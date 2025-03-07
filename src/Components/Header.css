@@ -1,0 +1,72 @@
+.custom-navbar {  
+    background-color: #343a40; /* Dark background color */  
+}  
+
+.custom-navbar .navbar-brand {  
+    color: #ffffff; /* White text for brand */  
+}  
+
+.custom-navbar .nav-link {  
+    color: #ffffff; /* White text for links */  
+}  
+
+.custom-navbar .nav-link:hover {  
+    color: #ffc107; /* Yellow color on hover */  
+}  
+
+.custom-navbar .dropdown-item {  
+    color: #343a40; /* Dark text for dropdown items */  
+}  
+
+.custom-navbar .dropdown-item:hover {  
+    background-color: #ffc107; /* Yellow background on hover */  
+    color: #343a40; /* Dark text on hover */  
+}  
+
+.custom-navbar .form-control {  
+    background-color: #495057; /* Darker input background */  
+    color: #ffffff; /* White text for input */  
+}  
+
+.custom-navbar .form-control::placeholder {  
+    color: #ffffff; /* White placeholder text */  
+}  
+
+.custom-navbar .btn-outline-light {  
+    color: #ffffff; /* White text for button */  
+    border-color: #ffffff; /* White border for button */  
+}  
+
+.custom-navbar .btn-outline-light:hover {  
+    background-color: #ffc107; /* Yellow background on hover */  
+    color: #343a40; /* Dark text on hover */  
+}  
+
+/* Header Logo */
+
+.logo {  
+    display: flex;  
+    align-items: center;  
+    font-family: 'Playfair Display', serif; /* Use Playfair Display font */  
+    font-size: 1.5rem; /* Adjust font size for better visibility */  
+    color: #FFFFFF; /* White for the logo text */  
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add a subtle shadow for depth */  
+}  
+
+.logo-icon {  
+    margin-right: 8px; /* Space between icon and text */  
+    font-size: 2.5rem; /* Adjust icon size */  
+    color: #B76E79; /* Rose Gold for the icon */  
+}  
+
+.logo-text {  
+    font-weight: bold; /* Make the text bold */  
+    letter-spacing: 1px; /* Add spacing between letters for elegance */  
+}  
+
+/* Optional: Add a hover effect */  
+.logo:hover {  
+    color: #F0F0F0; /* Slightly lighter white on hover */  
+    transition: color 0.3s ease; /* Smooth transition */  
+}  
+/* Header Logo */
