@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from "react-bootstrap";  
 import { Link } from "react-router-dom";  
 import './Header.css'; // Import custom CSS for additional styling  
-import logo from '../../images/logo.png';
+import logo from '../images/logo.png';
 
 const Header = () => {  
     return (  
