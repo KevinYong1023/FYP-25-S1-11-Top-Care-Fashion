@@ -4,7 +4,7 @@ import { House, Person, Eye, BoxArrowRight } from 'react-bootstrap-icons'; // or
 
 export default function Header(){
     return (
-        <Navbar bg="light" expand="lg" style={{ padding: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}>
+        <Navbar zz expand="lg" style={{ padding: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}>
             <Navbar.Brand href="/dashboard" style={{ color: 'black', marginLeft: '20px' }}>
                 LOGO {/* Placeholder for your logo */}
             </Navbar.Brand>

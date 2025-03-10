@@ -1,13 +1,10 @@
 import React from 'react';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import Sidebar from '../../Components/CustomerSupport/Sidebar';
-import Header from '../../Components/CustomerSupport/Header';
 
 export default function EditProfile(){
     return(
         <>
-        {/* Universal Header */}
-        <Header />
 
         <Container fluid>
             <Row className="d-flex">

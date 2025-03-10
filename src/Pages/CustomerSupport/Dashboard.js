@@ -41,8 +41,6 @@ export default function Dashboard() {
     ];
     return (
         <>
-            {/* Universal Header */}
-            <Header />
 
             <Container fluid>
                 <Row className="d-flex">

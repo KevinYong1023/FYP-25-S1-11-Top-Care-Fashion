@@ -6,8 +6,6 @@ import Header from '../../Components/CustomerSupport/Header';
 export default function Profile() {
      return (
            <>
-               {/* Universal Header */}
-               <Header />
    
                <Container fluid>
                    <Row className="d-flex">

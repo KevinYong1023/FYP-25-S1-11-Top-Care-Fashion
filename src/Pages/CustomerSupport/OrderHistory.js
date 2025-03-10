@@ -36,9 +36,6 @@ export default function OrderHistory() {
     ];
      return (
            <>
-               {/* Universal Header */}
-               <Header />
-   
                <Container fluid>
                    <Row className="d-flex">
                        {/* Sidebar - fixed width, no padding */}
