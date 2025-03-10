@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setIsLoggedIn, setRole }) => {  // Accept setIsLoggedIn as a prop
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -19,9 +19,14 @@ const Login = () => {
         }
         setError("");
         alert("Login Successful!");
-        navigate("/"); // Redirect to home page
-    };
-
+        setRole(formData.role);
+        setIsLoggedIn(true);  // Set login state to true
+        if(formData.role === "user"){
+            navigate("/shoppage");
+        }else{
+            navigate("/dashboard");
+        }
+    }
     return (
         <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
             <h2 className="mb-4">Login to Your Account</h2>
@@ -34,6 +39,10 @@ const Login = () => {
                 <Form.Group className="mb-3">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" name="password" placeholder="Enter your password" onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Login As:</Form.Label>
+                    <Form.Control type="role" name="role" placeholder="Enter your role" onChange={handleChange} required />
                 </Form.Group>
                 <Button variant="primary" type="submit" className="w-100">Login</Button>
             </Form>

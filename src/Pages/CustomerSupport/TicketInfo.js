@@ -5,10 +5,7 @@ import Header from '../../Components/CustomerSupport/Header';
 
 export default function TicketInfo(){
     return(
-        <>
-                 {/* Universal Header */}
-                 <Header />
-     
+            <>
                  <Container fluid>
                      <Row className="d-flex">
                          {/* Sidebar - fixed width, no padding */}
