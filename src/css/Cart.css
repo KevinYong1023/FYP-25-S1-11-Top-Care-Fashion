@@ -1,0 +1,50 @@
+/* src/Pages/cart.css */  
+
+.container {  
+    margin-top: 2rem;  
+}  
+
+h2 {  
+    margin-bottom: 1.5rem;  
+}  
+
+.card {  
+    margin-bottom: 1.5rem;  
+}  
+
+.card img {  
+    max-width: 100%;  
+    height: auto;  
+}  
+
+.summary {  
+    margin-top: 2rem;  
+}  
+
+.summary h5 {  
+    margin-bottom: 0.5rem;  
+}  
+
+.discount-code {  
+    display: flex;  
+    align-items: center;  
+}  
+
+.discount-code input {  
+    margin-right: 0.5rem;  
+}  
+
+.checkout-button {  
+    width: 15%;  
+}  
+
+.custom-cart-button {  
+    margin-left: 15px; /* Adjust the value as needed */  
+}  
+
+/* Discount Input Field Styles */  
+.discount-input {  
+    width: 200px !important; /* Set a specific width for the discount input */  
+    max-width: 100%; /* Ensure it doesn't exceed the container width */  
+}  
+
