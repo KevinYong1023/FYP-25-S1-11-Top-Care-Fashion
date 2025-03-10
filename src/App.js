@@ -13,21 +13,26 @@ import OrderHistory from "./Pages/CustomerSupport/OrderHistory";
 import Logout from "./Pages/Logout";
 import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
-
 import EditProfile from "./Pages/CustomerSupport/EditProfile";
-
 import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
 import UserProfile from "./Pages/UserProfile";
 import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
- 
+import EditProfile from "./Pages/CustomerSupport/EditProfile";  
+import { CartProvider } from './Components/CartContext'; 
+import Cart from './Pages/Cart'; 
+import Payment from './Pages/Payment';
+import MixMatch from './Pages/MixMatch';
+
 // Create the context
 export const AuthContext = createContext();
 
 function App() {
-    const [login, setLogin] = useState(false)
+
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -57,10 +62,14 @@ function App() {
                     <Route path="/order-details/:inv" element={<OrderDetails />} />
                     <Route path="/ticket-delete" element={<TicketDelete />} />
                     <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
-                    <Route path="/logout" element={<Logout setLogin={setLogin}/>} /> 
+                    <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/payment" element={<Payment />} />  
+                    <Route path="/mixmatch" element={<MixMatch />} />
                     <Route path="/update-account" element={<UpdateAccount />} />
                     <Route path="/user-profile" element={<UserProfile />} />
-                    <Route path="/upload-product" element={<UploadProduct />} />
+                    <Route path="/upload-product" element={<UploadProduct />} />    
+
                 </Routes>
             </Router>
         </AuthContext.Provider>
