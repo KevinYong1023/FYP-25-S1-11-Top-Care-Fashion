@@ -16,6 +16,8 @@ import Logout from "./Pages/Logout";
 import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
 import EditProfile from "./Pages/CustomerSupport/EditProfile";
+import UploadProduct from './Pages/UploadProduct.js';
+
 
 function App() {  
     const [isLoggedIn, setIsLoggedIn] = useState(false);  // State to manage login status
@@ -39,6 +41,7 @@ function App() {
             <Route path="/view-accounts" element={<ViewUsers />} /> 
             <Route path="/order-history" element={<OrderHistory />} /> 
             <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
+            <Route path="/upload-product" element={<UploadProduct />} />
           </Routes>
         </Router>
         </>
