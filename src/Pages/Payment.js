@@ -67,7 +67,7 @@ const Payment = () => {
 
     return (  
         <Container className="mt-4">  
-            <h2>Payment</h2>  
+            <h1>Payment</h1>  
             <Row className="payment-container">  
                 <Col className="payment-method">  
                     <Form.Group>  
