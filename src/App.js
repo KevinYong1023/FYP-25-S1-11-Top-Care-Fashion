@@ -62,6 +62,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
                     <Route path="/order-details/:inv" element={<OrderDetails />} />
                     <Route path="/ticket-delete" element={<TicketDelete />} />
                     <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
+                    <Route path="/profile-update" element={<EditProfile />} />   
                     <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/payment" element={<Payment />} />  
@@ -75,5 +76,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
         </AuthContext.Provider>
     );
 }
+
+
 
 export default App;

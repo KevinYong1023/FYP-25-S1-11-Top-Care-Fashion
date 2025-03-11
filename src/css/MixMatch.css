@@ -1,0 +1,63 @@
+.mixmatch-container {  
+    display: flex;  
+    justify-content: space-between;  
+    padding: 20px;  
+}  
+
+.mannequin {  
+    background-color: #ccc;  
+    width: 45%;  
+    height: 850px;  
+    display: flex;  
+    align-items: center;  
+    justify-content: center;  
+    border: 2px solid #666;  
+}  
+
+.mannequin-text {  
+    font-size: 24px;  
+    font-weight: bold;  
+    text-align: center;  
+}  
+
+.categories {  
+    display: flex;  
+    flex-direction: column; /* Change to column for vertical stacking */  
+    gap: 20px; /* Space between categories */  
+    width: 45%;  
+}  
+
+.category {  
+    background-color: #e0e0e0;  
+    padding: 10px;  
+    border-radius: 5px;  
+}  
+
+.category h2 {  
+    margin: 0;  
+}  
+
+.products {  
+    display: flex; /* Flex for horizontal layout within category */  
+    flex-direction: row; /* Align products horizontally */  
+    justify-content: space-between; /* Space products evenly */  
+    margin-top: 10px;  
+}  
+
+.product {  
+    background-color: #d0d0d0;  
+    height: 200px; /* Adjust height for image */  
+    width: 50%; /* Set width for images */  
+    display: flex;  
+    align-items: center;  
+    justify-content: center;  
+    margin: 5px; /* Space between products */  
+    border: 1px solid #999;  
+    border-radius: 5px;  
+    cursor: pointer;  
+    transition: background 0.2s;  
+}  
+
+.product:hover {  
+    background-color: #c0c0c0;  
+}  
