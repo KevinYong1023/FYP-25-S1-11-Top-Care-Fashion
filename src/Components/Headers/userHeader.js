@@ -12,10 +12,39 @@ export default function UserHeader({loginStatus}){
     return(
         <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
             <Container>
-                <>
-                        <Navbar.Brand href="/" as={Link} className="logo">
-                            <img src={logo} alt="logo" height={"50px"} width={"50px"} />
-                        </Navbar.Brand>
+
+
+                {LoggedAs !== "user" ? (
+                    // Admin Header
+                    <>
+                        <Navbar.Brand as={Link} to="/home" className="logo">  
+                    <img src={logo} alt="logo" height={"50px"} width={"50px"}/>  
+                </Navbar.Brand>  
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ borderColor: 'black' }} />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="ms-auto">
+                                <Nav.Link href="/dashboard" style={{ color: 'white', marginBottom: '10px' }}>
+                                    <House style={{ marginRight: '10px' }} /> Dashboard
+                                </Nav.Link>
+                                <Nav.Link href="/profile" style={{ color: 'white', marginBottom: '10px' }}>
+                                    <Person style={{ marginRight: '10px' }} /> Profile
+                                </Nav.Link>
+                                <Nav.Link href="/view-accounts" style={{ color: 'white', marginBottom: '10px' }}>
+                                    <Eye style={{ marginRight: '10px' }} /> View Account
+                                </Nav.Link>
+                                <Nav.Link href="/logout" style={{ color: 'white' }}>
+                                    <BoxArrowRight style={{ marginRight: '10px' }} /> Logout
+                                </Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </>
+                ) : (
+                    // User Header
+                    <>
+                        <Navbar.Brand as={Link} to="/home" className="logo">  
+                    <img src={logo} alt="logo" height={"50px"} width={"50px"}/>  
+                </Navbar.Brand>  
+
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
@@ -55,7 +84,8 @@ export default function UserHeader({loginStatus}){
 
         </Navbar>
 
-    )
-}
+    );
+};
+
 export default Header;
 
