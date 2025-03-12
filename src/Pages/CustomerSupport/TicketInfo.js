@@ -60,7 +60,8 @@ export default function TicketInfo() {
                             <p><strong>Ticket ID: {ticket.id}</strong></p>
                             <p><strong>Name: {ticket.name}</strong></p>
                             <p><strong>Description: {ticket.desc}</strong></p>
-                            
+                            <p><strong>Assignee: {ticket.assigned}</strong></p>
+                            <p><strong>Created: {ticket.created}</strong></p>
                             {/* Editable Dropdown for Status */}
                             <Form.Group controlId="formTicketStatus">
                                 <Form.Label><strong>Ticket Status:</strong></Form.Label>

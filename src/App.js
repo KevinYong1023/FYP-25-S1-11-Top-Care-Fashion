@@ -17,6 +17,7 @@ import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
 import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
+import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
 
 // Create the context
 export const AuthContext = createContext();
@@ -25,6 +26,7 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
 
     // Load data from localStorage when the app starts
     useEffect(() => {
@@ -40,7 +42,7 @@ function App() {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, role, setRole, email, setEmail }}>
+        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, role, setRole, email, setEmail,name, setName }}>
             <Router>
                 <Header />
                 <Routes>
@@ -51,12 +53,13 @@ function App() {
                     <Route path="/shoppage" element={<ShopPage />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/ticket-info/:id" element={<TicketInfo />} />
-                    <Route path="/profile" element={<Profile email={email} />} />  {/* Passing email as prop */}
+                    <Route path="/profile" element={<Profile email={email} setName={setName}/>} />  {/* Passing email as prop */}
                     <Route path="/view-accounts" element={<ViewUsers />} />
                     <Route path="/order-history" element={<OrderHistory />} />
                     <Route path="/chatbox" element={<Chatbox />} />
                     <Route path="/order-details/:inv" element={<OrderDetails />} />
                     <Route path="/ticket-delete" element={<TicketDelete />} />
+                    <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
                     <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
                 </Routes>
             </Router>
