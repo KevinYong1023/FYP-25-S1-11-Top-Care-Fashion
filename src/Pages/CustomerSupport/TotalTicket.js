@@ -1,45 +1,43 @@
-// Pages/Dashboard.js
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar';
 import { Link } from 'react-router-dom'; // Import Link from React Router
 import tickets from "../../mockdata/ticket.json"; // Ticket Mock Data
 
-export default function Dashboard() {
-    // Create a local state to manage tickets (simulate ticket deletion)
+export default function TotalTicket({ name }) {
     const [ticketList, setTicketList] = useState(tickets);
 
-    // Function to handle deletion of a ticket
-    function handleDelete(id) {
+    // Filter assigned tickets and non-closed tickets
+    const assignedTickets = ticketList.filter(
+        (ticket) => ticket.assigned === "Dasya Sokill" && ticket.status !== "close"
+    );
+   
+     // Function to handle deletion of a ticket
+     function handleDelete(id) {
         // Filter out the ticket that needs to be deleted
         const updatedTickets = ticketList.filter((ticket) => ticket.id !== id);
         setTicketList(updatedTickets); // Update the state with the new list
     }
 
-    function assignTicket(){
-        alert("You have pick up this Ticket");
+    function removeAssign(id){
+        alert("You have removed as ticket assignee");
+        const updatedTickets = ticketList.filter((ticket) => ticket.assigned === "");
+        setTicketList(updatedTickets); // Update the state with the new list
     }
 
-    // Filter out tickets that are not closed
-    const openTickets = ticketList.filter((ticket) => ticket.status !== "close");
-
     return (
-        <Container fluid>
-            <Row className="d-flex">
-                {/* Sidebar - fixed width, no padding */}
-                <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                    <Sidebar />
-                </Col>
+        <>
+            <Container fluid>
+                <Row className="d-flex">
+                    {/* Sidebar - fixed width, no padding */}
+                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
+                        <Sidebar />
+                    </Col>
 
-                {/* Main Content */}
-                <Col style={{ margin: '10px' }}>
-                    <h1>Welcome Dasya Sokill</h1>
-                    <p>Following are the tickets</p>
-                    <hr />
-                    <h2>All Available Tickets</h2>
-                    <a href="/assigned-ticket">Your Tickets</a>
+                    {/* Main Content */}
+                    <Col>
+                    <h2>Your Tickets</h2>
                     <hr/>
-                    <div>
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
@@ -47,25 +45,23 @@ export default function Dashboard() {
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Status</th>
-                                    <th>Assignee</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {openTickets.map((row) => (
+                                {console.log(name)}
+                                {assignedTickets.map((row) => (
                                     <tr key={row.id}>
                                         <td>{row.id}</td>
                                         <td>{row.name}</td>
                                         <td>{row.desc}</td>
                                         <td>{row.status}</td>
-                                        <td>{row.assigned}</td>
                                         <td>
                                             {/* Using Link to pass ticket ID to TicketInfo */}
                                             <Link to={`/ticket-info/${row.id}`} rel="noopener noreferrer">
                                                 Review
                                             </Link>
                                             <br />
-                                            {/* Simulate ticket deletion */}
                                             <button
                                                 onClick={() => handleDelete(row.id)}
                                                 style={{
@@ -80,7 +76,7 @@ export default function Dashboard() {
                                                 Delete
                                             </button>
                                             <button
-                                                onClick={() => assignTicket()}
+                                                onClick={() => removeAssign(row.id)}
                                                 style={{
                                                     background: 'none',
                                                     border: 'none',
@@ -90,16 +86,16 @@ export default function Dashboard() {
                                                     padding: 0
                                                 }}
                                             >
-                                                Assign to me
+                                                Remove Ticket
                                             </button>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                </Col>
-            </Row>
-        </Container>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 }

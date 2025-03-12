@@ -1,25 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
 import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
 import Sidebar from "../../Components/Sidebar";
 
-const Profile = ({ email }) => {
+const Profile = ({ email, setName }) => {
     const [user, setUser] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() =>{
         
         const fetchedUser = userData.find((user) => user.email === email); 
         if (fetchedUser) {
             setUser(fetchedUser);
+            setName(fetchedUser.name);
         }
     }, [email]);
-
-    const handleEditProfile = () => {
-        navigate(`/profile-update`, { state: { email } });
-    };
 
     // Check if user data is loaded before rendering
     if (!user) {
