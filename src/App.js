@@ -20,7 +20,8 @@ import UserProfile from "./Pages/UserProfile";
 import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
-import EditProfile from "./Pages/CustomerSupport/EditProfile";  
+
+
 import { CartProvider } from './Components/CartContext'; 
 import Cart from './Pages/Cart'; 
 import Payment from './Pages/Payment';
@@ -45,7 +46,10 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
     return (
-        <AuthContext.Provider value={{login, setLogin,role, setRole,email, setEmail,name, setName }}>
+
+<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, role, setRole, email, setEmail,name, setName }}>
+            <CartProvider>  
+
             <Router>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -62,9 +66,11 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
                     <Route path="/order-details/:inv" element={<OrderDetails />} />
                     <Route path="/ticket-delete" element={<TicketDelete />} />
                     <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
-                    <Route path="/profile-update" element={<EditProfile />} />   
                     <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
+                    <CartProvider>
+                    <Route path="/productpage" element={<ProductPage />} />
                     <Route path="/cart" element={<Cart />} />
+                    </CartProvider>
                     <Route path="/payment" element={<Payment />} />  
                     <Route path="/mixmatch" element={<MixMatch />} />
                     <Route path="/update-account" element={<UpdateAccount />} />
@@ -73,6 +79,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
 
                 </Routes>
             </Router>
+            </CartProvider>  
         </AuthContext.Provider>
     );
 }
