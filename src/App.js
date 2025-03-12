@@ -67,7 +67,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
 
             <Router>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/home" element={<Home />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login setLogin={setLogin}/>} />
                     <Route path="/productpage" element={<ProductPage />} />
@@ -102,10 +102,10 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
                     <Route path="/managerusersindividual/:id" element={<ManagerUsersIndividual />} />
                     <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
                     <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
-                    <CartProvider>
+                    
                     <Route path="/productpage" element={<ProductPage />} />
                     <Route path="/cart" element={<Cart />} />
-                    </CartProvider>
+                    
                     <Route path="/payment" element={<Payment />} />  
                     <Route path="/mixmatch" element={<MixMatch />} />
                     <Route path="/update-account" element={<UpdateAccount />} />
