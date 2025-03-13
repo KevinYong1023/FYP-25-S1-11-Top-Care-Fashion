@@ -49,9 +49,10 @@ function App() {
 
 const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const [role, setRole] = useState("");
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
+const [login, setLogin] = useState(false)
+const [role, setRole] = useState("");
+const [email, setEmail] = useState("");
+const [name, setName] = useState("");
 
     // Load data from localStorage when the app starts
     useEffect(() => {
@@ -67,7 +68,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
 
             <Router>
                 <Routes>
-                    <Route path="/home" element={<Home />} />
+                    <Route path="/" element={<Home />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login setLogin={setLogin}/>} />
                     <Route path="/productpage" element={<ProductPage />} />
