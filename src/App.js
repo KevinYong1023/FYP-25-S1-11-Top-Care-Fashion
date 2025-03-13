@@ -41,6 +41,7 @@ import EditProfile from "./Pages/CustomerSupport/EditProfile";
 import Cart from './Pages/Cart'; 
 import Payment from './Pages/Payment';
 import MixMatch from './Pages/MixMatch';
+import ShippingDetail from './Pages/ShippingDetail'; // Import your ShippingDetails component 
 
 // Create the context
 export const AuthContext = createContext();
@@ -66,7 +67,7 @@ function App() {
 
             <Router>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/home" element={<Home />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login setLogin={setLogin}/>} />
                     <Route path="/productpage" element={<ProductPage />} />
@@ -109,7 +110,8 @@ function App() {
                     <Route path="/mixmatch" element={<MixMatch />} />
                     <Route path="/update-account" element={<UpdateAccount />} />
                     <Route path="/user-profile" element={<UserProfile />} />
-                    <Route path="/upload-product" element={<UploadProduct />} />    
+                    <Route path="/upload-product" element={<UploadProduct />} />
+                    <Route path="/shippingdetail" element={<ShippingDetail />} />    
 
                 </Routes>
             </Router>
