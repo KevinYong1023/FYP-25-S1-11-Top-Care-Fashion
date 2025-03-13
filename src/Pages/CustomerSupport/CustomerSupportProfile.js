@@ -3,8 +3,9 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
 import Sidebar from "../../Components/Sidebar";
+import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
 
-const Profile = ({ email, setName }) => {
+const CustomerSupportProfile = ({ email, setName }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() =>{
@@ -23,6 +24,7 @@ const Profile = ({ email, setName }) => {
 
     return (
         <>
+        <AuthorityHeader/>
          <Container fluid>
                      <Row className="d-flex">
                          {/* Sidebar - fixed width, no padding */}
@@ -49,4 +51,4 @@ const Profile = ({ email, setName }) => {
     );
 };
 
-export default Profile;
+export default CustomerSupportProfile;

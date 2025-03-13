@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar';
 import { Link } from 'react-router-dom'; // Import Link from React Router
 import tickets from "../../mockdata/ticket.json"; // Ticket Mock Data
+import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function TotalTicket({ name }) {
     const [ticketList, setTicketList] = useState(tickets);
@@ -27,6 +28,7 @@ export default function TotalTicket({ name }) {
 
     return (
         <>
+        <AuthorityHeader/>
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar - fixed width, no padding */}
@@ -57,38 +59,30 @@ export default function TotalTicket({ name }) {
                                         <td>{row.desc}</td>
                                         <td>{row.status}</td>
                                         <td>
-                                            {/* Using Link to pass ticket ID to TicketInfo */}
-                                            <Link to={`/ticket-info/${row.id}`} rel="noopener noreferrer">
-                                                Review
-                                            </Link>
-                                            <br />
-                                            <button
-                                                onClick={() => handleDelete(row.id)}
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    color: 'red',
-                                                    textDecoration: 'underline',
-                                                    cursor: 'pointer',
-                                                    padding: 0
-                                                }}
-                                            >
-                                                Delete
-                                            </button>
-                                            <button
-                                                onClick={() => removeAssign(row.id)}
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    color: 'red',
-                                                    textDecoration: 'underline',
-                                                    cursor: 'pointer',
-                                                    padding: 0
-                                                }}
-                                            >
-                                                Remove Ticket
-                                            </button>
-                                        </td>
+  {/* Using Link to pass ticket ID to TicketInfo */}
+  <Link to={`/ticket-info/${row.id}`} rel="noopener noreferrer">
+    <Button variant="primary" size="sm" className="mb-2">Review</Button>
+  </Link>
+  <br />
+  {/* Delete Ticket Button */}
+  <Button
+    variant="danger"
+    size="sm"
+    className="mb-2"
+    onClick={() => handleDelete(row.id)}
+  >
+    Delete
+  </Button>
+  <br />
+  {/* Remove Ticket Button */}
+  <Button
+    variant="secondary"
+    size="sm"
+    onClick={() => removeAssign(row.id)}
+  >
+    Remove Ticket
+  </Button>
+</td>
                                     </tr>
                                 ))}
                             </tbody>
