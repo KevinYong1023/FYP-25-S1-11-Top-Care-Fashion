@@ -1,6 +1,7 @@
 import React, { useState } from 'react';  
 import { Container, Row, Col, Card, Button, Form, Modal } from 'react-bootstrap';  
 import 'bootstrap/dist/css/bootstrap.min.css';  
+import UserHeader from '../Components/Headers/userHeader';
 
 const ProductPage = () => {  
     const [reviews, setReviews] = useState([]);  
@@ -28,6 +29,8 @@ const ProductPage = () => {
     };  
 
     return (  
+        <>
+        <UserHeader loginStatus={true}/>
         <Container className="mt-4">  
             <Row>  
                 <Col md={4} className="d-flex flex-column align-items-center">  
@@ -116,7 +119,7 @@ const ProductPage = () => {
                 <Button variant="secondary"></Button>  
                 <p className="mt-2">Customer Support</p>  
             </footer>  
-        </Container>  
+        </Container>       </>
     );  
 };  
 

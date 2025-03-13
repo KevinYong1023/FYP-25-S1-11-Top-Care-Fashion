@@ -1,19 +1,11 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function TicketDelete() {
     return (
         <>
-            {/* Header with black background and centered logo */}
-            <header className="bg-dark py-2">
-                <Container fluid>
-                    <Row>
-                        <Col className="text-center">
-                            <img src='' alt="LOGO"/>
-                        </Col>
-                    </Row>
-                </Container>
-            </header>
+        <AuthorityHeader/>
 
             {/* Centered content with logout message and login button */}
             <Container fluid className="d-flex justify-content-center align-items-center" style={{ height: '70vh' }}>
