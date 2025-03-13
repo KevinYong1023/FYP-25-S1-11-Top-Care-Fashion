@@ -13,6 +13,10 @@ import OrderHistory from "./Pages/CustomerSupport/OrderHistory";
 import Logout from "./Pages/Logout";
 import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
+
+import EditProfile from "./Pages/CustomerSupport/EditProfile";
+import UpdateAccount from "./Pages/UpdateAccount";
+import UserProfile from "./Pages/UserProfile";
 import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
@@ -51,6 +55,8 @@ function App() {
                     <Route path="/ticket-delete" element={<TicketDelete />} />
                     <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
                     <Route path="/logout" element={<Logout setLogin={setLogin}/>} /> 
+                    <Route path="/update-account" element={<UpdateAccount />} />
+                    <Route path="/user-profile" element={<UserProfile />} />
                 </Routes>
             </Router>
         </AuthContext.Provider>
