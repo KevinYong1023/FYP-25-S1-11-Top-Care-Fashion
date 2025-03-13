@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../App";  // Import context from App.js
+import UserHeader from "../Components/Headers/userHeader";
 
-const Login = ({ setIsLoggedIn, setRole }) => {  // Accept setIsLoggedIn as a prop
-    const [formData, setFormData] = useState({ email: "", password: "" });
+const Login = () => {
+    const [formData, setFormData] = useState({ email: "", password: "", role: "" });
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    const { setLogin, setRole, setEmail } = useContext(AuthContext);  // Use context to set email, login, and role
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,21 +17,33 @@ const Login = ({ setIsLoggedIn, setRole }) => {  // Accept setIsLoggedIn as a pr
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.email || !formData.password) {
-            setError("Both fields are required!");
+        if (!formData.email || !formData.password || !formData.role) {
+            setError("All fields are required!");
             return;
         }
+
         setError("");
         alert("Login Successful!");
+
+        // Save data in context
         setRole(formData.role);
-        setIsLoggedIn(true);  // Set login state to true
-        if(formData.role === "user"){
+        setLogin(true);
+        setEmail(formData.email);
+
+        // Save data to localStorage
+        localStorage.setItem("role", formData.role);
+        localStorage.setItem("email", formData.email);
+
+        // Navigate based on the role
+        if (formData.role === "user") {
             navigate("/shoppage");
-        }else{
+        } else {
             navigate("/dashboard");
         }
-    }
+    };
     return (
+        <>
+        <UserHeader loginStatus={false}/>
         <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
             <h2 className="mb-4">Login to Your Account</h2>
             {error && <Alert variant="danger">{error}</Alert>}
@@ -42,12 +58,13 @@ const Login = ({ setIsLoggedIn, setRole }) => {  // Accept setIsLoggedIn as a pr
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Login As:</Form.Label>
-                    <Form.Control type="role" name="role" placeholder="Enter your role" onChange={handleChange} required />
+                    <Form.Control type="text" name="role" placeholder="Enter your role" onChange={handleChange} required />
                 </Form.Group>
                 <Button variant="primary" type="submit" className="w-100">Login</Button>
             </Form>
             <p className="mt-3">Don't have an account? <a href="/register">Register here</a></p>
         </Container>
+        </>
     );
 };
 

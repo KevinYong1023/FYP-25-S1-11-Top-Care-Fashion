@@ -15,7 +15,7 @@ export default function Sidebar(){
             <Nav.Link href="/dashboard" style={{ color: 'white', marginBottom: '10px' }}>
                 <House style={{ marginRight: '10px' }} /> Dashboard
             </Nav.Link>
-            <Nav.Link href="/profile" style={{ color: 'white', marginBottom: '10px' }}>
+            <Nav.Link href="/customer-support-profile" style={{ color: 'white', marginBottom: '10px' }}>
                 <Person style={{ marginRight: '10px' }} /> Profile
             </Nav.Link>
             <Nav.Link href="/view-accounts" style={{ color: 'white', marginBottom: '10px' }}>

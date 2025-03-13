@@ -2,9 +2,13 @@ import React from 'react';
 import { Container, Row, Col, Navbar, Nav, Card, Button,ListGroup  } from 'react-bootstrap';  
 import { Link } from 'react-router-dom'; // Import Link  
 import noproduct from '../images/NoProduct.jpg';
+import UserHeader from '../Components/Headers/userHeader';
 
-const ShopPage = () => { 
+const ShopPage = ({loginStatus}) => { 
+    console.log(loginStatus)
     return (  
+        <>
+        <UserHeader loginStatus={loginStatus}/>
         <Container fluid className="p-4">  
             {/* Navbar */}  
             <Navbar bg="light" expand="lg">  
@@ -74,6 +78,7 @@ const ShopPage = () => {
                 </Col>  
             </Row>  
         </Container>  
+        </>
     );  
 };  
 
