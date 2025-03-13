@@ -32,12 +32,10 @@ export const AuthContext = createContext();
 
 function App() {
 
-const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-const [login, setLogin] = useState(false)
-const [role, setRole] = useState("");
-const [email, setEmail] = useState("");
-const [name, setName] = useState("");
+    const [login, setLogin] = useState(false)
+    const [role, setRole] = useState("");
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
 
     // Load data from localStorage when the app starts
     useEffect(() => {
