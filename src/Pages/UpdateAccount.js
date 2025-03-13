@@ -32,6 +32,9 @@ const UpdateAccount = () => {
     };
 
     return (
+        <>
+        <UserHeader  loginStatus={true}/>
+  
         <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
             <h2 className="mb-4">Update Account</h2>
 
@@ -108,6 +111,7 @@ const UpdateAccount = () => {
             </Form>
 
         </Container>
+        </>
     );
 };
 

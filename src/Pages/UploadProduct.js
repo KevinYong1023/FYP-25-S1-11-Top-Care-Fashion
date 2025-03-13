@@ -76,6 +76,9 @@ const UploadProduct = () => {
     };
 
     return (
+        <>
+        <UserHeader  loginStatus={true}/>
+       
         <Container className="mt-4">
             <Card>
                 <Card.Body>
@@ -229,6 +232,7 @@ const UploadProduct = () => {
                 </Modal.Footer>
             </Modal>
         </Container>
+        </>
     );
 };
 
