@@ -15,6 +15,8 @@ import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
 
 import EditProfile from "./Pages/CustomerSupport/EditProfile";
+
+import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
 import UserProfile from "./Pages/UserProfile";
 import Chatbox from "./Pages/CustomerSupport/Chatbox";
@@ -35,6 +37,7 @@ function App() {
         const savedEmail = localStorage.getItem("email");
         setEmail(savedEmail);
     }, []);
+
 
     return (
         <AuthContext.Provider value={{login, setLogin,role, setRole,email, setEmail,name, setName }}>
@@ -57,6 +60,7 @@ function App() {
                     <Route path="/logout" element={<Logout setLogin={setLogin}/>} /> 
                     <Route path="/update-account" element={<UpdateAccount />} />
                     <Route path="/user-profile" element={<UserProfile />} />
+                    <Route path="/upload-product" element={<UploadProduct />} />
                 </Routes>
             </Router>
         </AuthContext.Provider>
