@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar';
 import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
+import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function ViewUsers() {
     // Filter users with the position 'user'
@@ -25,6 +26,7 @@ export default function ViewUsers() {
 
     return (
         <>
+        <AuthorityHeader/>
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar */}

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar';
 import orderData from '../../mockdata/orderhistory.json'; // Import the JSON data
+import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function OrderDetails() {
     const { inv } = useParams(); // Get the invoice ID from the URL
@@ -20,6 +21,7 @@ export default function OrderDetails() {
     // Conditionally render only when orderDetails is not null
     return (
         <>
+            <AuthorityHeader/>
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar - fixed width, no padding */}

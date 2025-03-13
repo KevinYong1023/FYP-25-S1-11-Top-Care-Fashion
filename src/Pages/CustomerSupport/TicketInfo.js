@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar';
 import { useParams, useNavigate } from "react-router-dom";
 import tickets from "../../mockdata/ticket.json"; // Ticket Mock Data
+import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function TicketInfo() {
     const navigate = useNavigate();
@@ -45,6 +46,8 @@ export default function TicketInfo() {
     }
 
     return (
+        <>
+            <AuthorityHeader/>
         <Container fluid>
             <Row className="d-flex">
                 {/* Sidebar - fixed width, no padding */}
@@ -104,5 +107,6 @@ export default function TicketInfo() {
                 </Col>
             </Row>
         </Container>
+        </>
     );
 }
