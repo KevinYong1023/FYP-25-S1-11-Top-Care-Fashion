@@ -13,7 +13,7 @@ import OrderHistory from "./Pages/CustomerSupport/OrderHistory";
 import Logout from "./Pages/Logout";
 import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
-import EditProfile from "./Pages/CustomerSupport/EditProfile";
+
 import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
 import UserProfile from "./Pages/UserProfile";
