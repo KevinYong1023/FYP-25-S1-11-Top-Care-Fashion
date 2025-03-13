@@ -61,7 +61,7 @@ function App() {
 
     return (
 
-<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, role, setRole, email, setEmail,name, setName }}>
+<AuthContext.Provider value={{login, setLogin,role, setRole,email, setEmail,name, setName }}>
             <CartProvider>  
 
             <Router>
@@ -100,7 +100,7 @@ function App() {
                     <Route path="/managerusersdashboard" element={<ManagerUsersDashboard />} />
                     <Route path="/managerusersindividual/:id" element={<ManagerUsersIndividual />} />
                     <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
-                    <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
+                    <Route path="/logout" element={<Logout setLogin={setLogin}/>} /> 
                     
                     <Route path="/productpage" element={<ProductPage />} />
                     <Route path="/cart" element={<Cart />} />
