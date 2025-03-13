@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 export default function UserProfile() {
     return (
+        <><UserProfile loginStatus={true} />
         <Container fluid>
             <Row className="d-flex justify-content-center">
                 {/* Main Content */}
@@ -30,5 +31,6 @@ export default function UserProfile() {
                 </Col>
             </Row>
         </Container>
+        </>
     );
 }

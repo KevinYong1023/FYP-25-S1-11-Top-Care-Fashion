@@ -12,7 +12,7 @@ export default function AuthorityHeader(){
         <>
           <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
             <Container>
-                <Navbar.Brand style={{ color: 'black', marginLeft: '20px' }}>
+                <Navbar.Brand href="/dashboard" style={{ color: 'black', marginLeft: '20px' }}>
                     <img src={logo} alt="logo" height={"50px"} width={"50px"} />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ borderColor: 'black' }} />
