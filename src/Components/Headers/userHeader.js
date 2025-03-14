@@ -13,7 +13,7 @@ export default function UserHeader({loginStatus}){
         <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
             <Container>
                 <>
-                        <Navbar.Brand href="/home" as={Link} to="/home" className="logo">
+                        <Navbar.Brand href="" as={Link} to="/home" className="logo">
                             <img src={logo} alt="logo" height={"50px"} width={"50px"} />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
