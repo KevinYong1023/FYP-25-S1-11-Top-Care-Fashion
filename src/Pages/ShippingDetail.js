@@ -3,7 +3,7 @@ import { Container, Button, Form } from 'react-bootstrap';
 import UserHeader from '../Components/Headers/userHeader';  
 import '../css/ShippingDetail.css'; // Ensure to create this CSS file for styling  
 
-const ShippingDetails = ({ loginStatus }) => {  
+const ShippingDetail = ({ loginStatus }) => {  
     console.log(loginStatus); // Simulate login status  
 
     return (  
@@ -28,11 +28,11 @@ const ShippingDetails = ({ loginStatus }) => {
                         <Form.Control type="text" placeholder="Postal Code" required />  
                         <Form.Control type="tel" placeholder="Phone No." required />  
                     </div>  
-                    <Button type="submit" className="submit-button">Submit</Button>  
+                    <Button type="submit" className="submit-button">Save</Button>  
                 </Form>  
             </Container>  
         </div>  
     );  
 };  
 
-export default ShippingDetails;  
+export default ShippingDetail;  
