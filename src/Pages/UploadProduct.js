@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { Container, Form, Button, Card, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import UserHeader from "../Components/Headers/userHeader";
 
 const UploadProduct = () => {
     const [product, setProduct] = useState({

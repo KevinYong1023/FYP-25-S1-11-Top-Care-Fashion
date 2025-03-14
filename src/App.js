@@ -13,15 +13,13 @@ import OrderHistory from "./Pages/CustomerSupport/OrderHistory";
 import Logout from "./Pages/Logout";
 import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
-
-import EditProfile from "./Pages/CustomerSupport/EditProfile";
-
 import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
 import UserProfile from "./Pages/UserProfile";
 import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
+import ShippingDetail from "./Pages/ShippingDetail.js";
  
 // Create the context
 export const AuthContext = createContext();
@@ -61,6 +59,7 @@ function App() {
                     <Route path="/update-account" element={<UpdateAccount />} />
                     <Route path="/user-profile" element={<UserProfile />} />
                     <Route path="/upload-product" element={<UploadProduct />} />
+                    <Route path="/shipping-detail" element={<ShippingDetail />} />
                 </Routes>
             </Router>
         </AuthContext.Provider>
