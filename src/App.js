@@ -20,6 +20,8 @@ import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
 import ShippingDetail from "./Pages/ShippingDetail.js";
+import ManageList from "./Pages/ManageList.js";
+
  
 // Create the context
 export const AuthContext = createContext();
@@ -60,6 +62,8 @@ function App() {
                     <Route path="/user-profile" element={<UserProfile />} />
                     <Route path="/upload-product" element={<UploadProduct />} />
                     <Route path="/shipping-detail" element={<ShippingDetail />} />
+                    <Route path="/manage-list" element={<ManageList />} />
+
                 </Routes>
             </Router>
         </AuthContext.Provider>
