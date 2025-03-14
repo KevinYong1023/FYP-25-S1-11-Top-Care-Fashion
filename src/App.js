@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate  } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register";
@@ -28,6 +28,7 @@ import Payment from './Pages/Payment';
 import MixMatch from './Pages/MixMatch';
 import ShippingDetail from './Pages/ShippingDetail'; // Import your ShippingDetails component 
 
+
 // Create the context
 export const AuthContext = createContext();
 
@@ -52,7 +53,8 @@ function App() {
 
             <Router>
                 <Routes>
-                    <Route path="/home" element={<Home />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/" element={<Navigate to="/home" replace />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login setLogin={setLogin}/>} />
                     <Route path="/productpage" element={<ProductPage />} />
