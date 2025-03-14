@@ -37,8 +37,8 @@ export default function UserProfile() {
                             </Col>
                             <Col md={6}>
                                 <p><strong>Address:</strong></p>
-                                <p>Hougang Avenue 4 Block 576</p>
-                                <p>#08-608</p>
+                                <p><strong>Hougang Avenue 4 Block 576</strong></p>
+                                <p><strong>#08-608</strong></p>
                                 <p><strong>Postal Code: 533567</strong></p>
                             </Col>
                         </Row>
