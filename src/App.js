@@ -21,6 +21,7 @@ import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
 import ShippingDetail from "./Pages/ShippingDetail.js";
 import ManageList from "./Pages/ManageList.js";
+import ProfitPage from "./Pages/ProfitPage.js";
 
  
 // Create the context
@@ -63,6 +64,7 @@ function App() {
                     <Route path="/upload-product" element={<UploadProduct />} />
                     <Route path="/shipping-detail" element={<ShippingDetail />} />
                     <Route path="/manage-list" element={<ManageList />} />
+                    <Route path="/profit-page" element={<ProfitPage />} />
 
                 </Routes>
             </Router>
