@@ -27,7 +27,7 @@ export default function ProfitPage() {
             // Dynamically calculate total earnings and number of products sold
             const totalEarningsCalc = products.reduce((sum, product) => sum + product.price, 0);
             setTotalEarnings(totalEarningsCalc);
-            setTotalProductsSold(products.length);
+            setTotalProductsSold(products.length); 
         };
 
         fetchData();
