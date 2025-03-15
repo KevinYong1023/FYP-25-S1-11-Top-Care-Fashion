@@ -6,8 +6,8 @@ import Sidebar from "../../Components/Sidebars/Sidebar";
 import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 
-const CustomerSupportProfile = ({ email, setName }) => {
-    const [user, setUser] = useState(null);
+const CustomerSupportProfile = ({ email, setName }) => {  
+    const [user, setUser] = useState(null);  
 
     console.log(user)
     useEffect(() =>{
@@ -19,10 +19,10 @@ const CustomerSupportProfile = ({ email, setName }) => {
         }
     }, [email]);
 
-    // Check if user data is loaded before rendering
-    if (!user) {
-        return <p>Loading user data...</p>;
-    }
+    // Check if user data is loaded before rendering  
+    if (!user) {  
+        return <p>Loading user data...</p>;  
+    }  
 
     const roleBasedLayouts = {
         admin: {
@@ -77,4 +77,52 @@ const CustomerSupportProfile = ({ email, setName }) => {
     );
 };
 
-export default CustomerSupportProfile;
+    return (  
+        <>  
+            <AuthorityHeader />  
+            <Container fluid>  
+                <Row className="d-flex">  
+                    {/* Sidebar - fixed width, no padding */}  
+                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>  
+                        <Sidebar />  
+                    </Col>  
+                    <Col style={{ margin: '10px' }}>  
+                        <h2 className="profile-title">Edit Profile</h2>  
+                        <Card className="profile-card">  
+                            <div className="profile-header">  
+                                <img src={userpic} alt="Profile" className="profile-pic" />  
+                            </div>  
+                            <Row>  
+                                <Col>  
+                                    <h4>Username:</h4>  
+                                    <p>{user.username}</p>  
+                                    <h4>Name:</h4>  
+                                    <p>{user.name}</p>  
+                                    <h4>Email:</h4>  
+                                    <p>{user.email}</p>  
+                                </Col>  
+                                <Col>  
+                                    <h4>Date of Birth:</h4>  
+                                    <p>{user.dob}</p>  
+                                    <h4>Gender:</h4>  
+                                    <p>{user.gender}</p>  
+                                    <h4>Phone:</h4>  
+                                    <p>{user.phone}</p>  
+                                    <h4>Position:</h4>  
+                                    <p>{user.position}</p>  
+                                </Col>  
+                            </Row>  
+                            <div className="button-container">  
+                            <button className="save-changes-btn" onClick={handleSaveChanges}>  
+                                    Save Changes  
+                                </button>  
+</div>  
+                        </Card>  
+                    </Col>  
+                </Row>  
+            </Container>  
+        </>  
+    );  
+};  
+
+export default CustomerSupportProfile;  
