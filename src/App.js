@@ -17,6 +17,11 @@ import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
 import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
+import ViewAccounts from "./Pages/Admin/ViewAccounts"
+import ViewAccountsAdmin from "./Pages/Admin/ViewAccountsAdmin"
+import ViewAccountsManager from "./Pages/Admin/ViewAccountsManager"
+import ViewAccountsUser from "./Pages/Admin/ViewAccountsUser"
+import ViewAccountsCS from "./Pages/Admin/ViewAccountsCS"
 
 // Create the context
 export const AuthContext = createContext();
@@ -58,6 +63,11 @@ function App() {
                     <Route path="/order-details/:inv" element={<OrderDetails />} />
                     <Route path="/ticket-delete" element={<TicketDelete />} />
                     <Route path="/logout" element={<Logout setIsLoggedIn={setIsLoggedIn} />} />  {/* Pass setIsLoggedIn to Logout */}
+                    <Route path="/view-all-accounts" element={<ViewAccounts/>}/>
+                    <Route path="/view-all-accounts-admin" element={<ViewAccountsAdmin/>}/>
+                    <Route path="/view-all-accounts-customersupport" element={<ViewAccountsCS/>}/>
+                    <Route path="/view-all-accounts-manager" element={<ViewAccountsManager/>}/>
+                    <Route path="/view-all-accounts-user" element={<ViewAccountsUser/>}/>
                 </Routes>
             </Router>
         </AuthContext.Provider>
