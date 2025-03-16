@@ -50,29 +50,32 @@ const CustomerSupportProfile = ({ email, setName }) => {
     const { title, extraFields } = roleBasedLayouts[user.position] || roleBasedLayouts.user;
 
     return (
-        <Container fluid>
-            <Row>
-                <Col xs={12} md={3} className="p-0">
-                    {getSidebar()}
-                </Col>
-                <Col md={9} className="p-4">
-                    <Card className={`p-4`}>
-                        <img src={userpic} alt="Profile" width="120" height="120" />
-                        <h4>Username: {user.name}</h4>
-                        <h4>Name: {user.name}</h4>
-                        <h4>Email: {user.email}</h4>
-                        <h4>Date of Birth: {user.dob}</h4>
-                        <h4>Gender: {user.gender}</h4>
-                        <h4>Phone: {user.phone}</h4>
-                        {extraFields}
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
-
+        <div>
+            <AuthorityHeader/>
+            <Container fluid>
+                <Row>
+                    <Col xs={12} md={3} className="p-0">
+                        {getSidebar()}
+                    </Col>
+                    <Col md={9} className="p-4">
+                        <Card className={`p-4`}>
+                            <img src={userpic} alt="Profile" width="120" height="120" />
+                            <h4>Username: {user.name}</h4>
+                            <h4>Name: {user.name}</h4>
+                            <h4>Email: {user.email}</h4>
+                            <h4>Date of Birth: {user.dob}</h4>
+                            <h4>Gender: {user.gender}</h4>
+                            <h4>Phone: {user.phone}</h4>
+                            {extraFields}
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
         
     );
 };
+//export default Profile;
 
 // return (
 //     <>
@@ -131,4 +134,4 @@ const CustomerSupportProfile = ({ email, setName }) => {
 //     );
 // };
 
-export default Profile;
+export default CustomerSupportProfile;

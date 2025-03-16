@@ -61,7 +61,7 @@ function App() {
                     <Route path="/chatbox" element={<Chatbox />} />
                     <Route path="/order-details/:inv" element={<OrderDetails />} />
                     <Route path="/ticket-delete" element={<TicketDelete />} />
-                    <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
+                    <Route path="/assigned-ticket" element={<TotalTicket name={name}/>}/>
                     <Route path="/logout" element={<Logout setLogin={setLogin}/>} /> 
                     <Route path="/update-account" element={<UpdateAccount />} />
                     <Route path="/user-profile" element={<UserProfile />} />
