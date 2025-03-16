@@ -13,6 +13,7 @@ import OrderHistory from "./Pages/CustomerSupport/OrderHistory";
 import Logout from "./Pages/Logout";
 import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
 import TicketDelete from "./Pages/CustomerSupport/TicketDelete";
+import CreateUser from "./Pages/CustomerSupport/CreateUser";
 
 import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
@@ -114,7 +115,7 @@ function App() {
                     <Route path="/user-profile" element={<UserProfile />} />
                     <Route path="/upload-product" element={<UploadProduct />} />
                     <Route path="/shippingdetail" element={<ShippingDetail />} />    
-
+                    <Route path="/createuser" element={<CreateUser />} />  
                 </Routes>
             </Router>
             </CartProvider>  

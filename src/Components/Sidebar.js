@@ -15,6 +15,10 @@ export default function Sidebar(){
             <Nav.Link href="/dashboard" style={{ color: 'white', marginBottom: '10px' }}>
                 <House style={{ marginRight: '10px' }} /> Dashboard
             </Nav.Link>
+            <Nav.Link href="/createuser" style={{ color: 'white', marginBottom: '10px' }}>
+                <BoxArrowRight style={{ marginRight: '10px' }} /> Create User
+            </Nav.Link>
+
             <Nav.Link href="/customer-support-profile" style={{ color: 'white', marginBottom: '10px' }}>
                 <Person style={{ marginRight: '10px' }} /> Profile
             </Nav.Link>
@@ -24,6 +28,7 @@ export default function Sidebar(){
             <Nav.Link href="/logout" style={{ color: 'white', marginBottom: '10px' }}>
                 <BoxArrowRight style={{ marginRight: '10px' }} /> Logout
             </Nav.Link>
+           
         </Nav>
 
         </div>
