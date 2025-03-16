@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar';
 import orderData from '../../mockdata/orderhistory.json'; // Import the JSON data
 import { Link } from 'react-router-dom';
+import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function OrderHistory() {
     // State to store the fetched data
@@ -34,6 +35,7 @@ export default function OrderHistory() {
 
     return (
         <>
+        <AuthorityHeader/>
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar - fixed width, no padding */}

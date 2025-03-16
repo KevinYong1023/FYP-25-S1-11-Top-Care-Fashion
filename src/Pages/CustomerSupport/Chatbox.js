@@ -1,10 +1,12 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar'; // Assuming Sidebar component is created
+import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function Chatbox() {
     return (
         <>
+            <AuthorityHeader/>
             <Container fluid>
                 {/* Body */}
                 <Row >

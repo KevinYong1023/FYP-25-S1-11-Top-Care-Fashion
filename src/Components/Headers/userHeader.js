@@ -1,42 +1,19 @@
-import React from "react";  
+import React, { useEffect,useState } from "react";  
 import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from "react-bootstrap";  
 import { Link } from "react-router-dom";  
-import '../css/Header.css';  
-import logo from '../images/logo.png';
-import { House, Person, Eye, BoxArrowRight } from 'react-bootstrap-icons';
+import '../../css/Header.css';  
+import logo from '../../images/logo.png';
 
-const Header = ({ isLoggedIn, LoggedAs }) => {
-    return (
+export default function UserHeader({loginStatus}){
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    useEffect(()=>{
+        setIsLoggedIn(loginStatus)
+    },[])
+    return(
         <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
             <Container>
-                {LoggedAs !== "user" ? (
-                    // Admin Header
-                    <>
-                        <Navbar.Brand style={{ color: 'black', marginLeft: '20px' }}>
-                            <img src={logo} alt="logo" height={"50px"} width={"50px"} />
-                        </Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ borderColor: 'black' }} />
-                        <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="ms-auto">
-                                <Nav.Link href="/dashboard" style={{ color: 'white', marginBottom: '10px' }}>
-                                    <House style={{ marginRight: '10px' }} /> Dashboard
-                                </Nav.Link>
-                                <Nav.Link href="/profile" style={{ color: 'white', marginBottom: '10px' }}>
-                                    <Person style={{ marginRight: '10px' }} /> Profile
-                                </Nav.Link>
-                                <Nav.Link href="/view-accounts" style={{ color: 'white', marginBottom: '10px' }}>
-                                    <Eye style={{ marginRight: '10px' }} /> View Account
-                                </Nav.Link>
-                                <Nav.Link href="/logout" style={{ color: 'white' }}>
-                                    <BoxArrowRight style={{ marginRight: '10px' }} /> Logout
-                                </Nav.Link>
-                            </Nav>
-                        </Navbar.Collapse>
-                    </>
-                ) : (
-                    // User Header
-                    <>
-                        <Navbar.Brand as={Link} className="logo">
+                <>
+                        <Navbar.Brand href="/" as={Link} className="logo">
                             <img src={logo} alt="logo" height={"50px"} width={"50px"} />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -49,7 +26,6 @@ const Header = ({ isLoggedIn, LoggedAs }) => {
                                 </NavDropdown>
                                 <Nav.Link as={Link} to="/sell">Sell</Nav.Link>
                             </Nav>
-                            {isLoggedIn && (
                                 <Form className="d-flex">
                                     <FormControl
                                         type="search"
@@ -59,10 +35,9 @@ const Header = ({ isLoggedIn, LoggedAs }) => {
                                     />
                                     <Button variant="outline-light">Search</Button>
                                 </Form>
-                            )}
                             <Nav>
                                 {isLoggedIn ? (
-                                    <>
+                                    <>  
                                         <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
                                         <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
                                     </>
@@ -75,10 +50,10 @@ const Header = ({ isLoggedIn, LoggedAs }) => {
                             </Nav>
                         </Navbar.Collapse>
                     </>
-                )}
             </Container>
-        </Navbar>
-    );
-};
 
-export default Header;
+        </Navbar>
+
+    )
+}
+

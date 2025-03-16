@@ -2,13 +2,14 @@ import React, { useState, useContext } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App";  // Import context from App.js
+import UserHeader from "../Components/Headers/userHeader";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "", role: "" });
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const { setIsLoggedIn, setRole, setEmail } = useContext(AuthContext);  // Use context to set email, login, and role
+    const { setLogin, setRole, setEmail } = useContext(AuthContext);  // Use context to set email, login, and role
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,11 +27,10 @@ const Login = () => {
 
         // Save data in context
         setRole(formData.role);
-        setIsLoggedIn(true);
+        setLogin(true);
         setEmail(formData.email);
 
         // Save data to localStorage
-        localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("role", formData.role);
         localStorage.setItem("email", formData.email);
 
@@ -44,6 +44,8 @@ const Login = () => {
         }
     };
     return (
+        <>
+        <UserHeader loginStatus={false}/>
         <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
             <h2 className="mb-4">Login to Your Account</h2>
             {error && <Alert variant="danger">{error}</Alert>}
@@ -64,6 +66,7 @@ const Login = () => {
             </Form>
             <p className="mt-3">Don't have an account? <a href="/register">Register here</a></p>
         </Container>
+        </>
     );
 };
 
