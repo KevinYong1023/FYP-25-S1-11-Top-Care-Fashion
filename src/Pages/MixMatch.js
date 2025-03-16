@@ -24,7 +24,8 @@ const MixMatch = () => {
         <div className="mixmatch-container">  
             <div className="mannequin">  
                 <span className="mannequin-text">Mannequin</span>  
-            </div>  
+            </div>
+              
             <div className="categories">  
                 {Object.entries(products).map(([category, items]) => (  
                     <div className="category" key={category}>  

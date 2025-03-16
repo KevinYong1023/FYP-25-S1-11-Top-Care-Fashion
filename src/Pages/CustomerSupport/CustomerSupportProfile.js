@@ -46,21 +46,21 @@ const CustomerSupportProfile = ({ email, setName }) => {
                             </div>  
                             <Row>  
                                 <Col>  
-                                    <h4>Username:</h4>  
+                                    <h3>Username:</h3>  
                                     <p>{user.username}</p>  
-                                    <h4>Name:</h4>  
+                                    <h3>Name:</h3>  
                                     <p>{user.name}</p>  
-                                    <h4>Email:</h4>  
+                                    <h3>Email:</h3>  
                                     <p>{user.email}</p>  
                                 </Col>  
                                 <Col>  
-                                    <h4>Date of Birth:</h4>  
+                                    <h3>Date of Birth:</h3>  
                                     <p>{user.dob}</p>  
-                                    <h4>Gender:</h4>  
+                                    <h3>Gender:</h3>  
                                     <p>{user.gender}</p>  
-                                    <h4>Phone:</h4>  
+                                    <h3>Phone:</h3>  
                                     <p>{user.phone}</p>  
-                                    <h4>Position:</h4>  
+                                    <h3>Position:</h3>  
                                     <p>{user.position}</p>  
                                 </Col>  
                             </Row>  
