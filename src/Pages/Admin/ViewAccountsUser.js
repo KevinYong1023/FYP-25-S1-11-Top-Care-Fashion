@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import AdminSidebar from '../../Components/AdminSidebar';
 import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
 
-export default function ViewAllAccounts() {
+export default function ViewAccountsUser() {
     // Filter users with the position 'user'
     const filteredUsers = userData.filter(user => user.position === "user");
 
@@ -45,7 +45,6 @@ export default function ViewAllAccounts() {
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Roles</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,7 +54,6 @@ export default function ViewAllAccounts() {
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>{user.phone.slice(0, 8)}</td> {/* Limits phone to 8 characters */}
-                                        <td>{user.position}</td>
                                     </tr>
                                 ))}
                             </tbody>

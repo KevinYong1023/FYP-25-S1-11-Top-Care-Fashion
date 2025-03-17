@@ -3,8 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import AdminSidebar from '../../Components/AdminSidebar';
 import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
 
-export default function ViewAllAccounts() {
-    // Filter users with the position 'user'
+export default function ViewAccountsManager() {
+    // Filter users with the position 'manager'
     const filteredUsers = userData.filter(user => user.position === "manager");
 
     // State to store the search query

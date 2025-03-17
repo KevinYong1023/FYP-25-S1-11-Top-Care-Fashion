@@ -19,6 +19,7 @@ const UploadProduct = () => {
         images: [],
     });
 
+    // Use states for updating the page
     const [preview, setPreview] = useState([]);
     const [cropModal, setCropModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -46,35 +47,33 @@ const UploadProduct = () => {
     
             // Update product state using a function to get the latest state
             setProduct(prev => {
-                if (prev.images.length === 0) { // Only update category for the first image
+                if (prev.images.length === 0) { 
                     const detectedCategory = handleCategory(files[0]);
                     return { ...prev, category: detectedCategory };
                 }
-                return prev; // If not the first image, return state as is
+                return prev; 
             });
         }
     };
 
     const handleCategory = (file) => {
         const fileName = file.name.toLowerCase();
-    if (fileName.includes("shirt") || fileName.includes("hoodie")) {
-        categoryName = "Top";
+        if (fileName.includes("shirt") || fileName.includes("hoodie")) {
+            categoryName = "Top";
+            setCategory(categoryName);
+            return "Top";
+        } else if (fileName.includes("jeans") || fileName.includes("pants") || fileName.includes("shorts")) {
+            categoryName = "Bottom";
+            setCategory(categoryName);
+            return "Bottom";
+        } else if (fileName.includes("shoe") || fileName.includes("sneaker")) {
+            categoryName = "Footware";
+            setCategory(categoryName);
+            return "FootWear";
+        }
         setCategory(categoryName);
-        return "Top";
-    } else if (fileName.includes("jeans") || fileName.includes("pants") || fileName.includes("shorts")) {
-        categoryName = "Bottom";
-        setCategory(categoryName);
-        return "Bottom";
-    } else if (fileName.includes("shoe") || fileName.includes("sneaker")) {
-        categoryName = "Footware";
-        setCategory(categoryName);
-        return "FootWear";
+        return "Invalid Item"; // Default: No category assigned
     }
-
-    setCategory(categoryName);
-    return "Invalid Item"; // Default: No category assigned
-    }
-
     // Handle cropping change
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
         console.log(croppedArea, croppedAreaPixels);
@@ -103,7 +102,6 @@ const UploadProduct = () => {
         e.preventDefault();
         if(product.category === "Invalid Item"){
             alert("Please select another image");
-            console.log("TEST");
             return;
         }
 
@@ -111,8 +109,6 @@ const UploadProduct = () => {
             alert("Please fill all fields and upload images.");
             return;
         }
-
-            console.log("Product Details (Frontend):", product);
             alert("Product details have been saved!");
         
             setProduct({ title: "", brand: "", condition: "", size: "", price: "", category: "", description: "", images: [] });

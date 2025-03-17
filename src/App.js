@@ -27,6 +27,8 @@ import ViewAccountsAdmin from "./Pages/Admin/ViewAccountsAdmin"
 import ViewAccountsManager from "./Pages/Admin/ViewAccountsManager"
 import ViewAccountsUser from "./Pages/Admin/ViewAccountsUser"
 import ViewAccountsCS from "./Pages/Admin/ViewAccountsCS"
+import CreateAccount from "./Pages/Admin/CreateAccount.js"
+import DeleteAccount from "./Pages/Admin/DeleteAccount.js"
  
 // Create the context
 export const AuthContext = createContext();
@@ -74,6 +76,8 @@ function App() {
                     <Route path="/view-all-accounts-customersupport" element={<ViewAccountsCS/>}/>
                     <Route path="/view-all-accounts-manager" element={<ViewAccountsManager/>}/>
                     <Route path="/view-all-accounts-user" element={<ViewAccountsUser/>}/>
+                    <Route path="/create-account" element={<CreateAccount/>}/>
+                    <Route path="/delete-account" element={<DeleteAccount/>}/>
                 </Routes>
             </Router>
         </AuthContext.Provider>
