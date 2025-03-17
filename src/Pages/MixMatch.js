@@ -27,6 +27,7 @@ const MixMatch = () => {
 
             <div className="mixmatch-container">
                 <div className="mannequin-containers">
+                    
                     <div className="mannequin-top">
                         <span className="mannequin-text">Top</span>
                         {/* Top mannequin content here */}

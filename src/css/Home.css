@@ -1,102 +1,85 @@
-body {  
-    font-family: 'Arial', sans-serif;  
-    margin: 0;  
-    padding: 0;  
+/* Home.css */
 
-}  
+.home-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
 
-.header {  
-    background-color: #4CAF50; /* Green background */  
-    color: white; /* Text color */  
-    padding: 20px;  
-    text-align: center;  
-    font-size: 28px; /* Increased header text size for visibility */  
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for depth */  
-}  
+.product-container {
+    max-width: 100%; /* Adjust as needed */
+    width:50%;
+    height: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc; /* For visual testing */
+}
 
-.main-image {  
-    background-image: url('https://via.placeholder.com/1200x400');  
-    background-size: cover;  
-    height: 400px;  
-    margin: 20px 0;  
-    border-radius: 10px; /* Rounded corners for main image */  
-}  
+.product-heading {
+    text-align: center;
+}
 
-.product-container {  
-    max-width: 1200px;  
-    margin: 0 auto;  
-    padding: 20px;  
-}  
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-items: center;
+    width:100%;
+    height: 500px;
+}
 
-.product-container h2 {  
-    margin-bottom: 20px;  
-    text-align: center;  
-    font-size: 30px; /* Enhanced heading size for emphasis */  
-    color: #333; /* Darker color for better visibility */  
-}  
+.product {
+    border: 1px solid #eee;
+    padding: 10px;
+    text-align: center;
+}
 
-.product-grid {  
-    display: grid;  
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Wider product boxes */  
-    gap: 20px;  
-}    
+.product:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
 
-.product {  
-    
-    background-color: #fff;  
-    border-radius: 12px;  
-    overflow: hidden; /* Ensure content is contained within rounded borders */  
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  
-    transition: transform 0.3s, box-shadow 0.3s;  /* Smooth transition for hover effects */  
-}  
+.product-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
 
-.product:hover {  
-    transform: translateY(-5px); /* Subtle lifting effect on hover */  
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */  
-}  
+.product-details {
+    padding: 20px;
+    text-align: center;
+}
 
-.product-image {  
-    height: 250px;  
-    background-size: cover;  
-    background-position: center;  
-}   
+.product-name {
+    font-weight: 600;
+    font-size: 1.2em;
+    color: #2c3e50;
+    margin: 15px 0 10px;
+}
 
-.product-info {  
-    padding: 15px;  
-    text-align: center;  
-}  
+.product-brand {
+    color: #777;
+    font-style: italic;
+    margin-bottom: 8px;
+}
 
-.product-name {  
-    font-weight: bold;  
-    font-size: 20px; /* Increased font size for product names */  
-    color: #333; /* Darker color for visibility */  
-    margin: 10px 0;  
-}  
+.product-price {
+    color: #e74c3c;
+    font-weight: 600;
+    font-size: 1.1em;
+    margin: 10px 0;
+}
 
-.product-brand {  
-    color: #777; /* Softer grey for brand */  
-    font-style: italic;  
-    margin-bottom: 5px;  
-}  
+.image-container {
+    margin: 20px auto;
+    max-width: 1500px;
+    text-align: center;
+}
 
-.product-price {  
-    color: #4CAF50;  
-    font-weight: bold;  
-    font-size: 18px; /* Slightly larger font for price visibility */  
-    margin: 5px 0;  
-}  
-
-.add-to-cart {  
-    background-color: #4CAF50;  
-    color: white;  
-    border: none;  
-    padding: 10px 15px;  
-    border-radius: 5px;  
-    cursor: pointer;  
-    font-weight: bold;  
-    transition: background-color 0.3s;  
-}  
-
-.add-to-cart:hover {  
-    background-color: #45a049; /* Darker green on hover */  
-}  
+.main-image-poster {
+    width: 80%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ddd;
+}
