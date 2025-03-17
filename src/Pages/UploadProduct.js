@@ -1,8 +1,11 @@
 import React, { useState, useCallback } from "react";
+import { useEffect } from "react";
 import Cropper from "react-easy-crop";
 import { Container, Form, Button, Card, Row, Col, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserHeader from "../Components/Headers/userHeader";
+
+let categoryName = ""
 
 const UploadProduct = () => {
     const [product, setProduct] = useState({
@@ -11,7 +14,7 @@ const UploadProduct = () => {
         condition: "",
         size: "",
         price: "",
-        category: "", 
+        category: categoryName, 
         description: "",
         images: [],
     });
@@ -21,6 +24,7 @@ const UploadProduct = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
+    const [category, setCategory] = useState(categoryName);
 
     // Handle text input changes
     const handleChange = (e) => {
@@ -28,15 +32,61 @@ const UploadProduct = () => {
         setProduct({ ...product, [name]: value });
     };
 
+    useEffect(() => {
+        console.log("Updated Category:", product.category);
+    }, [product.category]); 
+
     // Open cropping modal
     const handleImageChange = (e) => {
+        // const files = Array.from(e.target.files);
+        // if (files.length > 0) {
+        //     const fileURL = URL.createObjectURL(files[0]);
+        //     setSelectedImage(fileURL);
+        //     setCropModal(true);
+    
+        //     // Set category only for the first uploaded image
+        //     if (product.images.length === 0) {
+        //         const detectedCategory = handleCategory(files[0]);
+        //         setProduct(prev => ({ ...prev, category: detectedCategory })); // Update category
+        //         console.log("IT DOES")
+        //     }
+        // }
         const files = Array.from(e.target.files);
         if (files.length > 0) {
             const fileURL = URL.createObjectURL(files[0]);
             setSelectedImage(fileURL);
             setCropModal(true);
+    
+            // Update product state using a function to get the latest state
+            setProduct(prev => {
+                if (prev.images.length === 0) { // Only update category for the first image
+                    const detectedCategory = handleCategory(files[0]);
+                    return { ...prev, category: detectedCategory };
+                }
+                return prev; // If not the first image, return state as is
+            });
         }
     };
+
+    const handleCategory = (file) => {
+        const fileName = file.name.toLowerCase();
+    if (fileName.includes("shirt") || fileName.includes("hoodie")) {
+        categoryName = "Top";
+        setCategory(categoryName);
+        return "Top";
+    } else if (fileName.includes("jeans") || fileName.includes("pants") || fileName.includes("shorts")) {
+        categoryName = "Bottom";
+        setCategory(categoryName);
+        return "Bottom";
+    } else if (fileName.includes("shoe") || fileName.includes("sneaker")) {
+        categoryName = "Footware";
+        setCategory(categoryName);
+        return "FootWear";
+    }
+
+    setCategory(categoryName);
+    return "Invalid Item"; // Default: No category assigned
+    }
 
     // Handle cropping change
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -55,6 +105,7 @@ const UploadProduct = () => {
 
     // Remove selected image
     const handleRemoveImage = (index) => {
+        //handleCategory();
         setProduct((prev) => ({
             ...prev,
             images: prev.images.filter((_, i) => i !== index),
@@ -64,16 +115,22 @@ const UploadProduct = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(product.category === "Invalid Item"){
+            alert("Please select another image");
+            console.log("TEST");
+            return;
+        }
+
         if (!product.title || !product.brand || !product.condition || !product.size || !product.price || !product.category || !product.description || product.images.length === 0) {
             alert("Please fill all fields and upload images.");
             return;
         }
 
-        console.log("Product Details (Frontend):", product);
-        alert("Product details have been saved!");
-
-        setProduct({ title: "", brand: "", condition: "", size: "", price: "", category: "", description: "", images: [] });
-        setPreview([]);
+            console.log("Product Details (Frontend):", product);
+            alert("Product details have been saved!");
+        
+            setProduct({ title: "", brand: "", condition: "", size: "", price: "", category: "", description: "", images: [] });
+            setPreview([]);    
     };
 
     return (
@@ -130,7 +187,10 @@ const UploadProduct = () => {
                                         </div>
                                     </>
                                 ) : (
-                                    <p className="text-muted">No images uploaded yet.</p>
+                                    <div>
+                                    <p className="text-muted">No images uploaded yet. </p>
+                                    <p className="text-muted">Please upload an image with frontal view of the product for best results</p>
+                                    </div>
                                 )}
                             </div>
                         </Col>
@@ -165,7 +225,15 @@ const UploadProduct = () => {
                                     <Col md={6}>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Size</Form.Label>
-                                            <Form.Control type="text" name="size" value={product.size} onChange={handleChange} placeholder="Enter size" required />
+                                            <Form.Select name="size" value={product.size} onChange={handleChange} required>
+                                                <option value="">Select Size</option> 
+                                                <option value="XS">XS</option>
+                                                <option value="S">S</option>
+                                                <option value="M">M</option>
+                                                <option value="L">L</option>
+                                                <option value="XL">XL</option>
+                                                <option value="XXL">XXL</option>
+                                            </Form.Select>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -180,12 +248,7 @@ const UploadProduct = () => {
                                     <Col md={6}>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Category</Form.Label>
-                                            <Form.Select name="category" value={product.category} onChange={handleChange} required>
-                                                <option value="">Select category</option>
-                                                <option value="Top">Top</option>
-                                                <option value="Bottom">Bottom</option>
-                                                <option value="Shoes">Shoes</option>
-                                            </Form.Select>
+                                            <Form.Control type="test" placeholder="Category" disabled value={product.category} onChange={handleCategory}></Form.Control>
                                         </Form.Group>
                                     </Col>
                                 </Row>
