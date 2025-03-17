@@ -38,19 +38,6 @@ const UploadProduct = () => {
 
     // Open cropping modal
     const handleImageChange = (e) => {
-        // const files = Array.from(e.target.files);
-        // if (files.length > 0) {
-        //     const fileURL = URL.createObjectURL(files[0]);
-        //     setSelectedImage(fileURL);
-        //     setCropModal(true);
-    
-        //     // Set category only for the first uploaded image
-        //     if (product.images.length === 0) {
-        //         const detectedCategory = handleCategory(files[0]);
-        //         setProduct(prev => ({ ...prev, category: detectedCategory })); // Update category
-        //         console.log("IT DOES")
-        //     }
-        // }
         const files = Array.from(e.target.files);
         if (files.length > 0) {
             const fileURL = URL.createObjectURL(files[0]);
@@ -105,7 +92,6 @@ const UploadProduct = () => {
 
     // Remove selected image
     const handleRemoveImage = (index) => {
-        //handleCategory();
         setProduct((prev) => ({
             ...prev,
             images: prev.images.filter((_, i) => i !== index),
