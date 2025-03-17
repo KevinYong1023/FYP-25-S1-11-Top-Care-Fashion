@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import UserHeader from "../../Components/Headers/userHeader";
 import AdminSidebar from "../../Components/AdminSidebar";
 
 const CreateAccount = () => {
@@ -17,7 +15,6 @@ const CreateAccount = () => {
 
     const [errors, setErrors] = useState({});
     const [error, setError] = useState("");
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -156,9 +153,6 @@ const CreateAccount = () => {
                             Register
                         </Button>
                     </Form>
-                    <p className="mt-3">
-                        Already have an account? <a href="/login">Login here</a>
-                    </p>
                 </Col>
             </Row>
         </Container>
