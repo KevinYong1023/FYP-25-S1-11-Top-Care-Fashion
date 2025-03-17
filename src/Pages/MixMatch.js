@@ -1,5 +1,8 @@
 import React from 'react';  
 import '../css/MixMatch.css'; // Ensure the CSS file is correctly linked  
+import UserHeader from '../Components/Headers/userHeader';
+
+
 
 const MixMatch = () => {  
     const products = {  
@@ -21,6 +24,8 @@ const MixMatch = () => {
     };  
 
     return (  
+        <>
+                 <UserHeader loginStatus={true}/>
         <div className="mixmatch-container">  
             <div className="mannequin">  
                 <span className="mannequin-text">Mannequin</span>  
@@ -41,6 +46,7 @@ const MixMatch = () => {
                 ))}  
             </div>  
         </div>  
+        </>
     );  
 }  
 

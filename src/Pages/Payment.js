@@ -2,6 +2,7 @@
 import React, { useState } from 'react';  
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';  
 import '../css/Payment.css'; // Import your CSS file  
+import UserHeader from '../Components/Headers/userHeader';
 
 const Payment = () => {  
     const [paymentMethod, setPaymentMethod] = useState('credit');  
@@ -66,6 +67,8 @@ const Payment = () => {
     };  
 
     return (  
+        <>
+                         <UserHeader loginStatus={true}/>
         <Container className="mt-4">  
             <h1>Payment</h1>  
             <Row className="payment-container">  
@@ -166,6 +169,7 @@ const Payment = () => {
                 </Col>  
             </Row>  
         </Container>  
+        </>
     );  
 };  
 
