@@ -30,7 +30,11 @@ import ViewAccountsCS from "./Pages/Admin/ViewAccountsCS"
 import CreateAccount from "./Pages/Admin/CreateAccount.js"
 import DeleteAccount from "./Pages/Admin/DeleteAccount.js"
 import MixMatch from "./Pages/MixMatch.js";
-
+import ManagerDashboard from "./Pages/Manager/ManagerDashboard";
+import ManagerProfile from "./Pages/Manager/ManagerProfile";
+import ManagerUsersDashboard from "./Pages/Manager/ManagerUsersDashboard";
+import ManagerUsersIndividual from "./Pages/Manager/ManagerUsersIndividual";
+ 
 // Create the context
 export const AuthContext = createContext();
 
@@ -80,6 +84,10 @@ function App() {
                     <Route path="/create-account" element={<CreateAccount/>}/>
                     <Route path="/delete-account" element={<DeleteAccount/>}/>
                     <Route path="/mixmatch" element={<MixMatch/>}/>
+                    <Route path="/managerdashboard" element={<ManagerDashboard />} />
+                    <Route path="/managerprofile" element={<ManagerProfile />} />
+                    <Route path="/managerusersdashboard" element={<ManagerUsersDashboard />} />
+                    <Route path="/managerusersindividual/:id" element={<ManagerUsersIndividual />} />
                 </Routes>
             </Router>
         </AuthContext.Provider>

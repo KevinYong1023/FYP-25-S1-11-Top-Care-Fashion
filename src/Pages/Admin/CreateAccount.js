@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
-import AdminSidebar from "../../Components/AdminSidebar";
+import { useNavigate } from "react-router-dom";
+import UserHeader from "../../Components/Headers/userHeader";
+import AdminSidebar from "../../Components/Sidebars/AdminSidebar";
 
 const CreateAccount = () => {
     const [formData, setFormData] = useState({
