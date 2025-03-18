@@ -1,19 +1,21 @@
-import React, { useEffect,useState } from "react";  
-import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from "react-bootstrap";  
-import { Link } from "react-router-dom";  
-import '../../css/Header.css';  
+import React, { useEffect, useState } from "react";
+import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import '../../css/Header.css';
 import logo from '../../images/logo.png';
+import { FaShoppingCart } from 'react-icons/fa'; // Import cart icon
 
-export default function UserHeader({loginStatus}){
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    useEffect(()=>{
-        setIsLoggedIn(loginStatus)
-    },[])
-    return(
+export default function UserHeader({ loginStatus }) {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+        setIsLoggedIn(loginStatus);
+    }, [loginStatus]); // Add loginStatus as a dependency
+
+    return (
         <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
             <Container>
                 <>
-                        <Navbar.Brand href="/" as={Link} className="logo">
+                        <Navbar.Brand href="" as={Link} to="/home" className="logo">
                             <img src={logo} alt="logo" height={"50px"} width={"50px"} />
                         </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -41,6 +43,9 @@ export default function UserHeader({loginStatus}){
                                     <>  
                                         <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
                                         <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
+                                        <Nav.Link as={Link} to="/cart">
+                                        <FaShoppingCart />
+                                    </Nav.Link>
                                     </>
                                 ) : (
                                     <>
@@ -52,9 +57,6 @@ export default function UserHeader({loginStatus}){
                         </Navbar.Collapse>
                     </>
             </Container>
-
         </Navbar>
-
-    )
+    );
 }
-

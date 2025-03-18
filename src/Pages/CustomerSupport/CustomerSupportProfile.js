@@ -6,8 +6,8 @@ import Sidebar from "../../Components/Sidebars/Sidebar";
 import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 
-const CustomerSupportProfile = ({ email, setName }) => {
-    const [user, setUser] = useState(null);
+const CustomerSupportProfile = ({ email, setName }) => {  
+    const [user, setUser] = useState(null);  
 
     console.log(user)
     useEffect(() =>{
@@ -19,10 +19,10 @@ const CustomerSupportProfile = ({ email, setName }) => {
         }
     }, [email]);
 
-    // Check if user data is loaded before rendering
-    if (!user) {
-        return <p>Loading user data...</p>;
-    }
+    // Check if user data is loaded before rendering  
+    if (!user) {  
+        return <p>Loading user data...</p>;  
+    }  
 
     const roleBasedLayouts = {
         admin: {
@@ -77,4 +77,6 @@ const CustomerSupportProfile = ({ email, setName }) => {
     );
 };
 
-export default CustomerSupportProfile;
+   
+
+export default CustomerSupportProfile;  
