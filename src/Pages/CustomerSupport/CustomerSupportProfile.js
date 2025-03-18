@@ -68,7 +68,7 @@ const CustomerSupportProfile = ({ email, setName }) => {
                             <button className="save-changes-btn" onClick={handleSaveChanges}>  
                                     Save Changes  
                                 </button>  
-</div>  
+                        </div>  
                         </Card>  
                     </Col>  
                 </Row>  

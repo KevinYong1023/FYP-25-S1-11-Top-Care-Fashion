@@ -5,19 +5,19 @@ import UserHeader from '../Components/Headers/userHeader';
 const MixMatch = () => {
     const products = {
         top: [
-            { name: "Product 1", imageUrl: "path_to_image1.jpg", link: "link_to_product1" },
-            { name: "Product 2", imageUrl: "path_to_image2.jpg", link: "link_to_product2" },
-            { name: "Product 3", imageUrl: "path_to_image3.jpg", link: "link_to_product3" },
+            { name: "Product 1", imageUrl: "path_to_image1.jpg" },
+            { name: "Product 2", imageUrl: "path_to_image2.jpg", link: "" },
+            { name: "Product 3", imageUrl: "path_to_image3.jpg", link: "" },
         ],
         bottom: [
-            { name: "Product 1", imageUrl: "path_to_image4.jpg", link: "link_to_product4" },
-            { name: "Product 2", imageUrl: "path_to_image5.jpg", link: "link_to_product5" },
-            { name: "Product 3", imageUrl: "path_to_image6.jpg", link: "link_to_product6" },
+            { name: "Product 1", imageUrl: "path_to_image4.jpg", link: "" },
+            { name: "Product 2", imageUrl: "path_to_image5.jpg", link: "" },
+            { name: "Product 3", imageUrl: "path_to_image6.jpg", link: "" },
         ],
         footwear: [
-            { name: "Product 1", imageUrl: "path_to_image7.jpg", link: "link_to_product7" },
-            { name: "Product 2", imageUrl: "path_to_image8.jpg", link: "link_to_product8" },
-            { name: "Product 3", imageUrl: "path_to_image9.jpg", link: "link_to_product9" },
+            { name: "Product 1", imageUrl: "path_to_image7.jpg", link: "" },
+            { name: "Product 2", imageUrl: "path_to_image8.jpg", link: "" },
+            { name: "Product 3", imageUrl: "path_to_image9.jpg", link: "" },
         ],
     };
 
