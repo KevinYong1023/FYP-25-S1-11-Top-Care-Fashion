@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebars/Sidebar';
 import { Link } from 'react-router-dom'; // Import Link from React Router
 import tickets from "../../mockdata/ticket.json"; // Ticket Mock Data
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';

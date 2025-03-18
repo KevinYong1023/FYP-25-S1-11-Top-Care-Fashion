@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import AdminSidebar from '../../Components/AdminSidebar';
+import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
 
 export default function ViewAccountsAdmin() {

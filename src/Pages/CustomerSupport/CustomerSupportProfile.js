@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
-import Sidebar from "../../Components/Sidebar";
+import Sidebar from "../../Components/Sidebars/Sidebar";
 import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
-import AdminSideBar from "../../Components/AdminSidebar";
+import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 
 const CustomerSupportProfile = ({ email, setName }) => {
     const [user, setUser] = useState(null);
