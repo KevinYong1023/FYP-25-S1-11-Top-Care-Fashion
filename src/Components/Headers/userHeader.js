@@ -24,7 +24,7 @@ export default function UserHeader({loginStatus}){
                                     <NavDropdown.Item as={Link} to="/women">Women</NavDropdown.Item>
                                     <NavDropdown.Item as={Link} to="/men">Men</NavDropdown.Item>
                                 </NavDropdown>
-                                <Nav.Link as={Link} to="/sell">Sell</Nav.Link>
+                                <Nav.Link as={Link} to="/upload-product">Sell</Nav.Link>
                             </Nav>
                                 <Form className="d-flex">
                                     <FormControl
