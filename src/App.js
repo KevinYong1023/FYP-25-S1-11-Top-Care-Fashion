@@ -29,7 +29,7 @@ import ViewAccountsUser from "./Pages/Admin/ViewAccountsUser"
 import ViewAccountsCS from "./Pages/Admin/ViewAccountsCS"
 import CreateAccount from "./Pages/Admin/CreateAccount.js"
 import DeleteAccount from "./Pages/Admin/DeleteAccount.js"
- 
+
 // Create the context
 export const AuthContext = createContext();
 
