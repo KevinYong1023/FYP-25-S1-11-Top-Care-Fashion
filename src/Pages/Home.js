@@ -3,9 +3,10 @@ import { Container, Image } from "react-bootstrap";
 import UserHeader from '../Components/Headers/userHeader';
 import '../css/Home.css';
 
+
 const Home = () => {
     const products = [
-        { name: 'Stylish Jacket', brand: 'Brand A', price: '$49.99', imageUrl: 'https://source.unsplash.com/300x200/?jacket' },
+        { name: 'Stylish Jacket', brand: 'Brand A', price: '$49.99', imageUrl: 'https://source.unsplash.com/300x200/?sneakers' },
         { name: 'Casual Sneakers', brand: 'Brand B', price: '$39.99', imageUrl: 'https://source.unsplash.com/300x200/?sneakers' },
         { name: 'Elegant Dress', brand: 'Brand C', price: '$59.99', imageUrl: 'https://source.unsplash.com/300x200/?dress' },
         { name: 'Sporty Watch', brand: 'Brand D', price: '$99.99', imageUrl: 'https://source.unsplash.com/300x200/?watch' },
@@ -21,8 +22,9 @@ const Home = () => {
                 <div className="product-grid">
                     {products.map((product, index) => (
                         <div className="product" key={index}>
-                            <div className="product-image" style={{ backgroundImage: `url(${product.imageUrl})` }}></div>
+                            
                             <div className="product-details">
+                            
                                 <div className="product-name">{product.name}</div>
                                 <div className="product-brand">{product.brand}</div>
                                 <div className="product-price">{product.price}</div>

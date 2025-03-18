@@ -7,7 +7,7 @@
 
 .product-container {
     max-width: 100%; /* Adjust as needed */
-    width:50%;
+    width:60%;
     height: 700px;
     margin: 20px auto;
     padding: 20px;
@@ -29,8 +29,11 @@
 
 .product {
     border: 1px solid #eee;
-    padding: 10px;
+    padding: 20px; /* Increase padding */
     text-align: center;
+    width: 250px; /* Increase width */
+    height: 350px; /* Increase height */
+    box-sizing: border-box; /* Important: Include padding and border in width/height */
 }
 
 .product:hover {
