@@ -12,12 +12,12 @@ const CreateAccount = () => {
         email: '',
         phone: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        roles: ''
     });
 
     const [errors, setErrors] = useState({});
     const [error, setError] = useState("");
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,6 +29,7 @@ const CreateAccount = () => {
 
     const validateForm = () => {
         let formErrors = {};
+        let acceptedRoles = ["admin", "manager", "customer support"];
 
         if (!formData.firstName) formErrors.firstName = 'First Name is required.';
         if (!formData.lastName) formErrors.lastName = 'Last Name is required.';
@@ -40,12 +41,18 @@ const CreateAccount = () => {
         }
         if (!formData.phone) {
             formErrors.phone = 'Phone number is required.';
-        } else if (!/^\d{10}$/.test(formData.phone)) {
+        } else if (!/^\d{8}$/.test(formData.phone)) {
             formErrors.phone = 'Phone number must be 10 digits.';
         }
         if (!formData.password) formErrors.password = 'Password is required.';
+
         if (formData.password !== formData.confirmPassword)
             formErrors.confirmPassword = 'Passwords do not match.';
+        if(formData.roles === "")
+            formErrors.roles = 'Choose a role';
+        else if (!acceptedRoles.includes(formData.roles.toLowerCase())) 
+            formErrors.roles = "Invalid role, choose another role";
+
 
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
@@ -55,7 +62,32 @@ const CreateAccount = () => {
         e.preventDefault();
 
         if (validateForm()) {
-            alert("Registration Successful!");
+            const userInfo = `User Created:\nFirst Name: ${formData.firstName}
+                                \nLast Name: ${formData.lastName}
+                                \nUsername: ${formData.username}
+                                \nEmail: ${formData.email}
+                                \nPhone: ${formData.phone}
+                                \nRole: ${formData.roles.toLowerCase()}\n`;
+            
+            // Create a Blob and trigger download
+            const blob = new Blob([userInfo], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "created_user.txt";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+    
+            alert("User Created Successfully!");
+            setFormData({
+                firstName: '',
+                lastName: '',
+                username: '',
+                email: '',
+                phone: '',
+                password: '',
+                confirmPassword: ''
+            });
         } else {
             setError("Please correct the errors before submitting.");
         }
@@ -82,7 +114,7 @@ const CreateAccount = () => {
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleChange}
-                                placeholder="Enter your first name"
+                                placeholder="First name"
                             />
                             {errors.firstName && <Alert variant="danger">{errors.firstName}</Alert>}
                         </Form.Group>
@@ -93,7 +125,7 @@ const CreateAccount = () => {
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleChange}
-                                placeholder="Enter your last name"
+                                placeholder="Last name"
                             />
                             {errors.lastName && <Alert variant="danger">{errors.lastName}</Alert>}
                         </Form.Group>
@@ -104,7 +136,7 @@ const CreateAccount = () => {
                                 name="username"
                                 value={formData.username}
                                 onChange={handleChange}
-                                placeholder="Enter your username"
+                                placeholder="Username"
                             />
                             {errors.username && <Alert variant="danger">{errors.username}</Alert>}
                         </Form.Group>
@@ -126,7 +158,7 @@ const CreateAccount = () => {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                placeholder="Enter your phone number"
+                                placeholder="Phone number"
                             />
                             {errors.phone && <Alert variant="danger">{errors.phone}</Alert>}
                         </Form.Group>
@@ -152,13 +184,21 @@ const CreateAccount = () => {
                             />
                             {errors.confirmPassword && <Alert variant="danger">{errors.confirmPassword}</Alert>}
                         </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Roles</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="roles"
+                                value={formData.roles}
+                                onChange={handleChange}
+                                placeholder="Choose a role"
+                            />
+                            {errors.roles && <Alert variant="danger">{errors.roles}</Alert>}
+                        </Form.Group>
                         <Button variant="primary" type="submit" className="w-100">
                             Register
                         </Button>
                     </Form>
-                    <p className="mt-3">
-                        Already have an account? <a href="/login">Login here</a>
-                    </p>
                 </Col>
             </Row>
         </Container>
