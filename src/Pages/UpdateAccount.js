@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import UserHeader from "../Components/Headers/userHeader";
 
 const UpdateAccount = () => {
     const [formData, setFormData] = useState({
@@ -32,6 +33,9 @@ const UpdateAccount = () => {
     };
 
     return (
+        <>
+        <UserHeader  loginStatus={true}/>
+  
         <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
             <h2 className="mb-4">Update Account</h2>
 
@@ -108,6 +112,7 @@ const UpdateAccount = () => {
             </Form>
 
         </Container>
+        </>
     );
 };
 

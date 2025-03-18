@@ -37,8 +37,10 @@ const Login = () => {
         // Navigate based on the role
         if (formData.role === "user") {
             navigate("/shoppage");
+        } else if (formData.role === "admin"){
+            navigate("/view-all-accounts");
         } else {
-            navigate("/dashboard");
+            navigate("/dashboard")
         }
     };
     return (
@@ -68,4 +70,5 @@ const Login = () => {
     );
 };
 
-export default Login;
+
+export default Login;  
