@@ -37,12 +37,11 @@ import ManagerProfile from "./Pages/Manager/ManagerProfile";
 import ManagerUsersDashboard from "./Pages/Manager/ManagerUsersDashboard";
 import ManagerUsersIndividual from "./Pages/Manager/ManagerUsersIndividual";
  
-import EditProfile from "./Pages/CustomerSupport/EditProfile";  
+/*import EditProfile from "./Pages/CustomerSupport/EditProfile";  */
 /*import { CartProvider } from './Components/CartContext';  */
 import Cart from './Pages/Cart'; 
 import Payment from './Pages/Payment';
-import MixMatch from './Pages/MixMatch';
-import ShippingDetail from './Pages/ShippingDetail'; // Import your ShippingDetails component 
+
 
 
 // Create the context
@@ -65,7 +64,7 @@ function App() {
     return (
 
 <AuthContext.Provider value={{login, setLogin,role, setRole,email, setEmail,name, setName }}>
-            <CartProvider>  
+            
 
             <Router>
                 <Routes>
@@ -110,7 +109,7 @@ function App() {
                     <Route path="/cart" element={<Cart />} />
                     
                     <Route path="/payment" element={<Payment />} />  
-                    <Route path="/mixmatch" element={<MixMatch />} />
+                    
                     <Route path="/update-account" element={<UpdateAccount />} />
                     <Route path="/user-profile" element={<UserProfile />} />
                     <Route path="/upload-product" element={<UploadProduct />} />
@@ -118,7 +117,7 @@ function App() {
                     <Route path="/createuser" element={<CreateUser />} />  
                 </Routes>
             </Router>
-            </CartProvider>  
+            
         </AuthContext.Provider>
     );
 }
