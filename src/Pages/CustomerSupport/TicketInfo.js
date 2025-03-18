@@ -1,7 +1,7 @@
 // Pages/TicketInfo.js
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebars/Sidebar';
 import { useParams, useNavigate } from "react-router-dom";
 import tickets from "../../mockdata/ticket.json"; // Ticket Mock Data
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';

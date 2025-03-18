@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebars/Sidebar';
 import orderData from '../../mockdata/orderhistory.json'; // Import the JSON data
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 

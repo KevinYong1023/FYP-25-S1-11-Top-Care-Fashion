@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebars/Sidebar';
 import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
