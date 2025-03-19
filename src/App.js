@@ -39,7 +39,7 @@ import ManagerUsersDashboard from "./Pages/Manager/ManagerUsersDashboard";
 import ManagerUsersIndividual from "./Pages/Manager/ManagerUsersIndividual";
  
 /*import EditProfile from "./Pages/CustomerSupport/EditProfile";  */
-/*import { CartProvider } from './Components/CartContext';  */
+import { CartProvider } from './Components/CartContext.js';  
 import Cart from './Pages/Cart'; 
 import Payment from './Pages/Payment';
 import CustomerSupportProfileUpdate from "./Pages/CustomerSupport/CustomerSupportProfileUpdate.js";
@@ -62,14 +62,14 @@ function App() {
 
 
     return (
-
+<CartProvider> 
 <AuthContext.Provider value={{login, setLogin,role, setRole,email, setEmail,name, setName }}>
             
 
             <Router>
                 <Routes>
                 <Route path="/home" element={<Home />} />
-                <Route path="/" element={<Navigate to="/home" replace />} />
+                <Route path="/" element={<Navigate to="/login" replace />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login setLogin={setLogin}/>} />
                     <Route path="/productpage" element={<ProductPage />} />
@@ -121,6 +121,7 @@ function App() {
             </Router>
             
         </AuthContext.Provider>
+        </CartProvider> 
     );
 }
 
