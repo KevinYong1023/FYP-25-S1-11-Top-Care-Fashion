@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card,Button } from 'react-bootstrap';
 import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
 import Sidebar from "../../Components/Sidebars/Sidebar";
 import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
+import { useNavigate } from 'react-router-dom';  
 
-const CustomerSupportProfile = ({ email, setName }) => {
-    const [user, setUser] = useState(null);
+const CustomerSupportProfile = ({ email, setName }) => {  
+    const [user, setUser] = useState(null);  
+    const navigate = useNavigate();
+
     useEffect(() =>{
         
         const fetchedUser = userData.find((user) => user.email === email); 
@@ -17,10 +20,10 @@ const CustomerSupportProfile = ({ email, setName }) => {
         }
     }, [email]);
 
-    // Check if user data is loaded before rendering
-    if (!user) {
-        return <p>Loading user data...</p>;
-    }
+    // Check if user data is loaded before rendering  
+    if (!user) {  
+        return <p>Loading user data...</p>;  
+    }  
 
     return (
         <div>
@@ -40,6 +43,7 @@ const CustomerSupportProfile = ({ email, setName }) => {
                             <h4>Gender: {user.gender}</h4>
                             <h4>Phone: {user.phone}</h4>
                         </Card>
+                        <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
                     </Col>
                 </Row>
             </Container>
@@ -48,4 +52,6 @@ const CustomerSupportProfile = ({ email, setName }) => {
     );
 };
 
-export default CustomerSupportProfile;
+   
+
+export default CustomerSupportProfile;  

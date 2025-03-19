@@ -44,6 +44,7 @@ const MixMatch = () => {
             <div className="mixmatch-container">
                 {/* Mannequin Container */}
                 <div className="mannequin-containers">
+                    
                     <div className="mannequin-top">
                         {!selectedImages.top ? (<span className="mannequin-text">Top</span>) : 
                         (

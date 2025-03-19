@@ -116,6 +116,7 @@ const Login = () => {
                             />
                         </div>
                     </Form.Group>
+
                 </Form.Group>
                 <Button variant="primary" type="submit" className="w-100">Login</Button>
             </Form>
@@ -125,5 +126,4 @@ const Login = () => {
     );
 };
 
-
-export default Login;
+export default Login;  
