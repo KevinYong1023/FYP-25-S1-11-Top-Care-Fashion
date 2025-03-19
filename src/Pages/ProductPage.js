@@ -25,10 +25,10 @@ const ProductPage = () => {
 
     const handleClose = () => {  
         setShowModal(false);  
-        setSelectedUser(null);  
+        setSelectedUser(null); 
     };  
 
-    return (  
+    return ( 
         <>
         <UserHeader loginStatus={true}/>
         <Container className="mt-4">  
