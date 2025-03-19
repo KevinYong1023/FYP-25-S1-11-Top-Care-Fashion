@@ -38,7 +38,7 @@ import ManagerUsersDashboard from "./Pages/Manager/ManagerUsersDashboard";
 import ManagerUsersIndividual from "./Pages/Manager/ManagerUsersIndividual";
  
 /*import EditProfile from "./Pages/CustomerSupport/EditProfile";  */
-/*import { CartProvider } from './Components/CartContext';  */
+import { CartProvider } from './Components/CartContext.js';  
 import Cart from './Pages/Cart'; 
 import Payment from './Pages/Payment';
 
@@ -62,7 +62,7 @@ function App() {
 
 
     return (
-
+<CartProvider> 
 <AuthContext.Provider value={{login, setLogin,role, setRole,email, setEmail,name, setName }}>
             
 
@@ -119,6 +119,7 @@ function App() {
             </Router>
             
         </AuthContext.Provider>
+        </CartProvider> 
     );
 }
 

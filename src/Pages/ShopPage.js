@@ -22,7 +22,7 @@ const ShopPage = ({loginStatus}) => {
                     </Nav>  
                     <Nav>  
                         <Nav.Link href="#search">Search</Nav.Link>  
-                        <Nav.Link href="#cart">Cart</Nav.Link>  
+                        
                     </Nav>  
                 </Navbar.Collapse>  
             </Navbar>  
