@@ -25,6 +25,10 @@ const CustomerSupportProfile = ({ email, setName }) => {
         return <p>Loading user data...</p>;  
     }  
 
+    function updateProfile(){
+        navigate('/customer-support-profile-update');  
+    }
+    
     return (
         <div>
             <AuthorityHeader/>
