@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card,Button } from 'react-bootstrap';
 import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
 import Sidebar from "../../Components/Sidebars/Sidebar";
 import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
+import { useNavigate } from 'react-router-dom';  
 
 const CustomerSupportProfile = ({ email, setName }) => {  
     const [user, setUser] = useState(null);  
+    const navigate = useNavigate();
 
     console.log(user)
     useEffect(() =>{
@@ -50,6 +52,9 @@ const CustomerSupportProfile = ({ email, setName }) => {
     // Get the correct layout based on user position
     const { title, extraFields } = roleBasedLayouts[user.position] || roleBasedLayouts.user;
 
+    function updateProfile(){
+        navigate('/customer-support-profile-update');  
+    }
     return (
         <div>
             <AuthorityHeader/>
@@ -69,6 +74,7 @@ const CustomerSupportProfile = ({ email, setName }) => {
                             <h4>Phone: {user.phone}</h4>
                             {extraFields}
                         </Card>
+                        <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
                     </Col>
                 </Row>
             </Container>
