@@ -33,7 +33,7 @@ const Login = () => {
         // Save data to localStorage
         localStorage.setItem("role", formData.role);
         localStorage.setItem("email", formData.email);
-
+        console.log(formData.role )
         // Navigate based on the role
         if (formData.role === "user") {
             navigate("/shoppage");} 
@@ -64,7 +64,47 @@ const Login = () => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Login As:</Form.Label>
-                    <Form.Control type="text" name="role" placeholder="Enter your role" onChange={handleChange} required />
+                    <Form.Group>
+    <div>
+        <Form.Check 
+            type="radio" 
+            label="User" 
+            name="role" 
+            value="user" 
+            onChange={handleChange} 
+            required
+            checked={formData.role === "user"} 
+        />
+        <br/>
+        <Form.Check 
+            type="radio" 
+            label="Admin" 
+            name="role" 
+            value="admin" 
+            onChange={handleChange} 
+            required
+            checked={formData.role === "admin"} 
+        /><br/>
+        <Form.Check 
+            type="radio" 
+            label="Customer Support" 
+            name="role" 
+            value="customer support" 
+            onChange={handleChange} 
+            required
+            checked={formData.role === "customer support"} 
+        /><br/>
+        <Form.Check 
+            type="radio" 
+            label="Manager" 
+            name="role" 
+            value="manager" 
+            onChange={handleChange} 
+            required
+            checked={formData.role === "manager"} 
+        />
+    </div>
+</Form.Group>
                 </Form.Group>
                 <Button variant="primary" type="submit" className="w-100">Login</Button>
             </Form>

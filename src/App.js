@@ -41,8 +41,7 @@ import ManagerUsersIndividual from "./Pages/Manager/ManagerUsersIndividual";
 /*import { CartProvider } from './Components/CartContext';  */
 import Cart from './Pages/Cart'; 
 import Payment from './Pages/Payment';
-
-
+import CustomerSupportProfileUpdate from "./Pages/CustomerSupport/CustomerSupportProfileUpdate.js";
 
 // Create the context
 export const AuthContext = createContext();
@@ -77,6 +76,7 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/ticket-info/:id" element={<TicketInfo />} />
                     <Route path="/customer-support-profile" element={<CustomerSupportProfile email={email} setName={setName}/>} /> 
+                    <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate email={email}/>} /> 
                     <Route path="/view-accounts" element={<ViewUsers />} />
                     <Route path="/order-history" element={<OrderHistory />} />
                     <Route path="/chatbox" element={<Chatbox />} />
