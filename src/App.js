@@ -29,6 +29,7 @@ import ViewAccountsAdmin from "./Pages/Admin/ViewAccountsAdmin"
 import ViewAccountsManager from "./Pages/Admin/ViewAccountsManager"
 import ViewAccountsUser from "./Pages/Admin/ViewAccountsUser"
 import ViewAccountsCS from "./Pages/Admin/ViewAccountsCS"
+import AdminProfile from "./Pages/Admin/AdminProfile.js";
 import CreateAccount from "./Pages/Admin/CreateAccount.js"
 import DeleteAccount from "./Pages/Admin/DeleteAccount.js"
 import MixMatch from "./Pages/MixMatch.js";
@@ -41,8 +42,7 @@ import ManagerUsersIndividual from "./Pages/Manager/ManagerUsersIndividual";
 import { CartProvider } from './Components/CartContext.js';  
 import Cart from './Pages/Cart'; 
 import Payment from './Pages/Payment';
-
-
+import CustomerSupportProfileUpdate from "./Pages/CustomerSupport/CustomerSupportProfileUpdate.js";
 
 // Create the context
 export const AuthContext = createContext();
@@ -77,6 +77,7 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/ticket-info/:id" element={<TicketInfo />} />
                     <Route path="/customer-support-profile" element={<CustomerSupportProfile email={email} setName={setName}/>} /> 
+                    <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate email={email}/>} /> 
                     <Route path="/view-accounts" element={<ViewUsers />} />
                     <Route path="/order-history" element={<OrderHistory />} />
                     <Route path="/chatbox" element={<Chatbox />} />
@@ -95,6 +96,7 @@ function App() {
                     <Route path="/view-all-accounts-customersupport" element={<ViewAccountsCS/>}/>
                     <Route path="/view-all-accounts-manager" element={<ViewAccountsManager/>}/>
                     <Route path="/view-all-accounts-user" element={<ViewAccountsUser/>}/>
+                    <Route path="/admin-profile" element={<AdminProfile/>}/>
                     <Route path="/create-account" element={<CreateAccount/>}/>
                     <Route path="/delete-account" element={<DeleteAccount/>}/>
                     <Route path="/mixmatch" element={<MixMatch/>}/>

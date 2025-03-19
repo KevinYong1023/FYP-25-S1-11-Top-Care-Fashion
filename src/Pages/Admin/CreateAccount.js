@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import AdminSidebar from "../../Components/Sidebars/AdminSidebar";
-import AuthorityHeader from "../../Components/Headers/authrotiyHeaders"
+import AdminHeader from "../../Components/Headers/AdminHeader";
 
 const CreateAccount = () => {
     const [formData, setFormData] = useState({
@@ -94,7 +94,7 @@ const CreateAccount = () => {
 
     return (
         <div>
-            <AuthorityHeader/>
+            <AdminHeader/>
             <Container fluid>
                 <Row>
                     {/* Sidebar */}
