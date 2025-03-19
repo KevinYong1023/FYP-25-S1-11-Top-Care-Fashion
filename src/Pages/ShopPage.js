@@ -21,7 +21,7 @@ const ShopPage = ({loginStatus}) => {
                         <Nav.Link href="#sell">Sell</Nav.Link>  
                     </Nav>  
                     <Nav>  
-                        <Nav.Link href="#search">Search</Nav.Link>  
+                        
                         
                     </Nav>  
                 </Navbar.Collapse>  

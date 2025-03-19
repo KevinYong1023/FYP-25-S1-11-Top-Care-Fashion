@@ -50,7 +50,9 @@ const Payment = () => {
         e.preventDefault();  
         if (validateForm()) {  
             setSuccess(true);  
+            alert("Payment Successful!");
         }  
+        
     };  
 
     const handlePaymentMethodChange = (method) => {  
