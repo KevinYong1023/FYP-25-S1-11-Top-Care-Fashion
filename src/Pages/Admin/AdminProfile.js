@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
-import Sidebar from "../../Components/Sidebars/Sidebar";
-import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
+import AdminHeader from "../../Components/Headers/AdminHeader";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 
-const CustomerSupportProfile = ({ email, setName }) => {
+const AdminProfile = ({email}) => {
     const [user, setUser] = useState(null);
     useEffect(() =>{
         
-        const fetchedUser = userData.find((user) => user.email === email); 
+        let getEmail = localStorage.getItem("email");
+        const fetchedUser = userData.find((user) => user.email === getEmail); 
         if (fetchedUser) {
             setUser(fetchedUser);
-            setName(fetchedUser.name);
         }
     }, [email]);
 
@@ -24,11 +23,11 @@ const CustomerSupportProfile = ({ email, setName }) => {
 
     return (
         <div>
-            <AuthorityHeader/>
+            <AdminHeader/>
             <Container fluid>
                 <Row>
                     <Col xs={12} md={3} className="p-0">
-                        <Sidebar/>
+                        <AdminSideBar/>
                     </Col>
                     <Col md={9} className="p-4">
                         <Card className={`p-4`}>
@@ -44,8 +43,8 @@ const CustomerSupportProfile = ({ email, setName }) => {
                 </Row>
             </Container>
         </div>
-        
+           
     );
 };
 
-export default CustomerSupportProfile;
+export default AdminProfile;
