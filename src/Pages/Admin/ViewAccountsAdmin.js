@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
+import AuthorityHeader from "../../Components/Headers/authrotiyHeaders"
 
 export default function ViewAccountsAdmin() {
     // Filter users with the position 'admin'
@@ -24,7 +25,8 @@ export default function ViewAccountsAdmin() {
     });
 
     return (
-        <>
+        <div>
+            <AuthorityHeader/>
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar */}
@@ -63,6 +65,6 @@ export default function ViewAccountsAdmin() {
                     </Col>
                 </Row>
             </Container>
-        </>
+        </div>
     );
 }

@@ -15,7 +15,7 @@ export default function AdminSidebar(){
             
         {/* Side bar for admin */}
         <Nav className="flex-column">
-            <Nav.Link href="/profile" style={{ color: 'white', marginBottom: '10px' }}>
+            <Nav.Link href="/customer-support-profile" style={{ color: 'white', marginBottom: '10px' }}>
                 <Person style={{ marginRight: '10px' }} /> Profile
             </Nav.Link>
 
