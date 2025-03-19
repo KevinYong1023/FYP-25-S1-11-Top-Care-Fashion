@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import UserHeader from "../../Components/Headers/userHeader";
 import AdminSidebar from "../../Components/Sidebars/AdminSidebar";
+import AuthorityHeader from "../../Components/Headers/authrotiyHeaders"
 
 const CreateAccount = () => {
     const [formData, setFormData] = useState({
@@ -94,114 +93,116 @@ const CreateAccount = () => {
     };
 
     return (
+        <div>
+            <AuthorityHeader/>
+            <Container fluid>
+                <Row>
+                    {/* Sidebar */}
+                    <Col xs={11} md={2} id="AdminSidebar" className="p-0" style={{ minHeight: '100vh' }}>
+                            <AdminSidebar />
+                    </Col>
 
-        <Container fluid>
-            <Row>
-                {/* Sidebar */}
-                <Col xs={11} md={2} id="AdminSidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <AdminSidebar />
-                </Col>
-
-                {/* Create account Form */}
-                <Col md={10} style={{ padding: '20px' }}>
-                    <h2 className="mb-4">Create an Account</h2>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    <Form className="w-50" onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="firstName"
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                placeholder="First name"
-                            />
-                            {errors.firstName && <Alert variant="danger">{errors.firstName}</Alert>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="lastName"
-                                value={formData.lastName}
-                                onChange={handleChange}
-                                placeholder="Last name"
-                            />
-                            {errors.lastName && <Alert variant="danger">{errors.lastName}</Alert>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleChange}
-                                placeholder="Username"
-                            />
-                            {errors.username && <Alert variant="danger">{errors.username}</Alert>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email Address</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Enter your email"
-                            />
-                            {errors.email && <Alert variant="danger">{errors.email}</Alert>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Phone Number</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                placeholder="Phone number"
-                            />
-                            {errors.phone && <Alert variant="danger">{errors.phone}</Alert>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="Create a password"
-                            />
-                            {errors.password && <Alert variant="danger">{errors.password}</Alert>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                placeholder="Confirm your password"
-                            />
-                            {errors.confirmPassword && <Alert variant="danger">{errors.confirmPassword}</Alert>}
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Roles</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="roles"
-                                value={formData.roles}
-                                onChange={handleChange}
-                                placeholder="Choose a role"
-                            />
-                            {errors.roles && <Alert variant="danger">{errors.roles}</Alert>}
-                        </Form.Group>
-                        <Button variant="primary" type="submit" className="w-100">
-                            Register
-                        </Button>
-                    </Form>
-                </Col>
-            </Row>
-        </Container>
+                    {/* Create account Form */}
+                    <Col md={10} style={{ padding: '20px' }}>
+                        <h2 className="mb-4">Create an Account</h2>
+                        {error && <Alert variant="danger">{error}</Alert>}
+                        <Form className="w-50" onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>First Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    placeholder="First name"
+                                />
+                                {errors.firstName && <Alert variant="danger">{errors.firstName}</Alert>}
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Last Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    placeholder="Last name"
+                                />
+                                {errors.lastName && <Alert variant="danger">{errors.lastName}</Alert>}
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    placeholder="Username"
+                                />
+                                {errors.username && <Alert variant="danger">{errors.username}</Alert>}
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Email Address</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="Enter your email"
+                                />
+                                {errors.email && <Alert variant="danger">{errors.email}</Alert>}
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Phone Number</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="Phone number"
+                                />
+                                {errors.phone && <Alert variant="danger">{errors.phone}</Alert>}
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder="Create a password"
+                                />
+                                {errors.password && <Alert variant="danger">{errors.password}</Alert>}
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Confirm Password</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    placeholder="Confirm your password"
+                                />
+                                {errors.confirmPassword && <Alert variant="danger">{errors.confirmPassword}</Alert>}
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Roles</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="roles"
+                                    value={formData.roles}
+                                    onChange={handleChange}
+                                    placeholder="Choose a role"
+                                />
+                                {errors.roles && <Alert variant="danger">{errors.roles}</Alert>}
+                            </Form.Group>
+                            <Button variant="primary" type="submit" className="w-100">
+                                Register
+                            </Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 };
 
