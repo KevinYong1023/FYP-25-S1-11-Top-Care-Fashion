@@ -36,11 +36,15 @@ const Login = () => {
 
         // Navigate based on the role
         if (formData.role === "user") {
-            navigate("/shoppage");
-        } else if (formData.role === "admin"){
-            navigate("/view-all-accounts");
-        } else {
-            navigate("/dashboard")
+            navigate("/shoppage");} 
+            else if (formData.role === "admin"){
+                navigate("/view-all-accounts");
+            } 
+            else if (formData.role === "manager"){
+                navigate("/ManagerDashboard");
+            }
+            else {
+                navigate("/dashboard")
         }
     };
     return (
