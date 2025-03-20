@@ -37,8 +37,10 @@ const ProductPage = () => {
 
     const handleClose = () => {  
         setShowModal(false);  
-        setSelectedUser(null);  
+        setSelectedUser(null); 
     };  
+
+    return ( 
 
     const handleAddToCart = () => {  
         addToCart(product); // Add product to cart  
@@ -46,6 +48,7 @@ const ProductPage = () => {
     };  
 
     return (  
+
         <>
         <UserHeader loginStatus={true}/>
         <Container className="mt-4">  
