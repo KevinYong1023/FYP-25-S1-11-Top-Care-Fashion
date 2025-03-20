@@ -40,12 +40,10 @@ const ProductPage = () => {
         setSelectedUser(null); 
     };  
 
-    return ( 
-
     const handleAddToCart = () => {  
         addToCart(product); // Add product to cart  
         alert(`${product.name} has been added to your cart!`);  
-    };  
+    };
 
     return (  
 
