@@ -35,7 +35,7 @@ export default function UserHeader({ loginStatus }) {
                             <Nav>
                                 {isLoggedIn ? (
                                     <>  
-                                        <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+                                        <Nav.Link as={Link} to="/user-profile">Profile</Nav.Link>
                                         <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
                                         <Nav.Link as={Link} to="/cart">
                                         <FaShoppingCart />
