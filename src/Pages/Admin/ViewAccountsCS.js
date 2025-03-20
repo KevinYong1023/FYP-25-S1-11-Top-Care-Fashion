@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/Sidebar';
+import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AdminHeader from '../../Components/Headers/AdminHeader';
 
-export default function ViewUsers() {
-    // Filter users with the position 'user'
-    const filteredUsers = userData.filter(user => user.position === 'user');
+export default function ViewAccountsCS() {
+    // Filter users with the position 'customer support'
+    const filteredUsers = userData.filter(user => user.position === "customer support");
 
     // State to store the search query
     const [searchQuery, setSearchQuery] = useState('');
@@ -25,13 +25,13 @@ export default function ViewUsers() {
     });
 
     return (
-        <>
-        <AuthorityHeader/>
+        <div>
+            <AdminHeader/>
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar */}
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
+                    <Col xs={11} md={2} id="AdminSidebar" className="p-0" style={{ minHeight: '100vh' }}>
+                        <AdminSidebar />
                     </Col>
                    
                     {/* Main Content */}
@@ -47,7 +47,7 @@ export default function ViewUsers() {
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Action</th>
+                                    <th>Roles</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,11 +57,7 @@ export default function ViewUsers() {
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>{user.phone.slice(0, 8)}</td> {/* Limits phone to 8 characters */}
-                                        <td>
-                                            <a href="/order-history" rel="noopener noreferrer">
-                                                Order History
-                                            </a>
-                                        </td>
+                                        <td>{user.position}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -69,6 +65,6 @@ export default function ViewUsers() {
                     </Col>
                 </Row>
             </Container>
-        </>
+        </div>
     );
 }

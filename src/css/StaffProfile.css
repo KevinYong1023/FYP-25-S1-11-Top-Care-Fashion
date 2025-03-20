@@ -1,0 +1,51 @@
+body {  
+    font-family: Arial, sans-serif;  
+  
+}  
+
+.profile-title {  
+    text-align: center;  
+    margin: 20px 0;  
+    font-size: 24px;  
+    font-weight: bold;  
+}  
+
+.profile-card {  
+    padding: 2rem;  
+    border-radius: 8px;  
+    background-color: #fff;  
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  
+    text-align: center; /* Center text in the card */ 
+    font-size:larger;
+    width:50%; 
+} 
+ 
+
+.profile-pic {  
+    border-radius: 50%;  
+    width: 100px;  
+    height: 100px;  
+}  
+
+.profile-info h4 {  
+    margin: 10px 0; /* Spacing between user info */  
+}  
+
+.save-changes-btn {  
+    margin-top: 25px;  
+    padding: 0.5rem 1rem;  
+    background-color: #007bff; /* Bootstrap primary blue */  
+    color: white;  
+    border: none;  
+    border-radius: 4px;  
+    cursor: pointer;  
+    font-size: 16px;  
+    transition: background-color 0.3s ease;  
+    width:15%;
+    
+
+}  
+
+.save-changes-btn:hover {  
+    background-color: #0056b3; /* Darken on hover */  
+}  

@@ -1,41 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card,Button } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
-import Sidebar from "../../Components/Sidebars/Sidebar";
-import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
+import AdminHeader from "../../Components/Headers/AdminHeader";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
-import { useNavigate } from 'react-router-dom';  
 
-const CustomerSupportProfile = ({ email, setName }) => {  
-    const [user, setUser] = useState(null);  
-    const navigate = useNavigate();
-
+const AdminProfile = ({email}) => {
+    const [user, setUser] = useState(null);
     useEffect(() =>{
         
-        const fetchedUser = userData.find((user) => user.email === email); 
+        let getEmail = localStorage.getItem("email");
+        const fetchedUser = userData.find((user) => user.email === getEmail); 
         if (fetchedUser) {
             setUser(fetchedUser);
-            setName(fetchedUser.name);
         }
     }, [email]);
 
-    // Check if user data is loaded before rendering  
-    if (!user) {  
-        return <p>Loading user data...</p>;  
-    }  
-
-    function updateProfile(){
-        navigate('/customer-support-profile-update');  
+    // Check if user data is loaded before rendering
+    if (!user) {
+        return <p>Loading user data...</p>;
     }
-    
+
     return (
         <div>
-            <AuthorityHeader/>
+            <AdminHeader/>
             <Container fluid>
                 <Row>
                     <Col xs={12} md={3} className="p-0">
-                        <Sidebar/>
+                        <AdminSideBar/>
                     </Col>
                     <Col md={9} className="p-4">
                         <Card className={`p-4`}>
@@ -47,15 +39,12 @@ const CustomerSupportProfile = ({ email, setName }) => {
                             <h4>Gender: {user.gender}</h4>
                             <h4>Phone: {user.phone}</h4>
                         </Card>
-                        <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
                     </Col>
                 </Row>
             </Container>
         </div>
-        
+           
     );
 };
 
-   
-
-export default CustomerSupportProfile;  
+export default AdminProfile;

@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button, Form, Modal } from 'react-bootstrap';  
 import 'bootstrap/dist/css/bootstrap.min.css';  
 import UserHeader from '../Components/Headers/userHeader';
+import { useCart } from '../Components/CartContext'; // Ensure useCart is imported correctly  
+
 
 const ProductPage = () => {  
+    const { addToCart } = useCart(); // Get addToCart function from context  
     const [reviews, setReviews] = useState([]);  
     const [newReview, setNewReview] = useState({  
         buyerName: '',  
@@ -11,6 +14,15 @@ const ProductPage = () => {
     });  
     const [showModal, setShowModal] = useState(false);  
     const [selectedUser, setSelectedUser] = useState(null);  
+
+    // Sample product data (you can replace this with dynamic data)  
+    const product = {  
+        id: 1,  
+        name: 'Sample Product',  
+        price: 29.99,  
+        description: 'This is a sample product description.',  
+        imageUrl: 'https://via.placeholder.com/150',  
+    };  
 
     const handleSubmit = (e) => {  
         e.preventDefault();  
@@ -29,25 +41,31 @@ const ProductPage = () => {
     };  
 
     return ( 
+
+    const handleAddToCart = () => {  
+        addToCart(product); // Add product to cart  
+        alert(`${product.name} has been added to your cart!`);  
+    };  
+
+    return (  
+
         <>
         <UserHeader loginStatus={true}/>
         <Container className="mt-4">  
             <Row>  
                 <Col md={4} className="d-flex flex-column align-items-center">  
                     <Card className="mb-4" style={{ width: '100%' }}>  
-                        <Card.Img variant="top" src="https://via.placeholder.com/150" />  
+                        <Card.Img variant="top" src={product.imageUrl} />  
                     </Card>  
                 </Col>  
 
                 <Col md={8}>  
                     <Card className="mb-4">  
                         <Card.Body>  
-                            <Card.Title>Product Brand</Card.Title>  
-                            <Card.Subtitle className="mb-2 text-muted">Product Name</Card.Subtitle>  
-                            <Card.Text>Price: $XX.XX</Card.Text>  
-                            <Card.Text>Description:</Card.Text>  
-                            <Form.Control as="textarea" rows={3} placeholder="Product description" />  
-                            <Button variant="primary" className="mt-2">Add to Cart</Button>  
+                            <Card.Title>{product.name}</Card.Title>  
+                            <Card.Subtitle className="mb-2 text-muted">Price: ${product.price}</Card.Subtitle>  
+                            <Card.Text>{product.description}</Card.Text>  
+                            <Button variant="primary" className="mt-2" onClick={handleAddToCart}>Add to Cart</Button>  
                         </Card.Body>  
                     </Card>  
                 </Col>  
@@ -115,8 +133,8 @@ const ProductPage = () => {
             </Modal>  
 
             <footer className="text-center mt-4">  
-                <Button variant="secondary" className="me-2"></Button>  
-                <Button variant="secondary"></Button>  
+                <Button variant="secondary" className="me-2">Contact Us</Button>  
+                <Button variant="secondary">Help</Button>  
                 <p className="mt-2">Customer Support</p>  
             </footer>  
         </Container>       </>

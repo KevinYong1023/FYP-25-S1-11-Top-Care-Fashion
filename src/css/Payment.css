@@ -1,0 +1,56 @@
+/* src/css/Payment.css */  
+
+/* General styles for the payment form */  
+.payment-form {  
+    display: flex;  
+    flex-direction: column; /* Stack elements vertically */  
+    justify-content: flex-start; /* Align items to the start */  
+    height: 100%; /* Full height of the column */  
+    font-size: 25px; /* Set a larger default font size for the entire form */  
+}  
+
+/* Specific styles for headings */  
+h1 {  
+    font-size: 40px; /* Increase size for the main heading */  
+    margin-bottom: 20px; /* Adds space below the heading */  
+}  
+
+/* Styles for payment method labels */  
+.payment-method {  
+    font-size: 20px; /* Increase font size for payment method section */  
+}  
+
+/* Styles for the card details section */  
+.card-details {  
+    border: 2px solid #ccc; /* Light gray border */  
+    border-radius: 8px; /* Rounded corners */  
+    padding: 40px; /* Padding inside the card details */  
+    margin-top: 20px; /* Space above the card details */  
+    width: 100%;  
+}  
+
+/* Styles for QR Code section */  
+.paynow-qr {  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center;  
+    justify-content: flex-start; /* Align items to the start */  
+    border: 1px solid #ccc; /* Light gray border */  
+    border-radius: 8px; /* Rounded corners */  
+    padding: 20px; /* Padding inside the QR section */  
+    margin-top: 20px; /* Space above the QR section */  
+    height: 300px; /* Set a fixed height for the QR section */  
+    font-size: 18px; /* Set font size for Paynow form */  
+}  
+
+/* Adjust text size in QR placeholder - if any text is inside */  
+.qr-placeholder {  
+    width: 150px; /* Width of the QR code placeholder */  
+    height: 150px; /* Height of the QR code placeholder */  
+    background-color: #f0f0f0; /* Light gray background */  
+    display: flex;  
+    align-items: center;  
+    justify-content: center;  
+    border: 2px dashed #ccc; /* Dashed border */  
+    margin-bottom: 10px; /* Space below the QR code */  
+}  
