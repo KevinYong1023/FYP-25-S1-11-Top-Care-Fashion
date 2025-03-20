@@ -35,6 +35,7 @@ import DeleteAccount from "./Pages/Admin/DeleteAccount.js"
 import MixMatch from "./Pages/MixMatch.js";
 import ManagerDashboard from "./Pages/Manager/ManagerDashboard";
 import ManagerProfile from "./Pages/Manager/ManagerProfile";
+import ManagerProfileUpdate from "./Pages/Manager/ManagerProfileUpdate";
 import ManagerUsersDashboard from "./Pages/Manager/ManagerUsersDashboard";
 import ManagerUsersIndividual from "./Pages/Manager/ManagerUsersIndividual";
  
@@ -102,6 +103,7 @@ function App() {
                     <Route path="/mixmatch" element={<MixMatch/>}/>
                     <Route path="/managerdashboard" element={<ManagerDashboard />} />
                     <Route path="/managerprofile" element={<ManagerProfile />} />
+                    <Route path="/managerprofileupdate" element={<ManagerProfileUpdate />} />
                     <Route path="/managerusersdashboard" element={<ManagerUsersDashboard />} />
                     <Route path="/managerusersindividual/:id" element={<ManagerUsersIndividual />} />
                     <Route path = "/assigned-ticket" element={<TotalTicket name={name}/>}/>
