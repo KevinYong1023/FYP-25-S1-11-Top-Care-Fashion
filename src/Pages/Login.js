@@ -46,7 +46,7 @@ const Login = () => {
         console.log(formData.role )
         // Navigate based on the role
         if (formData.role === "user") {
-            navigate("/shoppage");} 
+            navigate("/home");} 
             else if (formData.role === "admin"){
                 navigate("/view-all-accounts");
             } 
