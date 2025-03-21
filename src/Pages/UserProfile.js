@@ -3,10 +3,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import UserHeader from '../Components/Headers/userHeader';
 import '../css/UserProfile.css'; // Import CSS file
 
-export default function UserProfile() {
+export default function UserProfile(loginStatus) {
     return (
         <>
-            <UserHeader />
+           <UserHeader loginStatus={loginStatus}/>
             <Container fluid>
                 <Row className="d-flex justify-content-center">
                     <Col md={8} className="profile-container">
@@ -46,10 +46,10 @@ export default function UserProfile() {
                         {/* Buttons Section */}
                         <Row className="button-container">
                             <Col md={6} className="button-group">
-                                <a href="/update-account" target="_blank" rel="noopener noreferrer">
+                                <a href="/update-account"  rel="noopener noreferrer">
                                     <button className="profile-button">Update Profile</button>
                                 </a>
-                                <a href="/shipping-detail" target="_blank" rel="noopener noreferrer">
+                                <a href="/shipping-detail"  rel="noopener noreferrer">
                                     <button className="profile-button">Update Shipping Details</button>
                                 </a>
                             </Col>

@@ -8,7 +8,7 @@ const ShippingDetail = ({ loginStatus }) => {
 
     return (  
         <div>  
-            <UserHeader loginStatus={loginStatus} /> {/* Pass the login status */}  
+             <UserHeader loginStatus={true} /> {/* Pass the login status */}  
             <Container className="shipping-container">  
                 <h2>Shipping Details</h2>  
                 <Form className="shipping-form">  

@@ -16,7 +16,7 @@ const Home = () => {
 
     return (
         <div className="home-page">
-            <UserHeader loginStatus={false} />
+            <UserHeader loginStatus={true} />
             <Container className="product-container">
                 <h2 className="product-heading">Featured Products</h2>
                 <div className="product-grid">

@@ -68,7 +68,7 @@ const ShopPage = ({loginStatus}) => {
                                             <Card.Title>Product Name</Card.Title>  
                                             <Card.Subtitle className="mb-2 text-muted">Product Brand</Card.Subtitle>  
                                             <Card.Text>Price: $XX.XX</Card.Text>  
-                                            <Button variant="primary">Add to Cart</Button>  
+                                            <Button variant="primary">View Product</Button>  
                                         </Card.Body>  
                                     </Card>  
                                 </Link>  
