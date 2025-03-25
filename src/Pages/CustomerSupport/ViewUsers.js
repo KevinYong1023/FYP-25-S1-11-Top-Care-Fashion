@@ -1,49 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
-import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function ViewUsers() {
+    const [users, setUsers] = useState([]);
+
+    // Fetch users from the backend
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('/api/users'); // Fetch users from backend route
+                const data = await response.json();
+                setUsers(data); // Set the fetched users to the state
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
     // Filter users with the position 'user'
-    const filteredUsers = userData.filter(user => user.position === 'user');
-
-    // State to store the search query
-    const [searchQuery, setSearchQuery] = useState('');
-
-    // Function to handle search input changes
-    const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value.toLowerCase());
-    };
-
-    // Function to filter users based on search query (id or name)
-    const filteredUsersBySearch = filteredUsers.filter((user) => {
-        return (
-            user.id.toString().toLowerCase().includes(searchQuery) ||
-            user.name.toLowerCase().includes(searchQuery)
-        );
-    });
+    const filteredUsers = users.filter(user => user.position === 'user');
 
     return (
         <>
-        <AuthorityHeader/>
+            <AuthorityHeader/>
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar */}
                     <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
                         <Sidebar />
                     </Col>
-                   
+
                     {/* Main Content */}
                     <Col md={10} style={{ padding: '20px' }}>
-                        <div>
-                            Search: <input type='text' onChange={handleSearchChange} value={searchQuery} />
-                        </div>
-                        <br/>
+                        <h2>Users List</h2>
+                        <hr />
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Account ID</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
@@ -51,16 +48,16 @@ export default function ViewUsers() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredUsersBySearch.map((user) => (
-                                    <tr key={user.id}>
-                                        <td>{user.id}</td>
+                                {filteredUsers.map(user => (
+                                    <tr key={user._id}>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>{user.phone.slice(0, 8)}</td> {/* Limits phone to 8 characters */}
                                         <td>
-                                            <a href="/order-history" rel="noopener noreferrer">
+                                            <a href={`/order-history/${user.name}`} rel="noopener noreferrer">
                                                 Order History
                                             </a>
+
                                         </td>
                                     </tr>
                                 ))}

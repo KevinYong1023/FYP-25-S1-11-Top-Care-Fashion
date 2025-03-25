@@ -16,19 +16,32 @@ export default function CustomerSupportProfileUpdate({ email }) {
         phone: ''
     });
 
-    // Fetch user data on component mount
+    // Fetch user data from the backend on component mount
     useEffect(() => {
-        const user = userData.find((user) => user.email === email);
-        if (user) {
-            setProfile({
-                username: user.username,
-                name: user.name,
-                email: user.email,
-                dob: user.dob,
-                gender: user.gender,
-                phone: user.phone
-            });
-        }
+        const fetchUserDetails = async () => {
+            if (email) {
+                try {
+                    const response = await fetch(`/api/user/${email}`);
+                    if (response.ok) {
+                        const userData = await response.json();
+                        setProfile({
+                            username: userData.username,
+                            name: userData.name,
+                            email: userData.email,
+                            dob: userData.dob,
+                            gender: userData.gender,
+                            phone: userData.phone
+                        });
+                    } else {
+                        console.error('Failed to fetch user details');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                }
+            }
+        };
+
+        fetchUserDetails();
     }, [email]);
 
     // Handle form changes
@@ -40,21 +53,39 @@ export default function CustomerSupportProfileUpdate({ email }) {
         }));
     };
 
-    const handleSubmit = (e) => {
-        alert("CUSTOMER SUPPORT UPDATED");
+    // Handle form submission and update user details in the backend
+    const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        // Remove the old user by filtering out their entry
-        const updatedUsers = userData.filter(user => user.email !== profile.email);
-    
-        // Add the updated profile to the list
-        updatedUsers.push(profile);
-    
-        // Log or manage the updated users array (in-memory update)
-        console.log('Updated Users:', updatedUsers);
-    
-        // Navigate back to the profile view
-        navigate('/customer-support-profile');  
+
+        try {
+            // Send PUT request to update the user profile
+            const response = await fetch(`/api/user/${email}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: profile.name,
+                    dob: profile.dob,
+                    gender: profile.gender,
+                    phone: profile.phone,
+                }),
+            });
+
+            if (response.ok) {
+                const updatedUser = await response.json();
+                console.log('Profile updated successfully:', updatedUser);
+                // Optionally, you can set the updated user data back to the state
+                setProfile(updatedUser);
+
+                // Navigate back to the profile view
+                navigate('/customer-support-profile');
+            } else {
+                console.error('Error updating profile');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
     };
 
     return (

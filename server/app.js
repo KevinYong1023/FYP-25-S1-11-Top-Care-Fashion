@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const route = require('./routes/routers'); // Import the route
+const route = require('./routes/routers'); // Import the user-related routes
 
 // Load environment variables from .env file
 dotenv.config();
@@ -20,7 +20,7 @@ app.use(cors());
 
 // MongoDB connection string from .env or default to localhost
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/fyp';
-
+console.log(mongoURI)
 // Connect to MongoDB using Mongoose with improved error handling
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB Atlas'))
@@ -34,8 +34,8 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-// Use the login route for handling login requests
-app.use('/api', route);  // Use this route under '/api'
+// Use all the routes
+app.use('/api', route);
 
 // Define the port the server will listen on (from .env or default to 5000)
 const PORT = process.env.PORT || 5000;

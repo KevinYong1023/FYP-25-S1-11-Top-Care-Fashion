@@ -1,34 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card,Button } from 'react-bootstrap';
-import userData from '../../mockdata/users.json';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import userpic from '../../images/profile.png';
 import Sidebar from "../../Components/Sidebars/Sidebar";
 import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
-import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
+import { MdOutlineEmail } from "react-icons/md";
 
 const CustomerSupportProfile = ({ email, setName }) => {  
     const [user, setUser] = useState(null);  
     const navigate = useNavigate();
 
-    useEffect(() =>{
-        
-        const fetchedUser = userData.find((user) => user.email === email); 
-        if (fetchedUser) {
-            setUser(fetchedUser);
-            setName(fetchedUser.name);
-        }
+    // Fetch user details based on email
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            console.log("Email:", email);
+            if (email) {
+                try {
+                    const response = await fetch(`/api/user/${email}`); 
+                    const data = await response.json();
+                    console.log("Data:", data);
+                    setUser(data); 
+                    setName(data.name);
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                }
+            }
+        };
+        fetchUserDetails();
     }, [email]);
-
-    // Check if user data is loaded before rendering  
-    if (!user) {  
-        return <p>Loading user data...</p>;  
-    }  
 
     function updateProfile(){
         navigate('/customer-support-profile-update');  
     }
-    
+
+    // If user data is not loaded, show a loading message
+    if (!user) {
+        return <p>Loading user data...</p>;
+    }
+
     return (
         <div>
             <AuthorityHeader/>
@@ -40,7 +49,7 @@ const CustomerSupportProfile = ({ email, setName }) => {
                     <Col md={9} className="p-4">
                         <Card className={`p-4`}>
                             <img src={userpic} alt="Profile" width="120" height="120" />
-                            <h4>Username: {user.name}</h4>
+                            <h4>Username: {user.username}</h4>
                             <h4>Name: {user.name}</h4>
                             <h4>Email: {user.email}</h4>
                             <h4>Date of Birth: {user.dob}</h4>
@@ -52,10 +61,7 @@ const CustomerSupportProfile = ({ email, setName }) => {
                 </Row>
             </Container>
         </div>
-        
     );
 };
 
-   
-
-export default CustomerSupportProfile;  
+export default CustomerSupportProfile;

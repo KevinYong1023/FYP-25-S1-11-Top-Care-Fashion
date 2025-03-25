@@ -1,54 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';  // To get the URL params
 import Sidebar from '../../Components/Sidebars/Sidebar';
-import orderData from '../../mockdata/orderhistory.json'; // Import the JSON data
-import { Link } from 'react-router-dom';
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function OrderHistory() {
-    // State to store the fetched data
+    const { username } = useParams();  // Get the username from the URL
     const [tableData, setTableData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(''); // State to store search input
-    const [filteredData, setFilteredData] = useState([]); // State to store filtered data
+    const [filteredData, setFilteredData] = useState([]);
 
-    // Load data from JSON file
+    // Fetch data from the backend API
     useEffect(() => {
-        // Set the imported JSON data directly into state
-        setTableData(orderData);
-        setFilteredData(orderData); // Initialize the filtered data with the complete data
-    }, []);
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/order-history/${username}`);
+                const data = await response.json();
+                setTableData(data);
+                setFilteredData(data);  // Initialize filtered data
+            } catch (error) {
+                console.error('Error fetching order history:', error);
+            }
+        };
 
-    // Handle search input
-    const handleSearch = (e) => {
-        const query = e.target.value.toLowerCase();
-        setSearchQuery(query);
+        fetchData();
+    }, [username]);
 
-        // Filter table data by invoice ID or seller name
-        const filtered = tableData.filter((row) => {
-            const invoiceId = row.inv.toString().toLowerCase(); // Convert ID to string for comparison
-            const sellerName = row.seller.toLowerCase(); // Convert seller name to lowercase
-            return invoiceId.includes(query) || sellerName.includes(query); // Match by ID or name
-        });
-
-        setFilteredData(filtered); // Update the filtered data
-    };
+  
 
     return (
         <>
         <AuthorityHeader/>
             <Container fluid>
                 <Row className="d-flex">
-                    {/* Sidebar - fixed width, no padding */}
                     <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
                         <Sidebar />
                     </Col>
 
-                    {/* Main Content */}
                     <Col md={10} style={{ padding: '20px' }}>
-                        <div>
-                            Search: <input type='text' value={searchQuery} onChange={handleSearch} />
-                        </div>
-                        <br/>
+                        <h2>Order History</h2>
+                        <hr/>
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
@@ -61,15 +51,13 @@ export default function OrderHistory() {
                             </thead>
                             <tbody>
                                 {filteredData.map((row) => (
-                                    <tr key={row.inv}>
-                                        <td>{row.inv}</td>
+                                    <tr key={row._id}>
+                                        <td>{row._id}</td>
                                         <td>{row.status}</td>
                                         <td>{row.seller}</td>
-                                        <td>{row.purchase_date}</td>
+                                        <td>{row.purchased}</td>
                                         <td>
-                                            <Link to={`/order-details/${row.inv}`}>
-                                                Review
-                                            </Link>
+                                            <a href={`/order-details/${row._id}/${username}`}>Review</a>
                                         </td>
                                     </tr>
                                 ))}
