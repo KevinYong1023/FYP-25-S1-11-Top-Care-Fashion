@@ -12,6 +12,7 @@
     "bootstrap": "^5.3.3",
     "cropperjs": "^2.0.0",
     "mongoose": "^8.13.0",
+    "mongoose-sequence": "^6.0.1",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-bootstrap-icons": "^1.11.5",

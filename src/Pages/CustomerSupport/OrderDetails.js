@@ -1,47 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Container, Row, Col } from 'react-bootstrap';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
-import orderData from '../../mockdata/orderhistory.json'; // Import the JSON data
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function OrderDetails() {
-    const { inv } = useParams(); // Get the invoice ID from the URL
+    const { id, username } = useParams(); // Get both the order ID and username from the URL
     const [orderDetails, setOrderDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
+    // Fetch order details from the backend API
     useEffect(() => {
-        console.log(inv); // Check if the invoice ID is correctly passed
-        if (inv) {
-            // Find the order using the invoice ID
-            const order = orderData.find((item) => item.inv === parseInt(inv));
-            setOrderDetails(order);
-        }
-    }, [inv]);
+        const fetchOrderDetails = async () => {
+            try {
+                const response = await fetch(`/api/order-details/${id}`);
+                const data = await response.json();
+                setOrderDetails(data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching order details:', error);
+                setLoading(false);
+            }
+        };
 
-    // Conditionally render only when orderDetails is not null
+        fetchOrderDetails();
+    }, [id]);
+
+    const BackToOrderHistory = () => {
+        navigate(`/order-history/${username}`);  // Navigate back with the username
+    };
+
     return (
         <>
-            <AuthorityHeader/>
+            <AuthorityHeader />
             <Container fluid>
                 <Row className="d-flex">
-                    {/* Sidebar - fixed width, no padding */}
                     <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
                         <Sidebar />
                     </Col>
                     <Col>
                         <h2>Order Details</h2>
                         <hr />
-                        {orderDetails ? (
+                        {loading ? (
+                            <p>Loading...</p>
+                        ) : orderDetails ? (
                             <div>
-                                <h2> Invoice #{orderDetails.inv}</h2>
+                                {console.log(orderDetails)}
+                                <h2> Invoice #{orderDetails._id}</h2>
                                 <br />
                                 <p>Status: {orderDetails.status}</p>
                                 <p>Seller: {orderDetails.seller}</p>
-                                <p>Purchase Date: {orderDetails.purchase_date}</p>
+                                <p>Purchase Date: {orderDetails.purchased}</p>
                             </div>
                         ) : (
-                            <p>Loading or Order not found...</p>
+                            <p>Order not found.</p>
                         )}
+                        <hr/>
+                        <Button onClick={BackToOrderHistory}>Back</Button>
                     </Col>
                 </Row>
             </Container>

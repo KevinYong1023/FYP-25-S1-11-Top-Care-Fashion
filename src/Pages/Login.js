@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState,useContext} from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../App"; // Import AuthContext
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "", role: "" });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const { setEmail, setRole, setLogin } = useContext(AuthContext); // Destructure setters from AuthContext
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,6 +32,9 @@ const Login = () => {
         const data = await response.json();
 
         if (response.ok) {
+          setEmail(formData.email); 
+          setRole(formData.role);   
+          setLogin(true);           
           if (formData.role === "user") {
             navigate("/home");} 
             else if (formData.role === "admin"){
