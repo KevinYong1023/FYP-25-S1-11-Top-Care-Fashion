@@ -13,7 +13,8 @@ const Register = () => {
         confirmPassword: '',
         position: '',
         gender: '',
-        dob: '' // Date of Birth field added
+        dob: '', // Date of Birth field added
+        address: '' // Address field added
     });
 
     const [errors, setErrors] = useState({});
@@ -48,6 +49,7 @@ const Register = () => {
             formErrors.confirmPassword = 'Passwords do not match.';
         if (!formData.position) formErrors.position = 'Position is required.';
         if (!formData.gender) formErrors.gender = 'Gender is required.';
+        if (!formData.address) formErrors.address = 'Address is required.';
 
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
@@ -71,7 +73,8 @@ const Register = () => {
                         phone: formData.phone,
                         position: formData.position,
                         gender: formData.gender,
-                        dob: formData.dob
+                        dob: formData.dob,
+                        address: formData.address
                     })
                 });
 
@@ -140,6 +143,17 @@ const Register = () => {
                             placeholder="Enter your phone number"
                         />
                         {errors.phone && <Alert variant="danger">{errors.phone}</Alert>}
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Address</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            placeholder="Enter your address"
+                        />
+                        {errors.address && <Alert variant="danger">{errors.address}</Alert>}
                     </Form.Group>
                     {/* Position Field */}
                     <Form.Group className="mb-3">

@@ -94,7 +94,7 @@ router.post('/login', async (req, res) => {
 
 // Registration route
 router.post('/register', async (req, res) => {
-    const {username, name, email, phone, password, dob, gender, position } = req.body;
+    const {username, name, email, phone, password, dob, gender, position, address } = req.body;
     try {
         // Check if the user already exists
         const existingUser = await User.findOne({ email });
@@ -115,7 +115,8 @@ router.post('/register', async (req, res) => {
             password: hashedPassword, // Store the hashed password
             dob, // Optional field
             gender, // Required field
-            position // Required field
+            position, // Required field
+            address,
         });
 
         // Save the user in the database
@@ -231,6 +232,7 @@ router.get('/user/:email', async (req, res) => {
             gender: user.gender,
             phone: user.phone,
             position: user.position,
+            address: user.address
             // Add other user fields if necessary
         });
     } catch (error) {
@@ -241,12 +243,12 @@ router.get('/user/:email', async (req, res) => {
 // Update user by email
 router.put('/user/:email', async (req, res) => {
     const { email } = req.params;
-    const { name, dob, gender, phone } = req.body; // Get updated fields from the request body
+    const { name, dob, gender, phone, address } = req.body; // Get updated fields from the request body
 
     try {
         const updatedUser = await User.findOneAndUpdate(
             { email },
-            { name, dob, gender, phone },
+            { name, dob, gender, phone, address },
             { new: true } // Returns the updated document
         );
 
@@ -296,6 +298,7 @@ router.get('/user/:email', async (req, res) => {
             gender: user.gender,
             phone: user.phone,
             position: user.position,
+            address: user.address
             // Add other user fields if necessary
         });
     } catch (error) {

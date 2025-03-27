@@ -49,6 +49,7 @@ function App() {
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
 
     // Load data from localStorage when the app starts
     useEffect(() => {
@@ -56,6 +57,7 @@ function App() {
         const savedRole = localStorage.getItem("role");
         const savedLogin = localStorage.getItem("login");
         const savedName = localStorage.getItem("name");
+        const savedAddress = localStorage.getItem("address");
 
         if (savedEmail) {
             setEmail(savedEmail);
@@ -69,6 +71,9 @@ function App() {
         if (savedName) {
             setName(savedName);
         }
+        if (savedAddress) {
+            setAddress(savedAddress);
+        }
     }, []);
 
     // Save state changes to localStorage when values update
@@ -77,11 +82,12 @@ function App() {
         localStorage.setItem("role", role);
         localStorage.setItem("login", login);
         localStorage.setItem("name", name);
-    }, [email, role, login, name]);
+        localStorage.setItem("address", address);
+    }, [email, role, login, name, address]);
 
     return (
         <CartProvider>
-            <AuthContext.Provider value={{ login, setLogin, role, setRole, email, setEmail, name, setName }}>
+            <AuthContext.Provider value={{ login, setLogin, role, setRole, email, setEmail, name, setName, address, setAddress }}>
                 <Router>
                     <Routes>
                         <Route path="/home" element={<Home />} />
@@ -100,8 +106,8 @@ function App() {
                         <Route path="/order-details/:id/:username" element={<OrderDetails />} />
                         <Route path="/assigned-ticket" element={<TotalTicket email={email} />} />
                         <Route path="/logout" element={<Logout setLogin={setLogin} />} />
-                        <Route path="/update-account" element={<UpdateAccount />} />
-                        <Route path="/user-profile" element={<UserProfile />} />
+                        <Route path="/update-account" element={<UpdateAccount email={email} />} />
+                        <Route path="/user-profile" element={<UserProfile email={email} setName={setName} setAddress={setAddress}/>} />
                         <Route path="/upload-product" element={<UploadProduct />} />
                         <Route path="/shipping-detail" element={<ShippingDetail />} />
                         <Route path="/manage-list" element={<ManageList />} />

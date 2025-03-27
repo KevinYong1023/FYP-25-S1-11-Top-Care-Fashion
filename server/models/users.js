@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
   position: {
     type: String,
     required: true
+  },
+  address: {
+    type: String,
+    required: true
   }
 });
 
