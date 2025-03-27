@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import Sidebar from "../../Components/Sidebar";
-import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
+import AuthorityHeader from "../../Components/Headers/CustomerSupportHeader";
 
 
 const CreateAccount = () => {

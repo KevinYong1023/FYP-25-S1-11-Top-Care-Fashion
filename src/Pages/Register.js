@@ -40,7 +40,7 @@ const Register = () => {
         }
         if (!formData.phone) {
             formErrors.phone = 'Phone number is required.';
-        } else if (!/^\d{10}$/.test(formData.phone)) {
+        } else if (!/^\d{8}$/.test(formData.phone)) {
             formErrors.phone = 'Phone number must be 10 digits.';
         }
         if (!formData.password) formErrors.password = 'Password is required.';

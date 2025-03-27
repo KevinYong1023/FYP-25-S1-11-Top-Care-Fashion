@@ -115,7 +115,9 @@ router.post('/register', async (req, res) => {
             password: hashedPassword, // Store the hashed password
             dob, // Optional field
             gender, // Required field
-            position // Required field
+            position, // Required field
+            joined: new Date().toISOString().split('T')[0], 
+            status:"Active",
         });
 
         // Save the user in the database
@@ -158,6 +160,17 @@ router.delete('/tickets/:id', async (req, res) => {
         const ticket = await Ticket.findByIdAndDelete(req.params.id);
         if (!ticket) return res.status(404).json({ message: 'Ticket not found' });
         res.json({ message: 'Ticket deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting the ticket' });
+    }
+});
+
+// Delete a user
+router.delete('/user/:id', async (req, res) => {
+    try {
+        const ticket = await User.findByIdAndDelete(req.params.id);
+        if (!ticket) return res.status(404).json({ message: 'Ticket not found' });
+        res.json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting the ticket' });
     }
@@ -206,7 +219,7 @@ router.put('/tickets/:id/status', async (req, res) => {
 
 
 // Get all users
-router.get('/users', async (req, res) => {
+router.get('/user', async (req, res) => {
     try {
         const users = await User.find(); // Fetch all users from the database
         res.json(users);
@@ -214,6 +227,43 @@ router.get('/users', async (req, res) => {
         res.status(500).json({ message: 'Error fetching users' });
     }
 });
+
+// Search users by name
+router.get('/user/search', async (req, res) => {
+    const { name } = req.query;
+
+    try {
+        const users = await User.find({ name: { $regex: name, $options: 'i' } }); // Case-insensitive search
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Error searching users' });
+    }
+});
+
+// Filter users by position and status
+router.get('/user/filter', async (req, res) => {
+    const { position, status } = req.query;
+
+    try {
+        const query = {};
+
+        // Add position filter if provided
+        if (position) {
+            query.position = position;
+        }
+
+        // Add status filter if provided
+        if (status) {
+            query.status = status;
+        }
+
+        const users = await User.find(query);
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Error filtering users' });
+    }
+});
+
 
 // Get user by email
 router.get('/user/:email', async (req, res) => {
@@ -241,12 +291,12 @@ router.get('/user/:email', async (req, res) => {
 // Update user by email
 router.put('/user/:email', async (req, res) => {
     const { email } = req.params;
-    const { name, dob, gender, phone } = req.body; // Get updated fields from the request body
+    const { username, name, dob, gender, phone } = req.body; // Get updated fields from the request body
 
     try {
         const updatedUser = await User.findOneAndUpdate(
-            { email },
-            { name, dob, gender, phone },
+            { email }, // Find user by email
+            { username, name, dob, gender, phone }, // Update the fields
             { new: true } // Returns the updated document
         );
 
@@ -256,6 +306,7 @@ router.put('/user/:email', async (req, res) => {
 
         res.json(updatedUser); // Return the updated user details
     } catch (error) {
+        console.error('Error updating user profile:', error); // Log error for better debugging
         res.status(500).json({ message: 'Error updating user profile' });
     }
 });
@@ -304,5 +355,23 @@ router.get('/user/:email', async (req, res) => {
     }
 });
 
+//Update User status:
+router.put('/user/:id/status', async (req, res) => {
+    const { id } = req.params; // Get user ID from the URL
+    const { status } = req.body; // Get the new status from the request body
+
+    try {
+        // Find the user by ID and update their status
+        const user = await User.findByIdAndUpdate(id, { status: status }, { new: true });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({ message: 'User status updated successfully', user });
+    } catch (error) {
+        console.error('Error updating user status:', error);
+        res.status(500).json({ message: 'Error updating user status' });
+    }
+});
 
 module.exports = router;

@@ -3,7 +3,7 @@ import React, { useState, useEffect} from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
 import { useParams, useNavigate } from "react-router-dom";
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function TicketInfo({email}) {
     const navigate = useNavigate();

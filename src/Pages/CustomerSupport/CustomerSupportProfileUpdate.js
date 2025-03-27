@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import userData from '../../mockdata/users.json'; // Import mock data
 import Sidebar from '../../Components/Sidebar';
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 import { useNavigate } from 'react-router-dom';  
 
 export default function CustomerSupportProfileUpdate({ email }) {
@@ -75,7 +74,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
             if (response.ok) {
                 const updatedUser = await response.json();
                 console.log('Profile updated successfully:', updatedUser);
-                // Optionally, you can set the updated user data back to the state
                 setProfile(updatedUser);
 
                 // Navigate back to the profile view
@@ -105,7 +103,7 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 type="text"
                                 name="username"
                                 value={profile.username}
-                                disabled
+                                onChange={handleChange}
                             />
                         </Form.Group>
 
@@ -116,7 +114,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="name"
                                 value={profile.name}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 
@@ -126,8 +123,7 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 type="email"
                                 name="email"
                                 value={profile.email}
-                                onChange={handleChange}
-                                
+                                disabled // Disable the email field
                             />
                         </Form.Group>
 
@@ -138,7 +134,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="dob"
                                 value={profile.dob}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 
@@ -148,7 +143,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="gender"
                                 value={profile.gender}
                                 onChange={handleChange}
-                                
                             >
                                 <option value="Female">Female</option>
                                 <option value="Male">Male</option>
@@ -163,7 +157,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="phone"
                                 value={profile.phone}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 

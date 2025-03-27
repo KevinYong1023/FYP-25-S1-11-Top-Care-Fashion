@@ -1,13 +1,10 @@
 import React from "react";  
-import { Navbar, Nav, NavDropdown, Container, Form, FormControl, Button } from "react-bootstrap";  
-import { Link } from "react-router-dom";  
+import { Navbar, Nav, Container } from "react-bootstrap";  
 import '../../css/Header.css';  
 import logo from '../../images/logo.png';
 import { House, Person, Eye, BoxArrowRight } from 'react-bootstrap-icons';
 
-
-
-export default function AuthorityHeader(){
+export default function CustomerSupportHeader(){
     return(
         <>
           <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">

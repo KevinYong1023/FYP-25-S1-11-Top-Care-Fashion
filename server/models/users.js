@@ -34,6 +34,14 @@ const userSchema = new mongoose.Schema({
   position: {
     type: String,
     required: true
+  },
+  joined:{
+    type: String,
+    required: true
+  },
+  status:{
+    type: String,
+    required: true
   }
 });
 

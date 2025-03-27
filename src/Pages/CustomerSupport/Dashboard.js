@@ -2,7 +2,7 @@ import React, { useState, useEffect,useContext} from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
 import { Link } from 'react-router-dom';
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 import { AuthContext } from '../../App';
 
 export default function Dashboard() {

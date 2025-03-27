@@ -13,13 +13,13 @@ export default function ManagerSidebar(){
         }}>
           <Nav className="flex-column">
             <Nav.Link href="/ManagerDashboard" style={{ color: 'white', marginBottom: '10px' }}>
-                <House style={{ marginRight: '10px' }} /> Manager Dashboard
+                <House style={{ marginRight: '10px' }} /> Dashboard
             </Nav.Link>
             <Nav.Link href="/ManagerProfile" style={{ color: 'white', marginBottom: '10px' }}>
-                <Person style={{ marginRight: '10px' }} /> Manager Profile
+                <Person style={{ marginRight: '10px' }} /> Profile
             </Nav.Link>
             <Nav.Link href="/ManagerUsersDashboard" style={{ color: 'white', marginBottom: '10px' }}>
-                <Eye style={{ marginRight: '10px' }} /> Manager Users
+                <Eye style={{ marginRight: '10px' }} />Users
             </Nav.Link>
             <Nav.Link href="/logout" style={{ color: 'white', marginBottom: '10px' }}>
                 <BoxArrowRight style={{ marginRight: '10px' }} /> Logout

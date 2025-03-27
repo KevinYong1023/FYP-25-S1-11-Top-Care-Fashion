@@ -1,44 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import userData from '../../mockdata/users.json';
 import userpic from '../../images/profile.png';
-import ManagerHeader from "../../Components/Headers/ManagerHeader";
+import ManagerHeader from "../../Components/Headers/ManagerHeader"; 
 import ManagerSideBar from "../../Components/Sidebars/ManagerSidebar";
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
 
-const ManagerProfile = ({email}) => {
+const ManagerProfile = ({ email, setName }) => {
     const [user, setUser] = useState(null);
-    const navigate = useNavigate(); // Initialize useNavigate
-    useEffect(() =>{
-        
-        let getEmail = localStorage.getItem("email");
-        const fetchedUser = userData.find((user) => user.email === getEmail); 
-        if (fetchedUser) {
-            setUser(fetchedUser);
-        }
+    const navigate = useNavigate();
+
+    // Fetch user details based on email
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            console.log("Email:", email);
+            if (email) {
+                try {
+                    const response = await fetch(`/api/user/${email}`);  // Assuming your API follows this route
+                    const data = await response.json();
+                    setUser(data); 
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                }
+            }
+        };
+        fetchUserDetails();
     }, [email]);
 
-    // Check if user data is loaded before rendering
+    function updateProfile() {
+        navigate('/ManagerProfileUpdate');
+    }
+
+    // Show loading message until user data is loaded
     if (!user) {
         return <p>Loading user data...</p>;
     }
 
-    function updateProfile(){
-        navigate('/ManagerProfileUpdate');  
-    }
-
     return (
         <div>
-            <ManagerHeader/>
+            <ManagerHeader />
             <Container fluid>
                 <Row>
                     <Col xs={12} md={3} className="p-0">
-                        <ManagerSideBar/>
+                        <ManagerSideBar />
                     </Col>
                     <Col md={9} className="p-4">
                         <Card className={`p-4`}>
-                            <img src={userpic} alt="Profile" width="120" height="120" />
-                            <h4>Username: {user.name}</h4>
+                            <h4>Username: {user.username}</h4>
                             <h4>Name: {user.name}</h4>
                             <h4>Email: {user.email}</h4>
                             <h4>Date of Birth: {user.dob}</h4>
@@ -50,7 +57,6 @@ const ManagerProfile = ({email}) => {
                 </Row>
             </Container>
         </div>
-           
     );
 };
 

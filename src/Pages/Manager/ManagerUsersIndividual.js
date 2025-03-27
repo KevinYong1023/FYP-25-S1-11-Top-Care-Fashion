@@ -42,8 +42,8 @@ export default function ManagerUsersIndividual() {
     };
 
     return (
+        <> <ManagerHeader />
         <Container fluid>
-            <ManagerHeader />
             <Row>
                 {/* Sidebar */}
                 <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: "100vh" }}>
@@ -60,7 +60,6 @@ export default function ManagerUsersIndividual() {
                         <Table striped bordered hover className="mt-3">
                             <thead className="table-light">
                                 <tr>
-                                    <th>Post ID</th>
                                     <th>Product Name</th>
                                     <th>Price</th>
                                     <th>Description</th>
@@ -71,7 +70,6 @@ export default function ManagerUsersIndividual() {
                             <tbody>
                                 {productPosts.map((post) => (
                                     <tr key={post.postId}>
-                                        <td>{post.postId}</td>
                                         <td>{post.name}</td>
                                         <td>{post.price}</td>
                                         <td>{post.description}</td>
@@ -93,9 +91,7 @@ export default function ManagerUsersIndividual() {
                         <Table striped bordered hover className="mt-3">
                             <thead className="table-light">
                                 <tr>
-                                    <th>Review ID</th>
-                                    <th>Post ID</th>
-                                    <th>User ID</th>
+                                    <th>Product</th>
                                     <th>Date</th>
                                     <th>Comment</th>
                                     <th>Rating</th>
@@ -105,9 +101,7 @@ export default function ManagerUsersIndividual() {
                             <tbody>
                                 {reviews.map((review) => (
                                     <tr key={review.reviewId}>
-                                        <td>{review.reviewId}</td>
-                                        <td>{review.postId}</td>
-                                        <td>{review.id}</td>
+                                        <td>Product 01</td>
                                         <td>{review.date}</td>
                                         <td>{review.comment}</td>
                                         <td>{review.rating}</td>
@@ -127,5 +121,6 @@ export default function ManagerUsersIndividual() {
                 </Col>
             </Row>
         </Container>
+        </>
     );
 }

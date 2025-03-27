@@ -28,7 +28,7 @@ import ViewAccountsManager from "./Pages/Admin/ViewAccountsManager";
 import ViewAccountsUser from "./Pages/Admin/ViewAccountsUser";
 import ViewAccountsCS from "./Pages/Admin/ViewAccountsCS";
 import AdminProfile from "./Pages/Admin/AdminProfile.js";
-import CreateAccount from "./Pages/Admin/CreateAccount.js";
+import AdminCreateAccount from "./Pages/Admin/AdminCreateAccount";
 import DeleteAccount from "./Pages/Admin/DeleteAccount.js";
 import MixMatch from "./Pages/MixMatch.js";
 import ManagerDashboard from "./Pages/Manager/ManagerDashboard";
@@ -40,6 +40,7 @@ import { CartProvider } from './Components/CartContext.js';
 import Cart from './Pages/Cart';
 import Payment from './Pages/Payment';
 import CustomerSupportProfileUpdate from "./Pages/CustomerSupport/CustomerSupportProfileUpdate.js";
+import AdminProfileUpdate from "./Pages/Admin/AdminProfileUpdate.js";
 
 // Create the context
 export const AuthContext = createContext();
@@ -111,13 +112,14 @@ function App() {
                         <Route path="/view-all-accounts-customersupport" element={<ViewAccountsCS />} />
                         <Route path="/view-all-accounts-manager" element={<ViewAccountsManager />} />
                         <Route path="/view-all-accounts-user" element={<ViewAccountsUser />} />
-                        <Route path="/admin-profile" element={<AdminProfile />} />
-                        <Route path="/create-account" element={<CreateAccount />} />
+                        <Route path="/admin-profile" element={<AdminProfile  email={email} />} />
+                        <Route path="/admin-profile-update" element={<AdminProfileUpdate email={email}/>} />
+                        <Route path="/create-account" element={<AdminCreateAccount />} />
                         <Route path="/delete-account" element={<DeleteAccount />} />
                         <Route path="/mixmatch" element={<MixMatch />} />
                         <Route path="/managerdashboard" element={<ManagerDashboard />} />
-                        <Route path="/managerprofile" element={<ManagerProfile />} />
-                        <Route path="/managerprofileupdate" element={<ManagerProfileUpdate />} />
+                        <Route path="/managerprofile" element={<ManagerProfile email={email} />} />
+                        <Route path="/managerprofileupdate" element={<ManagerProfileUpdate email={email}/>} />
                         <Route path="/managerusersdashboard" element={<ManagerUsersDashboard />} />
                         <Route path="/managerusersindividual/:id" element={<ManagerUsersIndividual />} />
                         <Route path="/cart" element={<Cart />} />
