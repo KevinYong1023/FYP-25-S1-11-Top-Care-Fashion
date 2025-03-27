@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
 import { Link } from 'react-router-dom'; // Import Link from React Router
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function TotalTicket({email}) {
     const [ticketList, setTicketList] = useState([]);

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import userpic from '../../images/profile.png';
 import Sidebar from "../../Components/Sidebars/Sidebar";
-import AuthorityHeader from "../../Components/Headers/authrotiyHeaders";
+import AuthorityHeader from "../../Components/Headers/CustomerSupportHeader";
 import { useNavigate } from 'react-router-dom';
-import { MdOutlineEmail } from "react-icons/md";
 
 const CustomerSupportProfile = ({ email, setName }) => {  
     const [user, setUser] = useState(null);  
@@ -18,7 +16,6 @@ const CustomerSupportProfile = ({ email, setName }) => {
                 try {
                     const response = await fetch(`/api/user/${email}`); 
                     const data = await response.json();
-                    console.log("Data:", data);
                     setUser(data); 
                     setName(data.name);
                 } catch (error) {
@@ -48,7 +45,6 @@ const CustomerSupportProfile = ({ email, setName }) => {
                     </Col>
                     <Col md={9} className="p-4">
                         <Card className={`p-4`}>
-                            <img src={userpic} alt="Profile" width="120" height="120" />
                             <h4>Username: {user.username}</h4>
                             <h4>Name: {user.name}</h4>
                             <h4>Email: {user.email}</h4>

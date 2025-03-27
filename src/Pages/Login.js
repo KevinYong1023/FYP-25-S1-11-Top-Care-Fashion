@@ -6,6 +6,7 @@ import { AuthContext } from "../App"; // Import AuthContext
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "", role: "" });
+  const [user, setUser] = useState(false)
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const { setEmail, setRole, setLogin } = useContext(AuthContext); // Destructure setters from AuthContext
@@ -20,7 +21,7 @@ const Login = () => {
     
     try {
       // Corrected API request URL to match the backend route
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,6 +33,7 @@ const Login = () => {
         const data = await response.json();
 
         if (response.ok) {
+          console.log(response)
           setEmail(formData.email); 
           setRole(formData.role);   
           setLogin(true);           

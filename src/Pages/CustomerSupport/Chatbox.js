@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar'; // Assuming Sidebar component is created
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function Chatbox() {
     return (

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function OrderDetails() {
     const { id, username } = useParams(); // Get both the order ID and username from the URL

@@ -1,93 +1,165 @@
-// Pages/ManagerUsersDashboard.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader";
 
 export default function ManagerUsersDashboard() {
-    // Mock user data
-    const [users, setUsers] = useState([
-        { id: "USR001", username: "john_doe", email: "john@example.com", phone: "123-4567", dateJoined: "01/02/2023" },
-        { id: "USR002", username: "jane_smith", email: "jane@example.com", phone: "987-6543", dateJoined: "15/04/2023" },
-        { id: "USR003", username: "mark_lee", email: "mark@example.com", phone: "555-6789", dateJoined: "22/06/2023" },
-        { id: "USR004", username: "sara_k", email: "sara@example.com", phone: "321-8765", dateJoined: "10/08/2023" },
-        { id: "USR005", username: "tom_h", email: "tom@example.com", phone: "654-9876", dateJoined: "05/10/2023" }
-    ]);
+    // State for storing users fetched from the API
+    const [users, setUsers] = useState([]);
 
     // State for search input
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Handle search filtering
-    const filteredUsers = users.filter(user =>
-        user.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    // Fetch users from the backend
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch("/api/user");
+            const data = await response.json();
+            // Filter users to only include those with position "user"
+            const filteredData = data.filter(user => user.position === "user");
+
+            setUsers(filteredData); // Set filtered users in state
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers(); // Fetch users on component mount
+    }, []);
+
+    // Filter users based on search query (filter by username)
+    const filteredUsers = users.filter((user) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Suspend user function
-    const handleSuspend = () => {
-        alert("Account suspended");
+    const handleSuspend = async (userId) => {
+        try {
+            const response = await fetch(`/api/user/${userId}/status`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status: "Suspended" }), // Set status to Suspended
+            });
+
+            if (response.ok) {
+                await fetchUsers(); // Refetch users to refresh the list
+            } else {
+                console.error("Error suspending user");
+            }
+        } catch (error) {
+            console.error("Error suspending user:", error);
+        }
+    };
+
+    // Activate user function
+    const handleActive = async (userId) => {
+        try {
+            const response = await fetch(`/api/user/${userId}/status`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status: "Active" }), // Set status to Active
+            });
+
+            if (response.ok) {
+                await fetchUsers(); // Refetch users to refresh the list
+            } else {
+                console.error("Error activating user");
+            }
+        } catch (error) {
+            console.error("Error activating user:", error);
+        }
     };
 
     return (
-        <Container fluid>
+        <>
             <ManagerHeader />
+            <Container fluid>
+                <Row>
+                    {/* Sidebar */}
+                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: "100vh" }}>
+                        <ManagerSidebar />
+                    </Col>
 
-            <Row>
-                {/* Sidebar */}
-                <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: "100vh" }}>
-                    <ManagerSidebar />
-                </Col>
+                    {/* Main Content */}
+                    <Col md={9} lg={10} className="px-md-4">
+                        <Row className="mt-3">
+                            <Col>
+                                <h2>User Account</h2>
+                            </Col>
+                            <Col xs="auto">
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Search by Username"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </Col>
+                        </Row>
 
-                {/* Main Content */}
-                <Col md={9} lg={10} className="px-md-4">
-                    <Row className="mt-3">
-                        <Col>
-                            <h2>User Account</h2>
-                        </Col>
-                        <Col xs="auto">
-                            <Form.Control
-                                type="text"
-                                placeholder="Search by ID or Username"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                        </Col>
-                    </Row>
-
-                    <Table striped bordered hover className="mt-3">
-                        <thead className="table-light">
-                            <tr>
-                                <th>Account ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Created On</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredUsers.map((user) => (
-                                <tr key={user.id}>
-                                    <td>{user.id}</td>
-                                    <td>{user.username}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.phone}</td>
-                                    <td>{user.dateJoined}</td>
-                                    <td>
-                                        <Button variant="danger" size="sm" className="me-2" onClick={handleSuspend}>
-                                            Suspend
-                                        </Button>
-                                        <Link to={`/managerusersindividual/${user.id}`} className="btn btn-primary btn-sm">
-                                            Edit
-                                        </Link>
-                                    </td>
+                        <Table striped bordered hover className="mt-3">
+                            <thead className="table-light">
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Created At</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
-        </Container>
+                            </thead>
+                            <tbody>
+                                {filteredUsers.map((user) => (
+                                    <tr key={user._id}>
+                                        <td>{user.username}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.phone}</td>
+                                        <td>{user.joined}</td>
+                                        <td>{user.status}</td>
+                                        <td>
+                                            {user.status !== "Active" ? (
+                                                <Button
+                                                    variant="success"
+                                                    size="sm"
+                                                    className="me-2"
+                                                    onClick={() => handleActive(user._id)} // Activate user
+                                                >
+                                                    Activate
+                                                </Button>
+                                            ) : (
+                                                <>
+                                                <Button
+                                                    variant="danger"
+                                                    size="sm"
+                                                    className="me-2"
+                                                    onClick={() => handleSuspend(user._id)} // Suspend user
+                                                >
+                                                    Suspend
+                                                </Button>
+                                                <Link
+                                                to={`/managerusersindividual/${user._id}`}
+                                                className="btn btn-primary btn-sm"
+                                            >
+                                                Review
+                                            </Link>
+                                                </>
+                                            )}
+                                          
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 }

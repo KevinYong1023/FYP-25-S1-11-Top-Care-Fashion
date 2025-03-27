@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
-import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function ViewUsers() {
     const [users, setUsers] = useState([]);
@@ -10,7 +10,7 @@ export default function ViewUsers() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('/api/users'); // Fetch users from backend route
+                const response = await fetch('/api/user'); // Fetch users from backend route
                 const data = await response.json();
                 setUsers(data); // Set the fetched users to the state
             } catch (error) {

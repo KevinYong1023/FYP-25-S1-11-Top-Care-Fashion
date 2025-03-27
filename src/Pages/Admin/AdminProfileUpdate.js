@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import ManagerSidebar from '../../Components/Sidebars/ManagerSidebar';
-import ManagerHeader from '../../Components/Headers/ManagerHeader';
+import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
+import AdminHeader from '../../Components/Headers/AdminHeader';
 import { useNavigate } from 'react-router-dom';  
 
-export default function ManagerProfileUpdate({ email }) {
+export default function AdminProfileUpdate({ email }) {
     const navigate = useNavigate();
     const [profile, setProfile] = useState({
         username: '',
@@ -79,7 +79,7 @@ export default function ManagerProfileUpdate({ email }) {
                 setProfile(updatedUser);
 
                 // Navigate back to the profile view
-                navigate('/ManagerProfile');
+                navigate('/admin-profile');
             } else {
                 console.error('Error updating profile');
             }
@@ -90,11 +90,11 @@ export default function ManagerProfileUpdate({ email }) {
 
     return (
         <>
-        <ManagerHeader/>
+        <AdminHeader />
         <Container fluid>
             <Row>
                 <Col xs={12} md={3} className="p-0">
-                    <ManagerSidebar/>
+                    <AdminSidebar />
                 </Col>
                 <Col md={9} className="p-4">
                     <h3>Update Profile</h3>
@@ -115,7 +115,6 @@ export default function ManagerProfileUpdate({ email }) {
                                 name="name"
                                 value={profile.name}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="email">
@@ -136,7 +135,6 @@ export default function ManagerProfileUpdate({ email }) {
                                 name="dob"
                                 value={profile.dob}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 
@@ -146,7 +144,6 @@ export default function ManagerProfileUpdate({ email }) {
                                 name="gender"
                                 value={profile.gender}
                                 onChange={handleChange}
-                                
                             >
                                 <option value="Female">Female</option>
                                 <option value="Male">Male</option>
@@ -161,7 +158,6 @@ export default function ManagerProfileUpdate({ email }) {
                                 name="phone"
                                 value={profile.phone}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 
