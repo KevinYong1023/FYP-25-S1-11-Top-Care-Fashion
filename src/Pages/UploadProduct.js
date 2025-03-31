@@ -1,285 +1,198 @@
-import React, { useState, useCallback } from "react";
-import { useEffect } from "react";
-import Cropper from "react-easy-crop";
-import { Container, Form, Button, Card, Row, Col, Modal } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserHeader from "../Components/Headers/userHeader";
 
-let categoryName = ""
+const UploadProduct = ({ email }) => {
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    price: "",
+    category: "Top",
+    imageUrl: ""
+  });
 
-const UploadProduct = () => {
-    const [product, setProduct] = useState({
-        title: "",
-        brand: "",
-        condition: "",
-        size: "",
-        price: "",
-        category: categoryName, 
-        description: "",
-        images: [],
-    });
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
-    // Use states for updating the page
-    const [preview, setPreview] = useState([]);
-    const [cropModal, setCropModal] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [crop, setCrop] = useState({ x: 0, y: 0 });
-    const [zoom, setZoom] = useState(1);
-    const [category, setCategory] = useState(categoryName);
-
-    // Handle text input changes
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProduct({ ...product, [name]: value });
-    };
-
-    useEffect(() => {
-        console.log("Updated Category:", product.category);
-    }, [product.category]); 
-
-    // Open cropping modal
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        if (files.length > 0) {
-            const fileURL = URL.createObjectURL(files[0]);
-            setSelectedImage(fileURL);
-            setCropModal(true);
-    
-            // Update product state using a function to get the latest state
-            setProduct(prev => {
-                if (prev.images.length === 0) { 
-                    const detectedCategory = handleCategory(files[0]);
-                    return { ...prev, category: detectedCategory };
-                }
-                return prev; 
-            });
-        }
-    };
-
-    const handleCategory = (file) => {
-        const fileName = file.name.toLowerCase();
-        if (fileName.includes("shirt") || fileName.includes("hoodie")) {
-            categoryName = "Top";
-            setCategory(categoryName);
-            return "Top";
-        } else if (fileName.includes("jeans") || fileName.includes("pants") || fileName.includes("shorts")) {
-            categoryName = "Bottom";
-            setCategory(categoryName);
-            return "Bottom";
-        } else if (fileName.includes("shoe") || fileName.includes("sneaker")) {
-            categoryName = "Footware";
-            setCategory(categoryName);
-            return "FootWear";
-        }
-        setCategory(categoryName);
-        return "Invalid Item"; // Default: No category assigned
+  useEffect(() => {
+    if (form.imageUrl.trim() !== "") {
+      setPreviewUrl(form.imageUrl);
+    } else {
+      setPreviewUrl("");
     }
-    // Handle cropping change
-    const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-        console.log(croppedArea, croppedAreaPixels);
-    }, []);
+  }, [form.imageUrl]);
 
-    // Save cropped image
-    const saveCroppedImage = () => {
-        setPreview([...preview, selectedImage]); // Add cropped image to preview
-        setProduct((prev) => ({
-            ...prev,
-            images: [...prev.images, selectedImage],
-        }));
-        setCropModal(false);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess(false);
+
+    // ✅ Frontend validation
+    if (!form.title.trim()) {
+      setError("Title is required.");
+      return;
+    }
+
+    if (!form.price || isNaN(form.price) || parseFloat(form.price) <= 0) {
+      setError("Please enter a valid price greater than 0.");
+      return;
+    }
+
+    if (!form.imageUrl.trim()) {
+      setError("Image URL is required.");
+      return;
+    }
+
+    // ✅ Relaxed URL validation: just checks if it's a proper URL
+    const urlRegex = /^https?:\/\/.+/i;
+    if (!urlRegex.test(form.imageUrl)) {
+      setError("Please enter a valid public image URL (must start with http or https).");
+      return;
+    }
+
+    const productData = {
+      ...form,
+      price: parseFloat(form.price),
+      email
     };
 
-    // Remove selected image
-    const handleRemoveImage = (index) => {
-        setProduct((prev) => ({
-            ...prev,
-            images: prev.images.filter((_, i) => i !== index),
-        }));
-        setPreview((prev) => prev.filter((_, i) => i !== index));
-    };
+    try {
+      const res = await fetch("/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productData)
+      });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if(product.category === "Invalid Item"){
-            alert("Please select another image");
-            return;
-        }
+      const data = await res.json();
 
-        if (!product.title || !product.brand || !product.condition || !product.size || !product.price || !product.category || !product.description || product.images.length === 0) {
-            alert("Please fill all fields and upload images.");
-            return;
-        }
-            alert("Product details have been saved!");
-        
-            setProduct({ title: "", brand: "", condition: "", size: "", price: "", category: "", description: "", images: [] });
-            setPreview([]);    
-    };
+      if (res.ok) {
+        setSuccess(true);
+        setForm({
+          title: "",
+          description: "",
+          price: "",
+          category: "Top",
+          imageUrl: ""
+        });
+        setPreviewUrl("");
+      } else {
+        setError(data.message || "Upload failed");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Server error");
+    }
+  };
 
-    return (
-        <>
-        <UserHeader  loginStatus={true}/>
-       
-        <Container className="mt-4">
-            <Card>
-                <Card.Body>
-                    <Row>
-                        {/* Left Side: Image Previews */}
-                        <Col md={5} className="border-end d-flex flex-column align-items-center">
-                            <h3 className="mb-3">Image Previews</h3>
-                            <div className="w-100 text-center">
-                                {preview.length > 0 ? (
-                                    <>
-                                        <div className="position-relative">
-                                            <img
-                                                src={preview[0]}
-                                                alt="Main Preview"
-                                                className="img-thumbnail mb-2"
-                                                style={{ width: "400px", height: "400px", objectFit: "cover" }}
-                                            />
-                                            <Button
-                                                variant="light"
-                                                size="sm"
-                                                className="position-absolute top-0 end-0 p-1 rounded-circle border border-secondary"
-                                                style={{ width: "20px", height: "20px", fontSize: "12px", lineHeight: "1" }}
-                                                onClick={() => handleRemoveImage(0)}
-                                            >
-                                                ×
-                                            </Button>
-                                        </div>
-                                        <div className="d-flex flex-wrap justify-content-center">
-                                            {preview.slice(1).map((url, index) => (
-                                                <div key={index + 1} className="position-relative m-1">
-                                                    <img
-                                                        src={url}
-                                                        alt={`Preview ${index + 2}`}
-                                                        className="img-thumbnail"
-                                                        style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                                                    />
-                                                    <Button
-                                                        variant="light"
-                                                        size="sm"
-                                                        className="position-absolute top-0 end-0 p-1 rounded-circle border border-secondary"
-                                                        style={{ width: "20px", height: "20px", fontSize: "12px", lineHeight: "1" }}
-                                                        onClick={() => handleRemoveImage(index + 1)}
-                                                    >
-                                                        ×
-                                                    </Button>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div>
-                                    <p className="text-muted">No images uploaded yet. </p>
-                                    <p className="text-muted">Please upload an image with frontal view of the product for best results</p>
-                                    </div>
-                                )}
-                            </div>
-                        </Col>
+  return (
+    <>
+      <UserHeader loginStatus={true} />
+      <Container className="mt-4">
+        <Card>
+          <Card.Body>
+            <Row>
+              {/* Left: Image Preview */}
+              <Col md={5} className="border-end text-center d-flex flex-column align-items-center justify-content-center">
+                <h4>Image Preview</h4>
+                {previewUrl ? (
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="img-thumbnail mt-2"
+                    style={{ width: "300px", height: "300px", objectFit: "cover" }}
+                  />
+                ) : (
+                  <div className="text-muted mt-3">Enter an image URL to preview it here.</div>
+                )}
+              </Col>
 
-                        {/* Right Side: Product Form */}
-                        <Col md={7}>
-                            <h3 className="mb-3">Upload a New Product</h3>
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Listing Title</Form.Label>
-                                    <Form.Control type="text" name="title" value={product.title} onChange={handleChange} placeholder="Enter listing title" required />
-                                </Form.Group>
+              {/* Right: Product Form */}
+              <Col md={7}>
+                <h3 className="mb-3">Upload Product</h3>
+                {success && <Alert variant="success">Product uploaded successfully!</Alert>}
+                {error && <Alert variant="danger">{error}</Alert>}
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control
+                      name="title"
+                      value={form.title}
+                      onChange={handleChange}
+                      placeholder="Enter product title"
+                      required
+                    />
+                  </Form.Group>
 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Brand</Form.Label>
-                                    <Form.Control type="text" name="brand" value={product.brand} onChange={handleChange} placeholder="Enter brand" required />
-                                </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      name="description"
+                      value={form.description}
+                      onChange={handleChange}
+                      placeholder="Product description"
+                    />
+                  </Form.Group>
 
-                                <Row>
-                                    <Col md={6}>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Condition</Form.Label>
-                                        <Form.Select name="condition" value={product.condition} onChange={handleChange} required>
-                                                <option value="">Select condition</option>
-                                                <option value="New">New</option>
-                                                <option value="Like New">Like New</option>
-                                                <option value="Used">Used</option>
-                                                <option value="For Parts">For Parts</option>
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md={6}>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Size</Form.Label>
-                                            <Form.Select name="size" value={product.size} onChange={handleChange} required>
-                                                <option value="">Select Size</option> 
-                                                <option value="XS">XS</option>
-                                                <option value="S">S</option>
-                                                <option value="M">M</option>
-                                                <option value="L">L</option>
-                                                <option value="XL">XL</option>
-                                                <option value="XXL">XXL</option>
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
+                  <Row>
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Price</Form.Label>
+                        <Form.Control
+                          type="number"
+                          name="price"
+                          value={form.price}
+                          onChange={handleChange}
+                          placeholder="Enter price"
+                          required
+                        />
+                      </Form.Group>
+                    </Col>
 
-                                <Row>
-                                    <Col md={6}>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Price ($)</Form.Label>
-                                            <Form.Control type="number" name="price" value={product.price} onChange={handleChange} placeholder="Enter product price" required />
-                                        </Form.Group>
-                                    </Col>
-                                    <Col md={6}>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Category</Form.Label>
-                                            <Form.Control type="test" placeholder="Category" disabled value={product.category} onChange={handleCategory}></Form.Control>
-                                        </Form.Group>
-                                    </Col>
-                                </Row>
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Category</Form.Label>
+                        <Form.Select
+                          name="category"
+                          value={form.category}
+                          onChange={handleChange}
+                        >
+                          <option value="Top">Top</option>
+                          <option value="Bottom">Bottom</option>
+                          <option value="Footwear">Footwear</option>
+                          <option value="Other">Other</option>
+                        </Form.Select>
+                      </Form.Group>
+                    </Col>
+                  </Row>
 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Description</Form.Label>
-                                    <Form.Control as="textarea" name="description" rows={4} value={product.description} onChange={handleChange} placeholder="Enter product description" required />
-                                </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Image URL</Form.Label>
+                    <Form.Control
+                      name="imageUrl"
+                      value={form.imageUrl}
+                      onChange={handleChange}
+                      placeholder="Paste a public image URL"
+                      required
+                    />
+                  </Form.Group>
 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Upload Images</Form.Label>
-                                    <Form.Control type="file" accept="image/*" onChange={handleImageChange} multiple required />
-                                </Form.Group>
-
-                                <Button variant="primary" type="submit">Post</Button>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Card.Body>
-            </Card>
-
-            {/* Crop Image Modal */}
-            <Modal show={cropModal} onHide={() => setCropModal(false)} centered size="lg">
-                <Modal.Header closeButton>
-                    <Modal.Title>Adjust Image</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {selectedImage && (
-                        <div style={{ position: "relative", width: "100%", height: "400px" }}>
-                            <Cropper
-                                image={selectedImage}
-                                crop={crop}
-                                zoom={zoom}
-                                aspect={1}
-                                onCropChange={setCrop}
-                                onZoomChange={setZoom}
-                                onCropComplete={onCropComplete}
-                            />
-                        </div>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setCropModal(false)}>Cancel</Button>
-                    <Button variant="primary" onClick={saveCroppedImage}>Save</Button>
-                </Modal.Footer>
-            </Modal>
-        </Container>
-        </>
-    );
+                  <Button variant="primary" type="submit">Upload</Button>
+                </Form>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Container>
+    </>
+  );
 };
 
 export default UploadProduct;

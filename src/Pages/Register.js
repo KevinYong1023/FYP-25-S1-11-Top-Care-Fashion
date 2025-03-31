@@ -96,7 +96,7 @@ const Register = () => {
     return (
         <>
             <UserHeader loginStatus={false} />
-            <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <Container className="d-flex flex-column align-items-center py-5" style={{ minHeight: '100vh' }}>
                 <h2 className="mb-4">Create an Account</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form className="w-50" onSubmit={handleSubmit}>

@@ -85,17 +85,17 @@ function App() {
         localStorage.setItem("address", address);
     }, [email, role, login, name, address]);
 
-    return (
-        <CartProvider>
-            <AuthContext.Provider value={{ login, setLogin, role, setRole, email, setEmail, name, setName, address, setAddress }}>
+    return ( 
+        <AuthContext.Provider value={{ login, setLogin, role, setRole, email, setEmail, name, setName, address, setAddress }}>
+            <CartProvider email={email}>
                 <Router>
                     <Routes>
-                        <Route path="/home" element={<Home />} />
+                        <Route path="/home" element={<Home email={email}  />} />
                         <Route path="/" element={<Navigate to="/login" replace />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login setLogin={setLogin} />} />
-                        <Route path="/productpage" element={<ProductPage />} />
-                        <Route path="/shoppage" element={<ShopPage loginStatus={login} />} />
+                        <Route path="/productpage/:id" element={<ProductPage email={email} />} />
+                        <Route path="/shoppage" element={<ShopPage loginStatus={login} email={email} />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/ticket-info/:id" element={<TicketInfo email={email}/>} />
                         <Route path="/customer-support-profile" element={<CustomerSupportProfile email={email} setName={setName} />} />
@@ -108,9 +108,9 @@ function App() {
                         <Route path="/logout" element={<Logout setLogin={setLogin} />} />
                         <Route path="/update-account" element={<UpdateAccount email={email} />} />
                         <Route path="/user-profile" element={<UserProfile email={email} setName={setName} setAddress={setAddress}/>} />
-                        <Route path="/upload-product" element={<UploadProduct />} />
+                        <Route path="/upload-product" element={<UploadProduct email={email} />} />
                         <Route path="/shipping-detail" element={<ShippingDetail />} />
-                        <Route path="/manage-list" element={<ManageList />} />
+                        <Route path="/manage-list" element={<ManageList email={email} />} />
                         <Route path="/profit-page" element={<ProfitPage />} />
                         <Route path="/view-all-accounts" element={<ViewAccounts />} />
                         <Route path="/view-all-accounts-admin" element={<ViewAccountsAdmin />} />
@@ -126,13 +126,13 @@ function App() {
                         <Route path="/managerprofileupdate" element={<ManagerProfileUpdate />} />
                         <Route path="/managerusersdashboard" element={<ManagerUsersDashboard />} />
                         <Route path="/managerusersindividual/:id" element={<ManagerUsersIndividual />} />
-                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/cart" element={<Cart email={email} />} />
                         <Route path="/payment" element={<Payment />} />
                         <Route path="/createuser" element={<CreateUser />} />
                     </Routes>
                 </Router>
-            </AuthContext.Provider>
-        </CartProvider>
+            </CartProvider>
+        </AuthContext.Provider>
     );
 }
 
