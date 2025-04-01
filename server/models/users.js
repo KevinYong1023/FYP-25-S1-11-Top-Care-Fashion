@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
   status:{
     type: String,
     required: true
+  },
+  address: {
+    type: String,
+    required: true
   }
 });
 

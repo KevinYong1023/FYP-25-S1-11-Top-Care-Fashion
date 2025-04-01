@@ -1,40 +1,59 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';  
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-const CartContext = createContext();  
+const CartContext = createContext();
 
-export const CartProvider = ({ children }) => {  
-    const [cart, setCart] = useState(() => {  
-        const savedCart = localStorage.getItem('cart');  
-        return savedCart ? JSON.parse(savedCart) : [];  
-    });  
+export const useCart = () => useContext(CartContext);
 
-    useEffect(() => {  
-        localStorage.setItem('cart', JSON.stringify(cart));  
-    }, [cart]);  
+const LOCAL_STORAGE_KEY_PREFIX = "cart_";
 
-    const addToCart = (item) => {  
-        setCart((prevCart) => [...prevCart, item]);  
-    };  
+// Load cart from localStorage for a specific user
+const loadCartFromStorage = (email) => {
+  try {
+    const storedCart = localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}${email}`);
+    return storedCart ? JSON.parse(storedCart) : [];
+  } catch {
+    return [];
+  }
+};
 
-    const removeFromCart = (itemId) => {  
-        setCart((prevCart) => prevCart.filter(item => item.id !== itemId));  
-    };  
+// Save cart to localStorage for a specific user
+const saveCartToStorage = (email, cart) => {
+  localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}${email}`, JSON.stringify(cart));
+};
 
-    const clearCart = () => {  
-        setCart([]);  
-    };  
+export const CartProvider = ({ children, email }) => {
+  const [cart, setCart] = useState([]);
 
-    const getTotalItems = () => {  
-        return cart.length;  
-    };  
+  // Load cart when user logs in or email changes
+  useEffect(() => {
+    if (email) {
+      const storedCart = loadCartFromStorage(email);
+      setCart(storedCart);
+    }
+  }, [email]);
 
-    return (  
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, getTotalItems }}>  
-            {children}  
-        </CartContext.Provider>  
-    );  
-};  
+  // Sync cart to localStorage
+  useEffect(() => {
+    if (email) {
+      saveCartToStorage(email, cart);
+    }
+  }, [cart, email]);
 
-export const useCart = () => {  
-    return useContext(CartContext);  
-};  
+  const addToCart = (item) => {
+    setCart((prev) => {
+      const exists = prev.some((p) => p.id === item.id);
+      if (exists) return prev;
+      return [...prev, item];
+    });
+  };
+
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};

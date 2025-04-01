@@ -1,62 +1,70 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import UserHeader from '../Components/Headers/userHeader';
-import '../css/UserProfile.css'; // Import CSS file
+import { useNavigate } from 'react-router-dom';
+import { MdOutlineEmail } from "react-icons/md";
 
-export default function UserProfile(loginStatus) {
+const UserProfile = ({ email, setName, setAddress }) => {  
+    const [user, setUser] = useState(null);  
+    const navigate = useNavigate();
+
+    // Fetch user details based on email
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            console.log("Email:", email);
+            if (email) {
+                try {
+                    const response = await fetch(`/api/user/${email}`); 
+                    const data = await response.json();
+                    console.log("Data:", data);
+                    setUser(data); 
+                    setName(data.name);
+                    setAddress(data.address);
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                }
+            }
+        };
+        fetchUserDetails();
+    }, [email]);
+
+    function updateProfile(){
+        navigate('/update-account');  
+    }
+
+    // If user data is not loaded, show a loading message
+    if (!user) {
+        return <p>Loading user data...</p>;
+    }
+
     return (
-        <>
-           <UserHeader loginStatus={loginStatus}/>
+        <div>
+            <UserHeader loginStatus={true} />
             <Container fluid>
-                <Row className="d-flex justify-content-center">
-                    <Col md={8} className="profile-container">
-                        <Row>
-                            <h2>Profile</h2>
-                            <hr />
-                            <Col md={6}>
-                                <p><strong>First Name: Tricia</strong></p>
-                                <p><strong>Last Name: Chan</strong></p>
-                                <p><strong>Username: tcqy</strong></p>
-                                <p><strong>Email: triciachanqy@gmail.com</strong></p>
-                            </Col>
-                            <Col md={6}>
-                                <p><strong>Phone No.: 90845365</strong></p>
-                                <p><strong>Date Joined: 11/03/2025</strong></p>
-                            </Col>
-                        </Row>
-
-                        {/* Shipping Details */}
-                        <Row>
+                <Row>
+                    <Col md={9} className="p-4">
+                        <Card className={`p-4`}>
+                            <h2>Profile Details</h2>
+                            <h4>Username: {user.username}</h4>
+                            <h4>Name: {user.name}</h4>
+                            <h4>Email: {user.email}</h4>
+                            <h4>Date of Birth: {user.dob}</h4>
+                            <h4>Gender: {user.gender}</h4>
+                            <h4>Phone: {user.phone}</h4>
+                        </Card>
+                        <Card className="p-4">
                             <h2>Shipping Details</h2>
-                            <hr />
-                            <Col md={6}>
-                                <p><strong>First Name: Tricia</strong></p>
-                                <p><strong>Last Name: Chan</strong></p>
-                                <p><strong>Phone No.: 90845365</strong></p>
-                                <p><strong>Email: triciachanqy@gmail.com</strong></p>
-                            </Col>
-                            <Col md={6}>
-                                <p><strong>Address:</strong></p>
-                                <p><strong>Hougang Avenue 4 Block 576</strong></p>
-                                <p><strong>#08-608</strong></p>
-                                <p><strong>Postal Code: 533567</strong></p>
-                            </Col>
-                        </Row>
-
-                        {/* Buttons Section */}
-                        <Row className="button-container">
-                            <Col md={6} className="button-group">
-                                <a href="/update-account"  rel="noopener noreferrer">
-                                    <button className="profile-button">Update Profile</button>
-                                </a>
-                                <a href="/shipping-detail"  rel="noopener noreferrer">
-                                    <button className="profile-button">Update Shipping Details</button>
-                                </a>
-                            </Col>
-                        </Row>
+                            <h4>Name: {user.name}</h4>
+                            <h4>Phone: {user.phone}</h4>
+                            <h4>Email: {user.email}</h4>
+                            <h4>Address: {user.address}</h4>
+                        </Card>
+                        <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
                     </Col>
                 </Row>
             </Container>
-        </>
+        </div>
     );
-}
+};
+
+export default UserProfile;
