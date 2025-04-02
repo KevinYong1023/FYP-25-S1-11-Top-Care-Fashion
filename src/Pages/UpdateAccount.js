@@ -1,119 +1,189 @@
-import React, { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import UserHeader from "../Components/Headers/userHeader";
+import { useNavigate } from 'react-router-dom';  
 
-const UpdateAccount = () => {
-    const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        phone: "",
+export default function UpdateAccount({ email }) {
+    const navigate = useNavigate();
+    const [profile, setProfile] = useState({
+        username: '',
+        name: '',
+        email: '',
+        dob: '',
+        gender: '',
+        phone: '',
+        address: ''
     });
 
-    const navigate = useNavigate();
+    // Fetch user data from the backend on component mount
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            if (email) {
+                try {
+                    const response = await fetch(`/api/user/${email}`);
+                    if (response.ok) {
+                        const userData = await response.json();
+                        setProfile({
+                            username: userData.username,
+                            name: userData.name,
+                            email: userData.email,
+                            dob: userData.dob,
+                            gender: userData.gender,
+                            phone: userData.phone,
+                            address: userData.address
+                        });
+                    } else {
+                        console.error('Failed to fetch user details');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                }
+            }
+        };
 
-    console.log("UpdateAccount Component Rendered"); // Debugging check
+        fetchUserDetails();
+    }, [email]);
 
-    // Handle input changes
+    // Handle form changes
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
+        setProfile((prevState) => ({
+            ...prevState,
+            [name]: value
         }));
     };
 
-    // Form submission handler
-    const handleSubmit = (e) => {
+    // Handle form submission and update user details in the backend
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("Account details saved successfully!");
-        navigate("/user-profile");
+
+        try {
+            // Send PUT request to update the user profile
+            const response = await fetch(`/api/user/${email}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: profile.username,
+                    name: profile.name,
+                    dob: profile.dob,
+                    gender: profile.gender,
+                    phone: profile.phone,
+                    address: profile.address
+                }),
+            });
+
+            if (response.ok) {
+                const updatedUser = await response.json();
+                console.log('Profile updated successfully:', updatedUser);
+                // Optionally, you can set the updated user data back to the state
+                setProfile(updatedUser);
+
+                // Navigate back to the profile view
+                navigate('/user-profile');
+            } else {
+                console.error('Error updating profile');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
     };
 
     return (
         <>
-        <UserHeader  loginStatus={true}/>
-  
-        <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-            <h2 className="mb-4">Update Account</h2>
+        <UserHeader loginStatus={true} />
+        <Container fluid>
+            <Row>
+                <Col md={9} className="p-4">
+                    <h3>Update Profile</h3>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" controlId="username">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="username"
+                                value={profile.username}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
 
-            <Form className="w-50" onSubmit={handleSubmit}>
-                {/* First Name */}
-                <Form.Group className="mb-3">
-                    <Form.Label>First Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        placeholder="Enter your first name"
-                    />
-                </Form.Group>
+                        <Form.Group className="mb-3" controlId="name">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={profile.name}
+                                onChange={handleChange}
+                                
+                            />
+                        </Form.Group>
 
-                {/* Last Name */}
-                <Form.Group className="mb-3">
-                    <Form.Label>Last Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        placeholder="Enter your last name"
-                    />
-                </Form.Group>
+                        <Form.Group className="mb-3" controlId="email">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                value={profile.email}
+                                disabled
+                                
+                            />
+                        </Form.Group>
 
-                {/* Username */}
-                <Form.Group className="mb-3">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        placeholder="Enter your username"
-                    />
-                </Form.Group>
+                        <Form.Group className="mb-3" controlId="dob">
+                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="dob"
+                                value={profile.dob}
+                                onChange={handleChange}
+                                
+                            />
+                        </Form.Group>
 
-                {/* Email */}
-                <Form.Group className="mb-3">
-                    <Form.Label>Email Address</Form.Label>
-                    <Form.Control
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Enter your email"
-                    />
-                </Form.Group>
+                        <Form.Group className="mb-3" controlId="gender">
+                            <Form.Label>Gender</Form.Label>
+                            <Form.Select
+                                name="gender"
+                                value={profile.gender}
+                                onChange={handleChange}
+                                
+                            >
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                                <option value="Other">Other</option>
+                            </Form.Select>
+                        </Form.Group>
 
-                {/* Phone Number */}
-                <Form.Group className="mb-3">
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="Enter your phone number"
-                    />
-                </Form.Group>
+                        <Form.Group className="mb-3" controlId="phone">
+                            <Form.Label>Phone Number</Form.Label>
+                            <Form.Control
+                                type="tel"
+                                name="phone"
+                                value={profile.phone}
+                                onChange={handleChange}
+                                
+                            />
+                        </Form.Group>
 
-                {/* Buttons */}
-                <div className="d-flex justify-content-between">
-                    <Button variant="secondary" onClick={() => navigate("/user-profile")}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" type="submit">
-                        Save
-                    </Button>
-                </div>
-            </Form>
+                        <Form.Group className="mb-3" controlId="address">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="address"
+                                value={profile.address}
+                                onChange={handleChange}
+                                
+                            />
+                        </Form.Group>
 
+                        <Button variant="primary" type="submit">
+                            Update Profile
+                        </Button>
+                    </Form>
+                </Col>
+            </Row>
         </Container>
         </>
     );
-};
-
-export default UpdateAccount;
+}

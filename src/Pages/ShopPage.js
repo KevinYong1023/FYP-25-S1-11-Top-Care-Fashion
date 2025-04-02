@@ -1,85 +1,196 @@
-import React from 'react';  
-import { Container, Row, Col, Navbar, Nav, Card, Button,ListGroup  } from 'react-bootstrap';  
-import { Link } from 'react-router-dom'; // Import Link  
-import noproduct from '../images/NoProduct.jpg';
-import UserHeader from '../Components/Headers/userHeader';
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Form, Button, Card, Pagination } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import UserHeader from "../Components/Headers/userHeader";
 
-const ShopPage = ({loginStatus}) => { 
-    console.log(loginStatus)
-    return (  
-        <>
-        <UserHeader loginStatus={loginStatus}/>
-        <Container fluid className="p-4">  
-            {/* Navbar */}  
-            <Navbar bg="light" expand="lg">  
-                <Navbar.Brand href="#home">Shop</Navbar.Brand>  
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />  
-                <Navbar.Collapse id="basic-navbar-nav">  
-                    <Nav className="me-auto">  
-                        <Nav.Link href="#women">Women</Nav.Link>  
-                        <Nav.Link href="#men">Men</Nav.Link>  
-                        <Nav.Link href="#sell">Sell</Nav.Link>  
-                    </Nav>  
-                    <Nav>  
-                        
-                        
-                    </Nav>  
-                </Navbar.Collapse>  
-            </Navbar>  
+const ShopPage = () => {
+  const [products, setProducts] = useState([]);
+  const [query, setQuery] = useState("");
+  const [filters, setFilters] = useState({
+    Top: false,
+    Bottom: false,
+    Footwear: false,
+    Under20: false,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
 
-            {/* Features Section */}  
-            <Row className="mt-4">  
-            <Col md={3}>
-            <Card className="shadow-sm mb-4">
-                <Card.Body>
-                    <Card.Title className="text-primary">Features</Card.Title>
-                    <ListGroup variant="flush">
-                        <ListGroup.Item action href="#shop-all" className="text-secondary">
-                            Shop All
-                        </ListGroup.Item>
-                        <ListGroup.Item action href="#shop-women" className="text-secondary">
-                            Shop Women
-                        </ListGroup.Item>
-                        <ListGroup.Item action href="#shop-men" className="text-secondary">
-                            Shop Men
-                        </ListGroup.Item>
-                        <ListGroup.Item action href="#shop-shoes" className="text-secondary">
-                            Shop Shoes
-                        </ListGroup.Item>
-                        <ListGroup.Item action href="#shop-under-20" className="text-secondary">
-                            Shop Under $20
-                        </ListGroup.Item>
-                        <ListGroup.Item action href="#shop-top-under-10" className="text-secondary">
-                            Shop Top Under $10
-                        </ListGroup.Item>
-                    </ListGroup>
-                </Card.Body>
+  const limit = 9;
+
+  const fetchProducts = async () => {
+    const categoryList = Object.entries(filters)
+      .filter(([key, value]) => value && key !== "Under20")
+      .map(([key]) => key);
+
+    const queryParams = new URLSearchParams({
+      query,
+      categories: categoryList.join(","),
+      maxPrice: filters.Under20 ? "20" : "",
+      page: currentPage,
+      limit,
+    });
+
+    try {
+      const res = await fetch(`/api/products/search?${queryParams.toString()}`);
+      const data = await res.json();
+      setProducts(data.products);
+      setTotalPages(data.totalPages);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+    // eslint-disable-next-line
+  }, [query, filters, currentPage]);
+
+  const handleCheckboxChange = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.checked });
+    setCurrentPage(1); // Reset to first page on new filter
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1);
+    fetchProducts();
+  };
+
+  // ✅ UPDATED: Navigate to /productpage/:id
+  const goToProduct = (id) => {
+    navigate(`/productpage/${id}`);
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <Pagination.Item
+          key={i}
+          active={i === currentPage}
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </Pagination.Item>
+      );
+    }
+    return <Pagination>{pages}</Pagination>;
+  };
+
+  return (
+    <>
+      <UserHeader loginStatus={true} />
+      <Container fluid className="mt-4">
+        <Form className="mb-3 text-center" onSubmit={handleSearch}>
+          <Form.Control
+            type="text"
+            placeholder="Search products..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            style={{ maxWidth: "500px", margin: "0 auto" }}
+          />
+        </Form>
+
+        <Row>
+          {/* Filter Sidebar */}
+          <Col md={2}>
+            <Card className="p-3">
+              <h5><strong>Shop By</strong></h5>
+              <Form.Check
+                type="checkbox"
+                label="All"
+                name="All"
+                onChange={() => {
+                  setFilters({
+                    Top: false,
+                    Bottom: false,
+                    Footwear: false,
+                    Under20: false,
+                  });
+                  setQuery("");
+                }}
+              />
+              <Form.Check
+                type="checkbox"
+                label="Top"
+                name="Top"
+                checked={filters.Top}
+                onChange={handleCheckboxChange}
+              />
+              <Form.Check
+                type="checkbox"
+                label="Bottom"
+                name="Bottom"
+                checked={filters.Bottom}
+                onChange={handleCheckboxChange}
+              />
+              <Form.Check
+                type="checkbox"
+                label="Footwear"
+                name="Footwear"
+                checked={filters.Footwear}
+                onChange={handleCheckboxChange}
+              />
+              <Form.Check
+                type="checkbox"
+                label="Under $20"
+                name="Under20"
+                checked={filters.Under20}
+                onChange={handleCheckboxChange}
+              />
             </Card>
-        </Col>
-                {/* Product Cards Section */}  
-                <Col md={9}>  
-                    <Row>  
-                        {[1, 2, 3, 4].map((item) => (  
-                            <Col md={4} key={item} className="mb-4">  
-                                <Link to="/productpage" style={{ textDecoration: 'none' }}> {/* Wrap Card with Link */}  
-                                    <Card>  
-                                        <Card.Img variant="top" src={noproduct}/>  
-                                        <Card.Body>  
-                                            <Card.Title>Product Name</Card.Title>  
-                                            <Card.Subtitle className="mb-2 text-muted">Product Brand</Card.Subtitle>  
-                                            <Card.Text>Price: $XX.XX</Card.Text>  
-                                            <Button variant="primary">View Product</Button>  
-                                        </Card.Body>  
-                                    </Card>  
-                                </Link>  
-                            </Col>  
-                        ))}  
-                    </Row>  
-                </Col>  
-            </Row>  
-        </Container>  
-        </>
-    );  
-};  
+          </Col>
 
-export default ShopPage;  
+          {/* Product Cards */}
+          <Col md={10}>
+            <Row>
+              {products.length === 0 ? (
+                <p>No products found.</p>
+              ) : (
+                products.map((product) => (
+                  <Col md={4} className="mb-4" key={product._id}>
+                    <Card className="h-100">
+                      <Card.Img
+                        variant="top"
+                        src={product.imageUrl}
+                        style={{
+                          objectFit: "cover",
+                          height: "250px",
+                          width: "100%",
+                        }}
+                        onError={(e) =>
+                          (e.target.src = "https://via.placeholder.com/250")
+                        }
+                      />
+                      <Card.Body>
+                        <Card.Title>{product.title}</Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted">
+                          ${product.price}
+                        </Card.Subtitle>
+                        <Card.Text>Category: {product.category}</Card.Text>
+                        <Button
+                          variant="primary"
+                          onClick={() => goToProduct(product._id)}
+                        >
+                          View Product
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))
+              )}
+            </Row>
+
+            {/* Pagination */}
+            <div className="mt-3 d-flex justify-content-center">
+              {renderPagination()}
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
+};
+
+export default ShopPage;
