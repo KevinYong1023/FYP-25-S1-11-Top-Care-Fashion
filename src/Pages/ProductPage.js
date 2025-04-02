@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Form, Modal } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserHeader from '../Components/Headers/userHeader';
 import { useCart } from '../Components/CartContext';
+import "../css/ProductPage.css";
 
 const ProductPage = () => {
     const { addToCart } = useCart();
@@ -52,21 +53,23 @@ const ProductPage = () => {
     return (
         <>
             <UserHeader loginStatus={true} />
-            <Container className="mt-4">
-                <Row>
-                    <Col md={4} className="d-flex flex-column align-items-center">
+            <Container className="mt-4 no-border-container">
+                <Row className="no-border-row">
+                    <Col md={4} className="no-border-col d-flex flex-column align-items-center">
                         <Card className="mb-4" style={{ width: '100%' }}>
                             <Card.Img variant="top" src={product.imageUrl} />
                         </Card>
                     </Col>
 
-                    <Col md={8}>
+                    <Col md={8} className="no-border-col">
                         <Card className="mb-4">
                             <Card.Body>
-                                <Card.Title>{product.name}</Card.Title>
+                                <Card.Title className="product-names">{product.name}</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted">Price: ${product.price}</Card.Subtitle>
                                 <Card.Text>{product.description}</Card.Text>
-                                <Button variant="primary" className="mt-2" onClick={handleAddToCart}>Add to Cart</Button>
+                                <Button className="custom-btn" onClick={handleAddToCart}>
+                                    Add to Cart
+                                </Button>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -74,7 +77,7 @@ const ProductPage = () => {
 
                 <Row className="mt-4">
                     <Col>
-                        <h4>Reviews</h4>
+                        <h4 className='review-font'>Reviews</h4>
                         {reviews.map((review) => (
                             <Card key={review.id} className="mb-2">
                                 <Card.Body>
@@ -111,7 +114,9 @@ const ProductPage = () => {
                                     required
                                 />
                             </Form.Group>
-                            <Button variant="primary" type="submit">Submit Comment</Button>
+                            <Button className="custom-btn" type="submit">
+                                Submit Comment
+                            </Button>
                         </Form>
                     </Col>
                 </Row>

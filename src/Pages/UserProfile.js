@@ -9,47 +9,54 @@ export default function UserProfile(loginStatus) {
            <UserHeader loginStatus={loginStatus}/>
             <Container fluid>
                 <Row className="d-flex justify-content-center">
-                    <Col md={8} className="profile-container">
+                    <Col md={10} className="profile-container">
                         <Row>
-                            <h2>Profile</h2>
-                            <hr />
+                            {/* Profile Section */}
                             <Col md={6}>
-                                <p><strong>First Name: Tricia</strong></p>
-                                <p><strong>Last Name: Chan</strong></p>
-                                <p><strong>Username: tcqy</strong></p>
-                                <p><strong>Email: triciachanqy@gmail.com</strong></p>
+                                <h2 className="profile-heading">Profile</h2>
+                                <hr />
+                                <Row>
+                                    <Col md={6}><p><strong>First Name:</strong> Tricia</p></Col>
+                                    <Col md={6}><p><strong>Last Name:</strong> Chan</p></Col>
+                                </Row>
+                                <p><strong>Username:</strong> tcqy</p>
+                                <p><strong>Email:</strong> triciachanqy@gmail.com</p>
+                                <p><strong>Phone No.:</strong> 90845365</p>
+                                <p><strong>Date Joined:</strong> 11/03/2025</p>
                             </Col>
-                            <Col md={6}>
-                                <p><strong>Phone No.: 90845365</strong></p>
-                                <p><strong>Date Joined: 11/03/2025</strong></p>
-                            </Col>
-                        </Row>
 
-                        {/* Shipping Details */}
-                        <Row>
-                            <h2>Shipping Details</h2>
-                            <hr />
+                            {/* Shipping Details Section */}
                             <Col md={6}>
-                                <p><strong>First Name: Tricia</strong></p>
-                                <p><strong>Last Name: Chan</strong></p>
-                                <p><strong>Phone No.: 90845365</strong></p>
-                                <p><strong>Email: triciachanqy@gmail.com</strong></p>
-                            </Col>
-                            <Col md={6}>
-                                <p><strong>Address:</strong></p>
-                                <p><strong>Hougang Avenue 4 Block 576</strong></p>
-                                <p><strong>#08-608</strong></p>
-                                <p><strong>Postal Code: 533567</strong></p>
+                                <h2 className="profile-heading">Shipping Details</h2>
+                                <hr />
+                                <Row>
+                                    <Col md={6}><p><strong>First Name:</strong> Tricia</p></Col>
+                                    <Col md={6}><p><strong>Last Name:</strong> Chan</p></Col>
+                                </Row>
+                                <p><strong>Phone No.:</strong> 90845365</p>
+                                <p><strong>Email:</strong> triciachanqy@gmail.com</p>
+                                <Row>
+                                    <Col md={6}>
+                                        <p><strong>Address:</strong></p>
+                                        <p>Hougang Avenue 4 Block 576</p>
+                                        <p>#08-608</p>
+                                    </Col>
+                                    <Col md={6}>
+                                        <p><strong>Postal Code:</strong> 533567</p>
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
 
                         {/* Buttons Section */}
-                        <Row className="button-container">
-                            <Col md={6} className="button-group">
-                                <a href="/update-account"  rel="noopener noreferrer">
+                        <Row className="mt-3">
+                            <Col md={6} className="d-flex justify-content-center">
+                                <a href="/update-account" rel="noopener noreferrer">
                                     <button className="profile-button">Update Profile</button>
                                 </a>
-                                <a href="/shipping-detail"  rel="noopener noreferrer">
+                            </Col>
+                            <Col md={6} className="d-flex justify-content-center">
+                                <a href="/shipping-detail" rel="noopener noreferrer">
                                     <button className="profile-button">Update Shipping Details</button>
                                 </a>
                             </Col>

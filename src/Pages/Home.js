@@ -3,7 +3,6 @@ import { Container, Image } from "react-bootstrap";
 import UserHeader from '../Components/Headers/userHeader';
 import '../css/Home.css';
 
-
 const Home = () => {
     const products = [
         { name: 'Stylish Jacket', brand: 'Brand A', price: '$49.99', imageUrl: 'https://source.unsplash.com/300x200/?sneakers' },
@@ -15,45 +14,48 @@ const Home = () => {
     ];
 
     return (
-        <div className="home-page">
+        <main className="home-page">
             <UserHeader loginStatus={true} />
-            <Container className="product-container">
+
+            {/* Image Wrapper for Side-by-Side Layout */}
+            <section className="image-container-wrapper">
+                <figure className="image-container">
+                    <Image
+                        src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                        alt="Poster 2"
+                        fluid
+                        rounded
+                        className="main-image-poster"
+                    />
+                </figure>
+                <figure className="image-container">
+                    <Image
+                        src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                        alt="Poster 3"
+                        fluid
+                        rounded
+                        className="main-image-poster"
+                    />
+                </figure>
+            </section>
+
+            <Container as="section" className="product-container">
                 <h2 className="product-heading">Featured Products</h2>
-                <div className="product-grid">
+                <ul className="product-grid">
                     {products.map((product, index) => (
-                        <div className="product" key={index}>
-                            
-                            <div className="product-details">
-                            
-                                <div className="product-name">{product.name}</div>
-                                <div className="product-brand">{product.brand}</div>
-                                <div className="product-price">{product.price}</div>
-                            </div>
-                        </div>
+                        <li className="product" key={index}>
+                            <article className="product-details">
+                                <h3 className="product-name">{product.name}</h3>
+                                <p className="product-brand">{product.brand}</p>
+                                <p className="product-price">{product.price}</p>
+                            </article>
+                        </li>
                     ))}
-                </div>
+                </ul>
             </Container>
-           
-            <div className="image-container">
-                <Image
-                    src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                    alt="Poster 2"
-                    fluid
-                    rounded
-                    className="main-image-poster"
-                />
-            </div>
-            <div className="image-container">
-                <Image
-                    src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                    alt="Poster 3"
-                    fluid
-                    rounded
-                    className="main-image-poster"
-                />
-            </div>
-        </div>
+        </main>
     );
 };
 
 export default Home;
+ 

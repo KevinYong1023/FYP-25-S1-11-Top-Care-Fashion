@@ -3,6 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import UserHeader from '../Components/Headers/userHeader';
 import { AuthContext } from "../App";  // Import context from App.js
+import "../css/Logout.css";
 
 export default function Logout() {  // Accept setIsLoggedIn as a prop
     const navigate = useNavigate();
@@ -24,7 +25,9 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
                     <Col className="text-center">
                         <h1>You have successfully logged out.</h1>
                         <br/>
-                        <Button variant="primary" onClick={handleLogout}>Login</Button> {/* Logout and redirect to login */}
+                        <Button className="custom-logout-btn" onClick={handleLogout}>
+                            Login
+                        </Button> {/* Logout and redirect to login */}
                     </Col>
                 </Row>
             </Container>

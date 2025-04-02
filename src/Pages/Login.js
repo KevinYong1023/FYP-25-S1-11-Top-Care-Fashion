@@ -3,6 +3,8 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App"; // Import AuthContext
+import "../css/Login.css"; 
+
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "", role: "" });
@@ -118,7 +120,10 @@ const Login = () => {
               </div>
             </Form.Group>
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100">Login</Button>
+          <Button className="w-100 custom-login-btn" type="submit">
+            Login
+          </Button>
+
         </Form>
         <p className="mt-3">Don't have an account? <a href="/register">Register here</a></p>
       </Container>

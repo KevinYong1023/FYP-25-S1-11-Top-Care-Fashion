@@ -1,0 +1,38 @@
+.custom-btn {
+    background-color: #f5ebe0 !important;
+    border-color: #f5ebe0 !important;
+    color: #333 !important;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .custom-btn:hover {
+    background-color: #e3d5ca !important; /* Slightly darker shade on hover */
+    border-color: #e3d5ca !important;
+  }
+  
+  .no-border-container {
+    border: none !important;
+}
+
+.no-border-row {
+    border: none !important;
+}
+
+.no-border-col {
+    border: none !important;
+}
+
+.product-names {
+    color: #6f4e37 !important; /* Change this to your desired color */
+    font-weight: bold !important;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 28px;
+}
+
+.review-font {
+    color: #6f4e37;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 28px;
+}

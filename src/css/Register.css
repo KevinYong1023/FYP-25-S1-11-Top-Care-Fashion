@@ -1,70 +1,10 @@
-/* Centering the form on the page */
-.register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Full height of the viewport */
-    background-color: #f4f7fc; /* Light background for the page */
-    margin: 0;
-  }
-  
-  form {
-    background-color: white;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .form-input {
-    margin-bottom: 15px;
-  }
-  
-  .form-input label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  .form-input input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 16px;
-  }
-  
-  .form-input input:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .error {
-    color: red;
-    font-size: 14px;
-    margin-top: 5px;
-  }
-  
+.custom-register-btn {
+  background-color: #97a97c !important;
+  border-color: #97a97c !important;
+  color: white !important;
+}
 
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 500px) {
-    form {
-      padding: 20px;
-      width: 90%;
-    }
-  }
-  
+.custom-register-btn:hover {
+  background-color: #85986c !important; /* Slightly darker green on hover */
+  border-color: #85986c !important;
+}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import UserHeader from "../Components/Headers/userHeader";
+import "../css/Register.css"; 
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -223,9 +224,10 @@ const Register = () => {
                         />
                         {errors.confirmPassword && <Alert variant="danger">{errors.confirmPassword}</Alert>}
                     </Form.Group>
-                    <Button variant="primary" type="submit" className="w-100">
+                    <Button className="w-100 custom-register-btn" type="submit">
                         Register
                     </Button>
+
                 </Form>
                 <p className="mt-3">
                     Already have an account? <a href="/login">Login here</a>

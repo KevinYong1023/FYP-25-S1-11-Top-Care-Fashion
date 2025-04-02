@@ -21,7 +21,7 @@
     font-size: 16px;
     font-weight: bold;
     color: white;
-    background-color: #007bff;
+    background-color: #1d2d44;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -29,5 +29,29 @@
 }
 
 .profile-button:hover {
-    background-color: #0056b3;
+    background-color: #3e5c76;
+}
+
+.profile-heading {
+    color: #6f4e37;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.profile-button {
+    background-color: #97a97c; /* Change to your desired color */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+    background-color: #85986c; /* Darker shade for hover effect */
 }

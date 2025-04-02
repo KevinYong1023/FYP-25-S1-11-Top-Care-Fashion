@@ -1,31 +1,68 @@
-/* Home.css */
-
+/* General Styles */
 .home-page {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
 }
 
+/* Image Container Wrapper (Side-by-Side Layout) */
+.image-container-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 25px; /* Adjust spacing between images */
+    margin-bottom: 40px;
+    flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.image-container {
+    flex: 1;
+    max-width: 45%; /* Ensures equal width for images */
+    text-align: center;
+}
+
+.main-image-poster {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 25px; /* Rounded corners */
+    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+    border: 2px solid #eee;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .image-container-wrapper {
+        flex-direction: column; /* Stack images on smaller screens */
+        align-items: center;
+    }
+
+    .image-container {
+        max-width: 100%;
+    }
+}
+
+/* Product Section */
 .product-container {
     max-width: 100%;
-    width: 85%; /* Further increased width */
-    margin: 50px auto; /* Increased margin */
-    padding: 50px; /* Increased padding */
+    width: 85%;
+    margin: 50px auto;
+    padding: 50px;
     border: 1px solid #ddd;
-    border-radius: 15px; /* More rounded corners */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12); /* Slightly enhanced shadow */
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
 }
 
 .product-heading {
     text-align: center;
-    font-size: 3em; /* Even larger heading */
+    font-size: 3em;
     margin-bottom: 40px;
     color: #333;
 }
 
+/* Grid Layout for Products */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 50px; /* Further increased gap */
+    gap: 50px;
     justify-items: center;
     width: 100%;
     height: auto;
@@ -33,23 +70,23 @@
 
 .product {
     border: none;
-    padding: 60px; /* Significantly increased padding */
+    padding: 60px;
     text-align: center;
-    width: 420px; /* Even wider boxes */
+    width: 420px;
     height: auto;
     background-color: #f9f9f9;
-    border-radius: 20px; /* More rounded corners */
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    border-radius: 20px;
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product:hover {
-    transform: translateY(-15px); /* Further increased hover lift */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18); /* More pronounced hover shadow */
+    transform: translateY(-15px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
 }
 
 .product-image {
-    height: 350px; /* Further increased image height */
+    height: 350px;
     object-fit: contain;
     margin-bottom: 30px;
 }
@@ -61,8 +98,8 @@
 
 .product-name {
     font-weight: 600;
-    font-size: 1.7em; /* Larger name */
-    color: #2c3e50;
+    font-size: 1.7em !important;
+    color: #2c3e50 !important;
     margin: 20px 0 15px;
 }
 
@@ -75,21 +112,6 @@
 .product-price {
     color: #e74c3c;
     font-weight: 600;
-    font-size: 1.4em; /* Larger price */
+    font-size: 1.4em;
     margin: 20px 0;
-}
-
-.image-container {
-    margin: 60px auto;
-    max-width: 1700px;
-    text-align: center;
-}
-
-.main-image-poster {
-    width: 95%; /* Even wider main image */
-    max-height: 700px; /* Increased main image height */
-    object-fit: cover;
-    border-radius: 25px; /* More rounded corners */
-    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.15); /* Stronger shadow */
-    border: 2px solid #eee;
 }

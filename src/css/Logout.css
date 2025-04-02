@@ -1,0 +1,11 @@
+.custom-logout-btn {
+    background-color: #d4a373 !important;
+    border-color: #d4a373 !important;
+    color: white !important;
+  }
+  
+  .custom-logout-btn:hover {
+    background-color: #b88661 !important; /* Slightly darker shade on hover */
+    border-color: #b88661 !important;
+  }
+  
