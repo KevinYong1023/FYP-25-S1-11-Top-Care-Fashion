@@ -135,10 +135,10 @@ export default function ViewAccounts() {
                                         onChange={(e) => setFilterPosition(e.target.value)}
                                     >
                                         <option value="">All</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="User">User</option>
-                                        <option value="Admin">Customer Support</option>
-                                        <option value="User">Manager</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="user">User</option>
+                                        <option value="customer support">Customer Support</option>
+                                        <option value="manager">Manager</option>
                                     </Form.Control>
                                 </Col>
                                 <Col md={4}>
