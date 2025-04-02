@@ -94,6 +94,40 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.put('/reset-password', async (req, res) => {
+    const { email, newPassword } = req.body;
+  
+    try {
+      // Check if email exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: 'Email does not exist.' });
+      }
+  
+      console.log("User found:", user);
+  
+      // Check if the new password is the same as the current one
+      const isMatch = await bcrypt.compare(newPassword, user.password);
+      if (isMatch) {
+        return res.status(400).json({ message: 'New password cannot be the same as the old one.' });
+      }
+  
+      // Hash new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      console.log("Hashed password:", hashedPassword);
+  
+      // Update only the password field without triggering full validation
+      user.password = hashedPassword;
+      await user.save({ validateBeforeSave: false }); // Disable validation before save
+  
+      return res.status(200).json({ message: 'Password reset successfully.' });
+    } catch (error) {
+      console.error("Error during password reset:", error);
+      res.status(500).json({ message: 'Server error. Please try again.' });
+    }
+  });
+  
+
 // Registration route
 router.post('/register', async (req, res) => {
     const {username, name, email, phone, password, dob, gender, position, address } = req.body;
