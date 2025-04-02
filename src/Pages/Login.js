@@ -123,6 +123,7 @@ const Login = () => {
           <Button variant="primary" type="submit" className="w-100">Login</Button>
         </Form>
         <p className="mt-3">Don't have an account? <a href="/register">Register here</a></p>
+        <p className="mt-3">Forgot Password? <a href="/reset-password">Reset here</a></p>
       </Container>
     </>
   );

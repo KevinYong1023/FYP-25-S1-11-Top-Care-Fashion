@@ -36,6 +36,7 @@ import Cart from './Pages/Cart';
 import Payment from './Pages/Payment';
 import CustomerSupportProfileUpdate from "./Pages/CustomerSupport/CustomerSupportProfileUpdate.js";
 import AdminProfileUpdate from "./Pages/Admin/AdminProfileUpdate.js";
+import ResetPassword from "./Pages/ResetPassword.js";
 
 // Create the context
 export const AuthContext = createContext();
@@ -91,6 +92,7 @@ function App() {
                         <Route path="/" element={<Navigate to="/login" replace />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login setLogin={setLogin} />} />
+                        <Route path="/reset-password" element={<ResetPassword/>}/>
                         <Route path="/productpage/:id" element={<ProductPage email={email} />} />
                         <Route path="/shoppage" element={<ShopPage loginStatus={login} email={email} />} />
                         <Route path="/dashboard" element={<Dashboard />} />
