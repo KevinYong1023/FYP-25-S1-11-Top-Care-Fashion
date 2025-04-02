@@ -538,27 +538,5 @@ router.get("/products/:id", async (req, res) => {
   });
   
 
-  router.get("/products/insights", async (req, res) => {
-    try {
-      // Get total products
-      const totalProducts = await Product.countDocuments();
-
-      // Get product count for each category
-      const categories = ["Footwear", "Top", "Bottom"];
-      const categoryCounts = {};
-      for (const category of categories) {
-        categoryCounts[category] = await Product.countDocuments({ category });
-      }
-
-      // Return the insights
-      res.json({
-        totalProducts,
-        categoryCounts
-      });
-    } catch (error) {
-      console.error("Error fetching product insights:", error);
-      res.status(500).json({ message: "Server error" });
-    }
-});
 
 module.exports = router;

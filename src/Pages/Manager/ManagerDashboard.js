@@ -8,7 +8,7 @@ export default function ManagerDashboard() {
     const [dashboardData, setDashboardData] = useState({
         totalUsers: 0,
         active: 0,
-        suspense:0,
+        suspense: 0,
         popularCategories: "", // Keep static or fetch if needed
         totalProducts: 0,
         categoryCounts: {
@@ -25,17 +25,18 @@ export default function ManagerDashboard() {
                 const response = await fetch("/api/user");
                 const users = await response.json();
                 const filteredUsers = users.filter(user => user.position === "user");
-
+            
                 const totalUsers = filteredUsers.length;
-
+                console.log(totalUsers)
                 // Count active users (assuming 'status' field contains "Active")
                 const activeNow = filteredUsers.filter(user => user.status === "Active" && user.position === "user").length;
-                const suspensedNow = filteredUsers.filter(user => user.status === "Suspensed").length;
+                const suspensedNow = filteredUsers.filter(user => user.status === "Suspended" && user.position === "user").length;
+                console.log(activeNow, suspensedNow)
                 setDashboardData(prevData => ({
                     ...prevData,
                     totalUsers,
-                    activeNow,
-                    suspensedNow
+                    active: activeNow,   // Use 'active' here
+                    suspense: suspensedNow  // Use 'suspense' here
                 }));
             } catch (error) {
                 console.error("Error fetching users:", error);
@@ -59,7 +60,6 @@ export default function ManagerDashboard() {
                 console.error("Error fetching product insights:", error);
             }
         };
-    
 
         fetchUsers();
         fetchProductInsights();
@@ -90,13 +90,13 @@ export default function ManagerDashboard() {
                         <Col md={6}>
                             <Card className="p-3">
                                 <h5>Active Now</h5>
-                                <p>{dashboardData.activeNow}</p>
+                                <p>{dashboardData.active}</p>
                             </Card>
                         </Col>
                         <Col md={6}>
                             <Card className="p-3">
                                 <h5>Suspended Now</h5>
-                                <p>{dashboardData.activeNow}</p>
+                                <p>{dashboardData.suspense}</p>
                             </Card>
                         </Col>
                     </Row>
