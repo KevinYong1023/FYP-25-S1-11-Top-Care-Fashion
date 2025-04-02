@@ -16,17 +16,12 @@ import CreateUser from "./Pages/CustomerSupport/CreateUser";
 import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
 import UserProfile from "./Pages/UserProfile";
-import Chatbox from "./Pages/CustomerSupport/Chatbox";
 import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
 import ShippingDetail from "./Pages/ShippingDetail.js";
 import ManageList from "./Pages/ManageList.js";
 import ProfitPage from "./Pages/ProfitPage.js";
 import ViewAccounts from "./Pages/Admin/ViewAccounts";
-import ViewAccountsAdmin from "./Pages/Admin/ViewAccountsAdmin";
-import ViewAccountsManager from "./Pages/Admin/ViewAccountsManager";
-import ViewAccountsUser from "./Pages/Admin/ViewAccountsUser";
-import ViewAccountsCS from "./Pages/Admin/ViewAccountsCS";
 import AdminProfile from "./Pages/Admin/AdminProfile.js";
 import AdminCreateAccount from "./Pages/Admin/AdminCreateAccount";
 import DeleteAccount from "./Pages/Admin/DeleteAccount.js";
@@ -97,7 +92,6 @@ function App() {
                         <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate email={email} />} />
                         <Route path="/view-accounts" element={<ViewUsers />} />
                         <Route path="/order-history/:username" element={<OrderHistory />} />
-                        <Route path="/chatbox" element={<Chatbox />} />
                         <Route path="/order-details/:id/:username" element={<OrderDetails />} />
                         <Route path="/assigned-ticket" element={<TotalTicket email={email} />} />
                         <Route path="/logout" element={<Logout setLogin={setLogin} />} />
@@ -108,10 +102,6 @@ function App() {
                         <Route path="/manage-list" element={<ManageList />} />
                         <Route path="/profit-page" element={<ProfitPage />} />
                         <Route path="/view-all-accounts" element={<ViewAccounts />} />
-                        <Route path="/view-all-accounts-admin" element={<ViewAccountsAdmin />} />
-                        <Route path="/view-all-accounts-customersupport" element={<ViewAccountsCS />} />
-                        <Route path="/view-all-accounts-manager" element={<ViewAccountsManager />} />
-                        <Route path="/view-all-accounts-user" element={<ViewAccountsUser />} />
                         <Route path="/admin-profile" element={<AdminProfile  email={email} />} />
                         <Route path="/admin-profile-update" element={<AdminProfileUpdate email={email}/>} />
                         <Route path="/create-account" element={<AdminCreateAccount />} />
