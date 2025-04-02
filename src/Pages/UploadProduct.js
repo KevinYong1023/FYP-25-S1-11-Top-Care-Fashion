@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserHeader from "../Components/Headers/userHeader";
@@ -9,87 +9,110 @@ const UploadProduct = ({ email }) => {
     description: "",
     price: "",
     category: "Top",
-    imageUrl: ""
+    image: null // Change to store the file
   });
 
   const [previewUrl, setPreviewUrl] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (form.imageUrl.trim() !== "") {
-      setPreviewUrl(form.imageUrl);
-    } else {
-      setPreviewUrl("");
-    }
-  }, [form.imageUrl]);
+  const [fileError, setFileError] = useState(""); // For file size errors
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+
+    if (name === "image") {
+      // Validate file size (max 2MB)
+      const file = files[0];
+      if (file && file.size > 2 * 1024 * 1024) { // 2MB limit
+        setFileError("File size exceeds 2MB.");
+        return;
+      }
+      setFileError(""); // Clear the error if valid
+      setForm({ ...form, [name]: file });
+
+      // Preview Image
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        setPreviewUrl(fileReader.result);
+      };
+      if (file) {
+        fileReader.readAsDataURL(file);
+      }
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setForm({ ...form, image: null });
+    setPreviewUrl("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
-
+  
     // ✅ Frontend validation
     if (!form.title.trim()) {
       setError("Title is required.");
       return;
     }
-
+  
     if (!form.price || isNaN(form.price) || parseFloat(form.price) <= 0) {
       setError("Please enter a valid price greater than 0.");
       return;
     }
-
-    if (!form.imageUrl.trim()) {
-      setError("Image URL is required.");
+  
+    if (!form.image) {
+      setError("Image is required.");
       return;
     }
-
-    // ✅ Relaxed URL validation: just checks if it's a proper URL
-    const urlRegex = /^https?:\/\/.+/i;
-    if (!urlRegex.test(form.imageUrl)) {
-      setError("Please enter a valid public image URL (must start with http or https).");
-      return;
-    }
-
-    const productData = {
-      ...form,
-      price: parseFloat(form.price),
-      email
-    };
-
-    try {
-      const res = await fetch("/api/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData)
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setSuccess(true);
-        setForm({
-          title: "",
-          description: "",
-          price: "",
-          category: "Top",
-          imageUrl: ""
+  
+    // Convert image file to base64 string using FileReader
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64Image = reader.result; // Base64-encoded image
+  
+      // Prepare product data including the base64 image
+      const productData = {
+        title: form.title,
+        description: form.description,
+        price: parseFloat(form.price),
+        category: form.category,
+        email: email,
+        imageUrl: base64Image // Base64 image data to be sent to backend
+      };
+  
+      try {
+        const res = await fetch("/api/products", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" }, // Set header for JSON
+          body: JSON.stringify(productData) // Send product data as a JSON string
         });
-        setPreviewUrl("");
-      } else {
-        setError(data.message || "Upload failed");
+  
+        const data = await res.json();
+  
+        if (res.ok) {
+          setSuccess(true);
+          setForm({
+            title: "",
+            description: "",
+            price: "",
+            category: "Top",
+            image: null
+          });
+          setPreviewUrl("");
+        } else {
+          setError(data.message || "Upload failed");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Server error");
       }
-    } catch (err) {
-      console.error(err);
-      setError("Server error");
-    }
+    };
+    reader.readAsDataURL(form.image); // Start reading the image as base64 string
   };
-
   return (
     <>
       <UserHeader loginStatus={true} />
@@ -101,14 +124,24 @@ const UploadProduct = ({ email }) => {
               <Col md={5} className="border-end text-center d-flex flex-column align-items-center justify-content-center">
                 <h4>Image Preview</h4>
                 {previewUrl ? (
-                  <img
-                    src={previewUrl}
-                    alt="Preview"
-                    className="img-thumbnail mt-2"
-                    style={{ width: "300px", height: "300px", objectFit: "cover" }}
-                  />
+                  <div className="position-relative">
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="img-thumbnail mt-2"
+                      style={{ objectFit: "cover" }}
+                    />
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      className="position-absolute top-0 end-0 m-2"
+                      onClick={handleRemoveImage}
+                    >
+                      Remove
+                    </Button>
+                  </div>
                 ) : (
-                  <div className="text-muted mt-3">Enter an image URL to preview it here.</div>
+                  <div className="text-muted mt-3">No image selected.</div>
                 )}
               </Col>
 
@@ -117,6 +150,7 @@ const UploadProduct = ({ email }) => {
                 <h3 className="mb-3">Upload Product</h3>
                 {success && <Alert variant="success">Product uploaded successfully!</Alert>}
                 {error && <Alert variant="danger">{error}</Alert>}
+                {fileError && <Alert variant="danger">{fileError}</Alert>}
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3">
                     <Form.Label>Title</Form.Label>
@@ -174,12 +208,12 @@ const UploadProduct = ({ email }) => {
                   </Row>
 
                   <Form.Group className="mb-3">
-                    <Form.Label>Image URL</Form.Label>
+                    <Form.Label>Image</Form.Label>
                     <Form.Control
-                      name="imageUrl"
-                      value={form.imageUrl}
+                      type="file"
+                      name="image"
                       onChange={handleChange}
-                      placeholder="Paste a public image URL"
+                      accept="image/*"
                       required
                     />
                   </Form.Group>
