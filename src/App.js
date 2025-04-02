@@ -46,6 +46,7 @@ function App() {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
+    const [userEmail, setUserEmail] = useState(""); // For manager to check the products that link to the user
 
     // Load data from localStorage when the app starts
     useEffect(() => {
@@ -116,8 +117,8 @@ function App() {
                         <Route path="/managerdashboard" element={<ManagerDashboard />} />
                         <Route path="/managerprofile" element={<ManagerProfile email={email} />} />
                         <Route path="/managerprofileupdate" element={<ManagerProfileUpdate email={email}/>} />
-                        <Route path="/managerusersdashboard" element={<ManagerUsersDashboard />} />
-                        <Route path="/managerusersindividual/:id" element={<ManagerUsersIndividual />} />
+                        <Route path="/managerusersdashboard" element={<ManagerUsersDashboard setUserEmail={setUserEmail}/>} />
+                        <Route path="/managerusersindividual" element={<ManagerUsersIndividual userEmail={userEmail} />} />
                         <Route path="/cart" element={<Cart email={email} />} />
                         <Route path="/payment" element={<Payment />} />
                         <Route path="/createuser" element={<CreateUser />} />

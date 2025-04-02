@@ -3,10 +3,12 @@ import { Container, Row, Col, Table, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader";
+import { useNavigate } from 'react-router-dom';
 
-export default function ManagerUsersDashboard() {
+export default function ManagerUsersDashboard({setUserEmail}) {
     // State for storing users fetched from the API
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
 
     // State for search input
     const [searchQuery, setSearchQuery] = useState("");
@@ -76,6 +78,11 @@ export default function ManagerUsersDashboard() {
         }
     };
 
+    function checkUserProducts(mail){
+        setUserEmail(mail)
+        navigate("/managerusersindividual")
+    }
+
     return (
         <>
             <ManagerHeader />
@@ -143,12 +150,14 @@ export default function ManagerUsersDashboard() {
                                                 >
                                                     Suspend
                                                 </Button>
-                                                <Link
-                                                to={`/managerusersindividual/${user._id}`}
-                                                className="btn btn-primary btn-sm"
-                                            >
-                                                Review
-                                            </Link>
+                                                <Button
+                                                    variant="primary"
+                                                    size="sm"
+                                                    className="me-2"
+                                                    onClick={() =>checkUserProducts(user.email)} // Suspend user
+                                                >
+                                                    Review
+                                                </Button>                                            
                                                 </>
                                             )}
                                           

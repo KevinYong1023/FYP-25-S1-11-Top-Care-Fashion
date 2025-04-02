@@ -7,9 +7,15 @@ export default function ManagerDashboard() {
     // State for dashboard data
     const [dashboardData, setDashboardData] = useState({
         totalUsers: 0,
-        activeNow: 0,
-        suspensedNow:0,
-        popularCategories: "Footwear", // Keep static or fetch if needed
+        active: 0,
+        suspense:0,
+        popularCategories: "", // Keep static or fetch if needed
+        totalProducts: 0,
+        categoryCounts: {
+            Footwear: 0,
+            Top: 0,
+            Bottom: 0
+        }
     });
 
     // Fetch users from backend and update dashboard data
@@ -25,17 +31,38 @@ export default function ManagerDashboard() {
                 // Count active users (assuming 'status' field contains "Active")
                 const activeNow = filteredUsers.filter(user => user.status === "Active" && user.position === "user").length;
                 const suspensedNow = filteredUsers.filter(user => user.status === "Suspensed").length;
-                setDashboardData({
+                setDashboardData(prevData => ({
+                    ...prevData,
                     totalUsers,
-                    activeNow,suspensedNow,
-                    popularCategories: "Footwear", // Keep as is, or fetch dynamically
-                });
+                    activeNow,
+                    suspensedNow
+                }));
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
         };
 
+        const fetchProductInsights = async () => {
+            try {
+                const response = await fetch("/api/products/insights");
+                const data = await response.json();
+                setDashboardData(prevData => ({
+                    ...prevData,
+                    totalProducts: data.totalProducts || 0,
+                    categoryCounts: {
+                        Footwear: data.categoryCounts?.Footwear || 0,
+                        Top: data.categoryCounts?.Top || 0,
+                        Bottom: data.categoryCounts?.Bottom || 0
+                    }
+                }));
+            } catch (error) {
+                console.error("Error fetching product insights:", error);
+            }
+        };
+    
+
         fetchUsers();
+        fetchProductInsights();
     }, []); // Empty dependency array means it runs once on component mount
 
     return (
@@ -78,14 +105,18 @@ export default function ManagerDashboard() {
                     <Row className="g-3">
                         <Col md={6}>
                             <Card className="p-3">
-                                <h5>Total Product</h5>
-                                <p>{dashboardData.totalUsers}</p>
+                                <h5>Total Products</h5>
+                                <p>{dashboardData.totalProducts}</p>
                             </Card>
                         </Col>
                         <Col md={6}>
                             <Card className="p-3">
                                 <h5>Popular Categories</h5>
-                                <p>{dashboardData.activeNow}</p>
+                                <ul>
+                                    <li>Footwear: {dashboardData.categoryCounts.Footwear}</li>
+                                    <li>Top: {dashboardData.categoryCounts.Top}</li>
+                                    <li>Bottom: {dashboardData.categoryCounts.Bottom}</li>
+                                </ul>
                             </Card>
                         </Col>
                     </Row>

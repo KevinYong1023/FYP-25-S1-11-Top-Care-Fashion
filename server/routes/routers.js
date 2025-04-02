@@ -501,17 +501,52 @@ router.get("/products/latest", async (req, res) => {
     }
   });  
 
-// GET /api/products/:id - Fetch product by ID
-router.get("/products/:id", async (req, res) => {
+  // GET /api/products/insights - Fetch product insights
+router.get("/products/insights", async (req, res) => {
     try {
-      const product = await Product.findById(req.params.id);
-      if (!product) return res.status(404).json({ message: "Not found" });
-      res.json(product);
-    } catch (err) {
-      console.error("Error fetching product by ID:", err);
+      // Get total products
+      const totalProducts = await Product.countDocuments();
+  
+      // Get product count for each category
+      const categories = ["Footwear", "Top", "Bottom"];
+      const categoryCounts = {};
+      for (const category of categories) {
+        categoryCounts[category] = await Product.countDocuments({ category });
+      }
+  
+      // Return the insights
+      res.json({
+        totalProducts,
+        categoryCounts
+      });
+    } catch (error) {
+      console.error("Error fetching product insights:", error);
       res.status(500).json({ message: "Server error" });
     }
   });
   
+
+  router.get("/products/insights", async (req, res) => {
+    try {
+      // Get total products
+      const totalProducts = await Product.countDocuments();
+
+      // Get product count for each category
+      const categories = ["Footwear", "Top", "Bottom"];
+      const categoryCounts = {};
+      for (const category of categories) {
+        categoryCounts[category] = await Product.countDocuments({ category });
+      }
+
+      // Return the insights
+      res.json({
+        totalProducts,
+        categoryCounts
+      });
+    } catch (error) {
+      console.error("Error fetching product insights:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+});
 
 module.exports = router;
