@@ -113,8 +113,8 @@ export default function Dashboard() {
                                 </thead>
                                 <tbody>
                                     {openTickets.map((row,index) => (
-                                        <tr key={row._id}>
-                                            <td>{index+1}</td>
+                                        <tr key={row.ticketId}>
+                                            <td>{row.ticketId}</td>
                                             <td>{row.user}</td>
                                             <td>{row.status}</td>
                                             <td>{row.created}</td>

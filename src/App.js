@@ -37,6 +37,7 @@ import Payment from './Pages/Payment';
 import CustomerSupportProfileUpdate from "./Pages/CustomerSupport/CustomerSupportProfileUpdate.js";
 import AdminProfileUpdate from "./Pages/Admin/AdminProfileUpdate.js";
 import ResetPassword from "./Pages/ResetPassword.js";
+import UserOrders from "./Pages/UserOrders.js";
 
 // Create the context
 export const AuthContext = createContext();
@@ -100,11 +101,12 @@ function App() {
                         <Route path="/customer-support-profile" element={<CustomerSupportProfile email={email} setName={setName} />} />
                         <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate email={email} />} />
                         <Route path="/view-accounts" element={<ViewUsers />} />
-                        <Route path="/order-history/:username" element={<OrderHistory />} />
+                        <Route path="/order/:username" element={<OrderHistory />} />
                         <Route path="/order-details/:id/:username" element={<OrderDetails />} />
                         <Route path="/assigned-ticket" element={<TotalTicket email={email} />} />
                         <Route path="/logout" element={<Logout setLogin={setLogin} />} />
                         <Route path="/update-account" element={<UpdateAccount email={email} />} />
+                        <Route path="/your-orders" element={<UserOrders email={email}/>}/>
                         <Route path="/user-profile" element={<UserProfile email={email} setName={setName} setAddress={setAddress}/>} />
                         <Route path="/upload-product" element={<UploadProduct email={email} />} />
                         <Route path="/shipping-detail" element={<ShippingDetail />} />

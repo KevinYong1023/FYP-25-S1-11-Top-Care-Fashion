@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         unique: true,  // Ensure the ticketNumber is unique
     },
-    seller:{
+    seller:{ // User sell the product
         type:String,
         required:true
     },
@@ -15,11 +15,20 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    products:{
+        type:String,
+        required:true
+    },
+    total:{
+        type: String,
+        required:true
+    },
     status: {
         type: String,
-        required: true
+        required: true,
+        default: "Processing"
     },
-    user:{
+    user:{ // User buy the product
         type:String,
         required:true
     }

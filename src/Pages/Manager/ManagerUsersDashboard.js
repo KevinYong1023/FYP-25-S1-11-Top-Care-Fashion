@@ -124,7 +124,7 @@ export default function ManagerUsersDashboard({setUserEmail}) {
                             </thead>
                             <tbody>
                                 {filteredUsers.map((user) => (
-                                    <tr key={user._id}>
+                                    <tr key={user.userId}>
                                         <td>{user.id}</td>
                                         <td>{user.username}</td>
                                         <td>{user.name}</td>
@@ -138,7 +138,7 @@ export default function ManagerUsersDashboard({setUserEmail}) {
                                                     variant="success"
                                                     size="sm"
                                                     className="me-2"
-                                                    onClick={() => handleActive(user._id)} // Activate user
+                                                    onClick={() => handleActive(user.userId)} // Activate user
                                                 >
                                                     Activate
                                                 </Button>
@@ -148,7 +148,7 @@ export default function ManagerUsersDashboard({setUserEmail}) {
                                                     variant="danger"
                                                     size="sm"
                                                     className="me-2"
-                                                    onClick={() => handleSuspend(user._id)} // Suspend user
+                                                    onClick={() => handleSuspend(user.userId)} // Suspend user
                                                 >
                                                     Suspend
                                                 </Button>

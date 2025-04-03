@@ -50,7 +50,7 @@ export default function ManagerUsersIndividual({ userEmail }) {
       });
       if (response.ok) {
         // If deletion is successful, update the product list
-        setProductPosts(productPosts.filter(post => post._id !== productId));
+        setProductPosts(productPosts.filter(post => post.productNo !== productId));
       } else {
         console.error("Error deleting product");
       }

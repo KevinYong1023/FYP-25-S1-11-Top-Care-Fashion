@@ -4,7 +4,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose); // Import mongoose
 const productSchema = new mongoose.Schema({
   productNo: {
     type: Number,
-    unique: true,  
+    unique: true
 },
   title: {
     type: String,

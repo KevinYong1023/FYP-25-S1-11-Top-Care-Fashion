@@ -7,7 +7,7 @@ const OrderHistory = require('../models/orders.js'); // Ensure correct path to t
 const Product = require('../models/product');
 
 // API to get order history by username
-router.get('/order-history/:username', async (req, res) => {
+router.get('/order/:username', async (req, res) => {
     const { username } = req.params;
     
     try {

@@ -5,7 +5,7 @@ import Sidebar from '../../Components/Sidebars/Sidebar';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function OrderDetails() {
-    const { id, username } = useParams(); // Get both the order ID and username from the URL
+    const { id, name } = useParams(); // Get both the order ID and username from the URL
     const [orderDetails, setOrderDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function OrderDetails() {
     }, [id]);
 
     const BackToOrderHistory = () => {
-        navigate(`/order-history/${username}`);  // Navigate back with the username
+        navigate(`/order-history/${name}`);  // Navigate back with the username
     };
 
     return (
@@ -51,6 +51,7 @@ export default function OrderDetails() {
                                 <br />
                                 <p>Status: {orderDetails.status}</p>
                                 <p>Seller: {orderDetails.seller}</p>
+                                <p>Total: {orderDetails.total}</p>
                                 <p>Purchase Date: {orderDetails.purchased}</p>
                             </div>
                         ) : (

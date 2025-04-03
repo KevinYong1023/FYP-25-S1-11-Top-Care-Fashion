@@ -5,17 +5,15 @@ import Sidebar from '../../Components/Sidebars/Sidebar';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function OrderHistory() {
-    const { username } = useParams();  // Get the username from the URL
-    const [tableData, setTableData] = useState([]);
+    const { name } = useParams();  // Get the username from the URL
     const [filteredData, setFilteredData] = useState([]);
 
     // Fetch data from the backend API
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/order-history/${username}`);
+                const response = await fetch(`/api/order-history/${name}`);
                 const data = await response.json();
-                setTableData(data);
                 setFilteredData(data);  // Initialize filtered data
             } catch (error) {
                 console.error('Error fetching order history:', error);
@@ -23,7 +21,7 @@ export default function OrderHistory() {
         };
 
         fetchData();
-    }, [username]);
+    }, [name]);
 
   
 
@@ -45,19 +43,21 @@ export default function OrderHistory() {
                                     <th>Invoice ID</th>
                                     <th>Status</th>
                                     <th>Seller</th>
+                                    <th>Total</th>
                                     <th>Date Purchase</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredData.map((row) => (
-                                    <tr key={row._id}>
-                                        <td>{row._id}</td>
+                                    <tr key={row.orderNumber}>
+                                        <td>{row.orderNumber}</td>
                                         <td>{row.status}</td>
                                         <td>{row.seller}</td>
+                                        <td>{row.total}</td>
                                         <td>{row.purchased}</td>
                                         <td>
-                                            <a href={`/order-details/${row._id}/${username}`}>Review</a>
+                                            <a href={`/order-details/${row.orderNumber}/${name}`}>Review</a>
                                         </td>
                                     </tr>
                                 ))}
