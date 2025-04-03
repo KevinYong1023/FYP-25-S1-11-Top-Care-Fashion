@@ -150,7 +150,6 @@ export default function ManagerProfileUpdate({ email }) {
                             >
                                 <option value="Female">Female</option>
                                 <option value="Male">Male</option>
-                                <option value="Other">Other</option>
                             </Form.Select>
                         </Form.Group>
 

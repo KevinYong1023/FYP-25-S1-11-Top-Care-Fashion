@@ -112,6 +112,7 @@ export default function ManagerUsersDashboard({setUserEmail}) {
                         <Table striped bordered hover className="mt-3">
                             <thead className="table-light">
                                 <tr>
+                                    <th>ID</th>
                                     <th>Username</th>
                                     <th>Name</th>
                                     <th>Email</th>
@@ -124,11 +125,12 @@ export default function ManagerUsersDashboard({setUserEmail}) {
                             <tbody>
                                 {filteredUsers.map((user) => (
                                     <tr key={user._id}>
+                                        <td>{user.id}</td>
                                         <td>{user.username}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>{user.phone}</td>
-                                        <td>{user.joined}</td>
+                                        <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
                                         <td>{user.status}</td>
                                         <td>
                                             {user.status !== "Active" ? (

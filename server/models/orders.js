@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose); // Import mongoose-sequence
 
-// Define the ticket schema
-const ticketSchema = new mongoose.Schema({
-    ticketId: {
+// Define the orderHistory schema
+const orderSchema = new mongoose.Schema({
+    orderNumber: {
         type: Number,
         unique: true,  // Ensure the ticketNumber is unique
     },
-    user:{
+    seller:{
         type:String,
         required:true
     },
-    description:{
+    purchased:{
         type: String,
         required: true
     },
@@ -19,21 +19,17 @@ const ticketSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    assignee: {
-        type: String,
-        required: false
-    },
-    created: {
-        type: Date,
-        default: Date.now
-      }
+    user:{
+        type:String,
+        required:true
+    }
 });
 
 // Add auto-increment to the ticketNumber field
-ticketSchema.plugin(AutoIncrement, {inc_field: 'ticketId'});
+orderSchema.plugin(AutoIncrement, {inc_field: 'productId'});
 
 // Create the Ticket model
-const Ticket = mongoose.model('Ticket', ticketSchema);
+const Order = mongoose.model('OrderHistory', orderSchema);
 
 // Export the model
-module.exports = Ticket;
+module.exports = Order;

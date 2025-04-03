@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import userpic from '../../images/profile.png';
 import ManagerHeader from "../../Components/Headers/ManagerHeader"; 
 import ManagerSideBar from "../../Components/Sidebars/ManagerSidebar";
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +11,6 @@ const ManagerProfile = ({ email, setName }) => {
     // Fetch user details based on email
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log("Email:", email);
             if (email) {
                 try {
                     const response = await fetch(`/api/user/${email}`);  // Assuming your API follows this route
