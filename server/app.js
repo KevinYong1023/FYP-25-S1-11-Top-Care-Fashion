@@ -6,12 +6,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
+
 // Import the API-related routes
 const userRoutes = require('./routes/users'); // Import the user-related routes
 const ticketRoutes = require('./routes/tickets'); 
 const orderRoutes = require('./routes/orders'); 
 const productRoutes = require('./routes/products'); 
 const commentsRoutes = require('./routes/comments')
+const virtualPaymentsRoutes = require('./routes/virtualPayments');
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -42,8 +45,10 @@ app.get('/', (req, res) => {
 });
 
 // Use all the routes
+
 // Use '/api/users' for all user-related routes
 app.use('/api', userRoutes);
+app.use('/api/auth', require('./routes/auth'));
 
 // Use '/api/tickets' for all ticket-related routes
 app.use('/api', ticketRoutes);
@@ -56,6 +61,11 @@ app.use('/api', productRoutes);
 
 // Use '/api/comments' for all product-related routes
 app.use('/api', commentsRoutes);
+
+// Use '/api/virtual' for all transactions-related routes
+app.use('/api', virtualPaymentsRoutes);
+
+
 
 // Define the port the server will listen on (from .env or default to 5000)
 const PORT = process.env.PORT || 5000;

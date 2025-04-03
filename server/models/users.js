@@ -51,9 +51,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  revenue: {
-    type: String, // Change it to the corresponding value
-    required: false
+
+  revenue:{
+    type: Number, // Change it to the correspond value
+    required:false,
+    min: [0, 'Balance cannot be negative.']
   }
 });
 
