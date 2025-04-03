@@ -34,6 +34,13 @@ const userSchema = new mongoose.Schema({
   position: {
     type: String,
     required: true
+  },
+  
+  balance: {
+    type: Number,
+    required: false, // <<< Field does NOT have to exist
+    min: [0, 'Balance cannot be negative.']
+    // No 'default' here if you set it conditionally
   }
 });
 

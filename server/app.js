@@ -4,7 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const route = require('./routes/routers'); // Import the user-related routes
+ const route = require('./routes/routers'); // Import the user-related routes */
+ const virtualPaymentsRoutes = require('./routes/virtualPayments');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -35,7 +36,10 @@ app.get('/', (req, res) => {
 });
 
 // Use all the routes
-app.use('/api', route);
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/virtual', require('./routes/virtualPayments'));
+
+
 
 // Define the port the server will listen on (from .env or default to 5000)
 const PORT = process.env.PORT || 5000;

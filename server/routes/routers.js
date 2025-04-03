@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/users.js');
 const Ticket = require('../models/tickets.js');
 const OrderHistory = require('../models/orderhistory'); // Ensure correct path to the model
+const VirtualWallet = require('../models/VirtualWallet');
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const authenticate = require('../middleware/authenticate');
 
 // API to get order history by username
 router.get('/order-history/:username', async (req, res) => {
@@ -56,53 +60,74 @@ router.get('/api/order-details/:id', async (req, res) => {
 
 
 // Login route
-router.post('/login', async (req, res) => {
+ /* router.post('/login', async (req, res) => {
     const { email, password, role } = req.body;
+     // Input validation
+     if (!email || !password || !role) {
+        return res.status(400).json({ message: 'Email, password, and role are required' });
+    }
     try {
-        // Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'User not found' });
+            return res.status(400).json({ message: 'Invalid credentials' }); // Generic error
         }
 
-        // Check if the password is correct
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password); // Use consistent bcrypt variable
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(400).json({ message: 'Invalid credentials' }); // Generic error
         }
 
-        // Check if the user selected the correct role
         if (user.position !== role) {
             return res.status(400).json({ message: 'Incorrect role selected' });
         }
 
-        // If login is successful, return user data (without the password)
-        res.json({
-            message: 'Login successful',
-            user: {
-                id: user._id,
-                email: user.email,
-                role: user.position, // Use position instead of role
-                name: user.name,
-                profile_pic: user.profile_pic
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error' });
-    }
-});
+        // --- EDIT: Generate and Return JWT ---
+        const payload = { userId: user._id };
 
-// Registration route
+        console.log('JWT Secret Check in login route:', process.env.JWT_SECRET ? 'Loaded OK' : '!!! MISSING or UNDEFINED !!!');
+
+        const token = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' } // Example expiry
+        );
+
+        res.json({ token }); // Send ONLY the token
+        // --- END EDIT ---
+
+    } catch (error) {
+        console.error("Login Error:", error);
+        res.status(500).json({ message: 'Server error during login' });
+    }
+}); */
+
+/* // Registration route
 router.post('/register', async (req, res) => {
-    const {username, name, email, phone, password, dob, gender, position } = req.body;
+    const { username, name, email, phone, password, dob, gender, position } = req.body;
+
+    // --- Add Input Validation ---
+    if (!username || !name || !email || !phone || !password || !gender || !position) {
+        return res.status(400).json({ message: 'Missing required registration fields' });
+    }
+    // Add more specific validation (email format, password strength etc.)
+
+    // --- EDIT: Use Mongoose Session for Atomic Operations ---
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    // --- END EDIT ---
+
     try {
-        // Check if the user already exists
-        const existingUser = await User.findOne({ email });
+        // Check if the user already exists (check both email and username if both should be unique)
+        const existingUser = await User.findOne({ $or: [{ email }, { username }] }).session(session); // Use session
         if (existingUser) {
-            return res.status(400).json({ message: 'User with this email already exists' });
+             await session.abortTransaction(); // Abort before sending response
+             session.endSession();
+             // Be specific about which field exists
+             const field = existingUser.email === email ? 'email' : 'username';
+            return res.status(400).json({ message: `User with this ${field} already exists` });
         }
 
-        // Hash the password
+        // Hash the password (ensure 'bcrypt' variable matches import)
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -112,26 +137,58 @@ router.post('/register', async (req, res) => {
             name,
             email,
             phone,
-            password: hashedPassword, // Store the hashed password
-            dob, // Optional field
-            gender, // Required field
-            position // Required field
+            password: hashedPassword,
+            dob: dob ? new Date(dob) : null, // Convert dob string to Date if provided
+            gender,
+            position
         });
 
-        // Save the user in the database
-        await newUser.save();
+        // Save the user within the transaction
+        const savedUser = await newUser.save({ session });
 
-        // Send success response
-        res.status(201).json({ message: 'User registered successfully' });
+        // --- EDIT: Conditionally create Virtual Wallet ---
+        if (savedUser.position === 'user') { // Check if the position is 'user'
+            console.log(`Registering 'user', creating wallet for ${savedUser._id}`);
+            const wallet = new VirtualWallet({ userId: savedUser._id }); // Link via userId
+            await wallet.save({ session }); // Save wallet within transaction
+        } else {
+            console.log(`Registering '${savedUser.position}', skipping wallet creation.`);
+        }
+        // --- END EDIT ---
+
+        // --- EDIT: Commit the transaction ---
+        await session.commitTransaction();
+        // --- END EDIT ---
+
+        // --- EDIT: Generate and Return JWT ---
+        const payload = { userId: savedUser._id };
+        const token = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+         res.status(201).json({ token }); // Return token instead of simple message
+         // --- END EDIT ---
+
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        // --- EDIT: Abort transaction on error ---
+        await session.abortTransaction();
+        // --- END EDIT ---
+        console.error("Registration Error:", error);
+        res.status(500).json({ message: 'Server error during registration' });
+    } finally {
+         // --- EDIT: Always end the session ---
+         session.endSession();
+         // --- END EDIT ---
     }
-});
+}); */
 
 // Get all Ticket
-router.get('/tickets', async (req, res) => {
+router.get('/tickets', authenticate, async (req, res) => { // <-- 'authenticate' added here
+    // If the request reaches here, the token was valid and authenticate() called next()
+    // req.userId should now be available from the middleware
     try {
-        const tickets = await Ticket.find(); // Fetch all tickets from the collection
+        const tickets = await Ticket.find();
         res.json(tickets);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching tickets' });
@@ -302,6 +359,11 @@ router.get('/user/:email', async (req, res) => {
         console.error('Error fetching user details:', error);
         res.status(500).json({ message: 'Error fetching user details' });
     }
+
+
+
+
+    
 });
 
 
