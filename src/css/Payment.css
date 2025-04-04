@@ -11,8 +11,11 @@
 
 /* Specific styles for headings */  
 h1 {  
-    font-size: 40px; /* Increase size for the main heading */  
-    margin-bottom: 20px; /* Adds space below the heading */  
+    font-size: 40px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #6f4e37;
+    font-weight: bold;
+    margin-bottom: 20px;  
 }  
 
 /* Styles for payment method labels */  
@@ -26,7 +29,8 @@ h1 {
     border-radius: 8px; /* Rounded corners */  
     padding: 40px; /* Padding inside the card details */  
     margin-top: 20px; /* Space above the card details */  
-    width: 100%;  
+    width: 100%; 
+    font-size: 20px; 
 }  
 
 /* Styles for QR Code section */  

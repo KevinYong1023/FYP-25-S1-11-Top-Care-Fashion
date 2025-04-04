@@ -9,8 +9,8 @@ const ShippingDetail = ({ loginStatus }) => {
     return (  
         <div>  
              <UserHeader loginStatus={true} /> {/* Pass the login status */}  
-            <Container className="shipping-container">  
-                <h2>Shipping Details</h2>  
+             <Container className="shipping-container">  
+                <h2 className='title'>Shipping Details</h2>  
                 <Form className="shipping-form">  
                     <div className="input-group">  
                         <Form.Control type="text" placeholder="First Name" required />  

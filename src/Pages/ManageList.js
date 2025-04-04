@@ -5,6 +5,7 @@ import UserHeader from "../Components/Headers/userHeader";
 import denim from "../images/denim.jpg";
 import shoe from "../images/shoe.jpg";
 import hoodie from "../images/hoodie.jpg";
+import "../css/ManageList.css";
 
 const ManageList = () => {
     const [listings, setListings] = useState([
@@ -37,9 +38,9 @@ const ManageList = () => {
 
     return (
         <>
-            <UserHeader /> {/* Now placed outside the Container */}
-            <Container className="mt-4">
-                <h2 className="mb-4">Manage Listings</h2>
+            <UserHeader />
+            <Container className="manage-list-container mt-4">
+                <h2 className="managing-header">Manage Listings</h2>
                 <Table striped bordered hover responsive>
                     <thead>
                         <tr>
@@ -56,13 +57,13 @@ const ManageList = () => {
                                 <tr key={listing.id}>
                                     <td className="text-center">
                                         <div className="d-flex justify-content-center">
-                                        <Image 
-                                            src={listing.image} 
-                                            alt={listing.name} 
-                                            height={100} 
-                                            style={{ width: "auto" }} 
-                                            rounded 
-                                        />
+                                            <Image 
+                                                src={listing.image} 
+                                                alt={listing.name} 
+                                                height={100} 
+                                                style={{ width: "auto" }} 
+                                                rounded 
+                                            />
                                         </div>
                                     </td>
                                     <td>{listing.name}</td>

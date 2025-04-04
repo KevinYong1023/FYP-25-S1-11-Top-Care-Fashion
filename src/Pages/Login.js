@@ -63,8 +63,8 @@ const Login = () => {
   return (
     <>
       <UserHeader loginStatus={false} />
-      <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <h2 className="mb-4">Login to Your Account</h2>
+      <Container className="d-flex flex-column justify-content-center align-items-center vh-95">
+        <h2 className="login-header">Login to Your Account</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
         <Form className="w-50" onSubmit={handleSubmit}>

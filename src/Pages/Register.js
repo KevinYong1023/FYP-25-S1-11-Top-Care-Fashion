@@ -95,7 +95,7 @@ const Register = () => {
         <>
             <UserHeader loginStatus={false} />
             <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-                <h2 className="mb-4">Create an Account</h2>
+                <h2 className="register-header">Create an Account</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form className="w-50" onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">

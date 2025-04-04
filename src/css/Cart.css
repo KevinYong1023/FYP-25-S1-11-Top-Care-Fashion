@@ -1,11 +1,13 @@
-/* src/Pages/cart.css */  
-
 .container {  
     margin-top: 2rem;  
 }  
 
-h2 {  
+.cart-header {  
     margin-bottom: 1.5rem;  
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #6f4e37;
+    font-weight: bold;
+    font-size: 35px;
 }  
 
 .card {  
@@ -34,17 +36,59 @@ h2 {
     margin-right: 0.5rem;  
 }  
 
-.checkout-button {  
-    width: 15%;  
-}  
-
-.custom-cart-button {  
-    margin-left: 15px; /* Adjust the value as needed */  
-}  
-
-/* Discount Input Field Styles */  
 .discount-input {  
-    width: 200px !important; /* Set a specific width for the discount input */  
-    max-width: 100%; /* Ensure it doesn't exceed the container width */  
+    width: 200px !important;  
+    max-width: 100%;  
 }  
 
+.apply-button {
+    background-color: #b08968;
+    border-color: #b08968;
+}
+
+.apply-button:hover {
+    background-color: #9c7558;
+    border-color: #9c7558;
+}
+
+.clear-cart-button {
+    background-color: #8f857b;
+    border: #8f857b;
+    font-weight: bold;
+    color: white;
+}
+
+.clear-cart-button:hover {
+    background-color: #686763;
+    border: #686763;
+}
+
+.checkout-button {
+    background-color: #87986a;
+    border: #87986a;
+    font-weight: bold;
+}
+
+.checkout-button:hover {
+    background-color: #718355;
+    border: #718355;
+}
+
+.remove-button {
+    background-color: #8f857b;
+    border: #8f857b;
+}
+
+/* Styling for the cart buttons */
+.cart-buttons {
+    display: flex;
+    justify-content: flex-end; /* Aligns buttons to the right */
+    gap: 15px; /* Adds space between buttons */
+}
+
+@media (max-width: 768px) {
+    .cart-buttons {
+        justify-content: center; /* Center buttons on small screens */
+        flex-direction: row; /* Ensure they remain side by side */
+    }
+}

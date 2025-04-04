@@ -1,0 +1,34 @@
+.custom-save-btn {
+    background-color: #97a97c; 
+    border-color: #97a97c;
+}
+
+.custom-cancel-btn {
+    background-color: #ddbea9;
+    border-color: #ddbea9;
+}
+
+.custom-save-btn:hover {
+    background-color: #85986c;
+    border-color: #85986c;
+}
+
+.custom-cancel-btn:hover{
+    background-color: #cb997e;
+    border-color: #cb997e;
+}
+.account-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh; /* Full viewport height */
+}
+
+.account {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 28px;
+    color: #6f4e37;
+    font-weight: bold;
+    text-transform: uppercase;
+}

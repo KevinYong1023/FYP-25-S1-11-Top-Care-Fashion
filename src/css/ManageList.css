@@ -1,0 +1,34 @@
+/* ManageList.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+.manage-list-container {
+    font-family: 'Poppins', sans-serif;
+}
+
+.managing-header {
+    font-weight: bold;
+    text-align: center;
+    color: #6f4e37;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.table th, .table td {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.text-danger {
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.text-danger:hover {
+    text-decoration: underline;
+}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import UserHeader from "../Components/Headers/userHeader";
+import "../css/UpdateAccount.css";
 
 const UpdateAccount = () => {
     const [formData, setFormData] = useState({
@@ -36,8 +37,8 @@ const UpdateAccount = () => {
         <>
         <UserHeader  loginStatus={true}/>
   
-        <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-            <h2 className="mb-4">Update Account</h2>
+        <Container className="account-container">
+            <h2 className="account">Update Account</h2>
 
             <Form className="w-50" onSubmit={handleSubmit}>
                 {/* First Name */}
@@ -102,12 +103,12 @@ const UpdateAccount = () => {
 
                 {/* Buttons */}
                 <div className="d-flex justify-content-between">
-                    <Button variant="secondary" onClick={() => navigate("/user-profile")}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" type="submit">
-                        Save
-                    </Button>
+                <Button className="custom-cancel-btn" onClick={() => navigate("/user-profile")}>
+                    Cancel
+                </Button>
+                <Button className="custom-save-btn" type="submit">
+                    Save
+                </Button>
                 </div>
             </Form>
 

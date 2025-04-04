@@ -1,0 +1,22 @@
+.custom-view-button {
+    background-color: #b08968;  /* Change this to your preferred color */
+    border-color: #b08968;
+    color: white;  /* Ensures text is visible */
+}
+
+.custom-view-button:hover {
+    background-color: #7f5539;  /* Slightly darker on hover */
+    border-color: #7f5539;
+}
+
+.custom-search-button {
+    background-color: #a5a58d;  /* Custom orange color */
+    border-color: #a5a58d;
+    color: white;  /* Ensures text is readable */
+}
+
+.custom-search-button:hover {
+    background-color: #6b705c;  /* Darker orange on hover */
+    border-color: #6b705c;
+}
+

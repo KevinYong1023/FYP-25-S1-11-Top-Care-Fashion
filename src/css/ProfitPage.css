@@ -19,14 +19,14 @@
 
 .profit-card h3 {
     margin-bottom: 10px;
-    font-size: 24px;
+    font-size: 28px;
 }
 
 .value,
 .products-sold {
     font-size: 28px;
     font-weight: bold;
-    color: #007bff;
+    color: #7f5539;
 }
 
 .section-title {
@@ -53,6 +53,6 @@
     object-fit: cover;
 }
 
-.product-name {
-    font-weight: bold;
+.items-name {
+    font-size: 20px;
 }

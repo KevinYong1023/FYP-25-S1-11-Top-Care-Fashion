@@ -80,7 +80,7 @@ export default function ProfitPage() {
                                                     className="product-image"
                                                     thumbnail
                                                 />
-                                                <span className="product-name">{product.name}</span>
+                                                <span className="items-name">{product.name}</span>
                                             </td>
                                             <td>{product.dateSold}</td>
                                             <td>${product.price.toLocaleString()}</td>
