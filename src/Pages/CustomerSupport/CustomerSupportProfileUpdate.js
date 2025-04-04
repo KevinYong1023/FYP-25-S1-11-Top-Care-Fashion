@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import userData from '../../mockdata/users.json'; // Import mock data
-import Sidebar from '../../Components/Sidebar';
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
+import "../../css/CustomerSupportProfileUpdate.css"
 
 export default function CustomerSupportProfileUpdate({ email }) {
     const navigate = useNavigate();
@@ -75,10 +74,7 @@ export default function CustomerSupportProfileUpdate({ email }) {
             if (response.ok) {
                 const updatedUser = await response.json();
                 console.log('Profile updated successfully:', updatedUser);
-                // Optionally, you can set the updated user data back to the state
                 setProfile(updatedUser);
-
-                // Navigate back to the profile view
                 navigate('/customer-support-profile');
             } else {
                 console.error('Error updating profile');
@@ -93,11 +89,8 @@ export default function CustomerSupportProfileUpdate({ email }) {
         <AuthorityHeader/>
         <Container fluid>
             <Row>
-                <Col xs={12} md={3} className="p-0">
-                    <Sidebar/>
-                </Col>
-                <Col md={9} className="p-4">
-                    <h3>Update Profile</h3>
+                <Col xs={12} md={8} className="mx-auto p-4"> {/* Centered Form */}
+                <h3 className="profile-title">Update Profile</h3>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="username">
                             <Form.Label>Username</Form.Label>
@@ -116,7 +109,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="name"
                                 value={profile.name}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 
@@ -126,8 +118,7 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 type="email"
                                 name="email"
                                 value={profile.email}
-                                onChange={handleChange}
-                                
+                                disabled
                             />
                         </Form.Group>
 
@@ -138,7 +129,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="dob"
                                 value={profile.dob}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 
@@ -148,7 +138,6 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="gender"
                                 value={profile.gender}
                                 onChange={handleChange}
-                                
                             >
                                 <option value="Female">Female</option>
                                 <option value="Male">Male</option>
@@ -163,11 +152,10 @@ export default function CustomerSupportProfileUpdate({ email }) {
                                 name="phone"
                                 value={profile.phone}
                                 onChange={handleChange}
-                                
                             />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
+                        <Button type="submit" className="update-btn">
                             Update Profile
                         </Button>
                     </Form>

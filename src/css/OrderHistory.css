@@ -1,0 +1,38 @@
+/* Style for the page title */
+.order-history-title {
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #6f4e37;
+    margin-bottom: 15px;
+}
+
+/* Center the table and add spacing */
+.order-history-table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+/* Style table headers */
+.order-history-table th {
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Style table cells */
+.order-history-table td {
+    text-align: center;
+    padding: 8px;
+}
+
+/* Style the review link */
+.order-history-table a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.order-history-table a:hover {
+    text-decoration: underline;
+}

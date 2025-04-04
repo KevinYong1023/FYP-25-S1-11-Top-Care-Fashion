@@ -1,6 +1,5 @@
-import React, { useState, useEffect,useContext} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/Sidebar';
 import { Link } from 'react-router-dom';
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 import { AuthContext } from '../../App';
@@ -90,9 +89,6 @@ export default function Dashboard() {
             <AuthorityHeader />
             <Container fluid>
                 <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
                     <Col style={{ margin: '10px' }}>
                         <h1>Welcome {userName ? userName : "User"}</h1>
                         <p>Following are the tickets</p>
@@ -112,34 +108,33 @@ export default function Dashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {openTickets.map((row,index) => (
+                                    {openTickets.map((row, index) => (
                                         <tr key={row._id}>
-                                            <td>{index+1}</td>
+                                            <td>{index + 1}</td>
                                             <td>{row.user}</td>
                                             <td>{row.status}</td>
                                             <td>{row.created}</td>
                                             <td>
-    <div style={{ display: 'flex', gap: '10px' }}> {/* Flexbox container with spacing */}
-        <Link to={`/ticket-info/${row._id}`} rel="noopener noreferrer"> 
-            <Button variant="primary" size="sm">Review</Button>
-        </Link>
-        <Button
-            variant="danger"
-            size="sm"
-            onClick={() => handleDelete(row._id)}
-        >
-            Delete
-        </Button>
-        <Button
-            variant="warning"
-            size="sm"
-            onClick={() =>assignTicket(row._id)}
-        >
-            Assign to me
-        </Button>
-    </div>
-</td>
-
+                                                <div style={{ display: 'flex', gap: '10px' }}> {/* Flexbox container with spacing */}
+                                                    <Link to={`/ticket-info/${row._id}`} rel="noopener noreferrer"> 
+                                                        <Button variant="primary" size="sm">Review</Button>
+                                                    </Link>
+                                                    <Button
+                                                        variant="danger"
+                                                        size="sm"
+                                                        onClick={() => handleDelete(row._id)}
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                    <Button
+                                                        variant="warning"
+                                                        size="sm"
+                                                        onClick={() => assignTicket(row._id)}
+                                                    >
+                                                        Assign to me
+                                                    </Button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

@@ -1,0 +1,18 @@
+.profile-title {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #6f4e37;
+    text-align: center;
+}
+
+.update-btn {
+    background-color: #a5a58d;
+    border-color: #a5a58d;
+    width: 100%;
+}
+
+.update-btn:hover {
+    background-color: #6b705c; 
+    border-color: #6b705c;
+}

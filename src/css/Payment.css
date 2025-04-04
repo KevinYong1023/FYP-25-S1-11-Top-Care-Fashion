@@ -58,3 +58,17 @@ h1 {
     border: 2px dashed #ccc; /* Dashed border */  
     margin-bottom: 10px; /* Space below the QR code */  
 }  
+
+.confirm-button {
+    background-color: #a5a58d;
+    border: #a5a58d;margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 20px;
+
+}
+
+.confirm-button:hover {
+    background-color: #6b705c;
+    border: #6b705c;
+}

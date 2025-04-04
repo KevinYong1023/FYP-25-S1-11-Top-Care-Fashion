@@ -146,7 +146,7 @@ const Payment = () => {
                                         label="Terms and conditions..."   
                                     />  
                                 </Form.Group>  
-                                <Button variant="primary" type="submit">Confirm</Button>  
+                                <Button className="confirm-button" type="submit">Confirm</Button>  
                             </div>  
                         )}  
                         {paymentMethod === 'paynow' && (  
@@ -174,5 +174,4 @@ const Payment = () => {
         </>
     );  
 };  
-
 export default Payment;  

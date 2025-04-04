@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/Sidebar';
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
+import '../../css/ViewUsers.css';  // Import the CSS file
 
 export default function ViewUsers() {
     const [users, setUsers] = useState([]);
@@ -26,17 +26,12 @@ export default function ViewUsers() {
 
     return (
         <>
-            <AuthorityHeader/>
+            <AuthorityHeader />
             <Container fluid>
                 <Row className="d-flex">
-                    {/* Sidebar */}
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-
                     {/* Main Content */}
-                    <Col md={10} style={{ padding: '20px' }}>
-                        <h2>Users List</h2>
+                    <Col xs={12} style={{ padding: '20px' }}> {/* Set to 12 to span full width */}
+                        <h2 className="user-list-header">Users List</h2>
                         <hr />
                         <table className="table table-bordered">
                             <thead>
@@ -57,7 +52,6 @@ export default function ViewUsers() {
                                             <a href={`/order-history/${user.name}`} rel="noopener noreferrer">
                                                 Order History
                                             </a>
-
                                         </td>
                                     </tr>
                                 ))}
