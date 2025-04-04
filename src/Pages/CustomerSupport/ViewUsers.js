@@ -54,7 +54,7 @@ export default function ViewUsers() {
                                         <td>{user.email}</td>
                                         <td>{user.phone.slice(0, 8)}</td> {/* Limits phone to 8 characters */}
                                         <td>
-                                            <a href={`/order/${user.name}`} rel="noopener noreferrer">
+                                            <a href={`/order-history/${user.name}`} rel="noopener noreferrer">
                                                 Order History
                                             </a>
 

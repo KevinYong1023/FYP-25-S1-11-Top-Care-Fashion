@@ -37,7 +37,7 @@ export default function UserOrders({email}){
                     const sellOrders = data.filter(order => order.seller === name);
                     setSellList(sellOrders);
                     // Filter buyList (orders where the user is the buyer)
-                    const buyOrders = data.filter(order => order.user === name);
+                    const buyOrders = data.filter(order => order.buyer === name);
                     setBuyList(buyOrders);
                      } catch (error) {
                          console.error('Error fetching order history:', error);

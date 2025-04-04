@@ -171,7 +171,7 @@ export default function ViewAccounts() {
                             <tbody>
                                 {users.map((user) => (
                                     <tr key={user._id}>
-                                        <td>{user._id}</td>
+                                        <td>{user.userId}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
                                         <td>{user.phone.slice(0, 8)}</td>
@@ -181,7 +181,7 @@ export default function ViewAccounts() {
                                             {user.status === 'Active' ? (
                                                 <Button
                                                     variant="warning"
-                                                    onClick={() => handleSuspend(user._id)}
+                                                    onClick={() => handleSuspend(user.userId)}
                                                     className="me-2"
                                                 >
                                                     Suspend
@@ -189,7 +189,7 @@ export default function ViewAccounts() {
                                             ) : (
                                                 <Button
                                                     variant="success"
-                                                    onClick={() => handleActive(user._id)}
+                                                    onClick={() => handleActive(user.userId)}
                                                     className="me-2"
                                                 >
                                                     Activate
@@ -197,7 +197,7 @@ export default function ViewAccounts() {
                                             )}
                                             <Button
                                                 variant="danger"
-                                                onClick={() => handleDelete(user._id)}
+                                                onClick={() => handleDelete(user.userId)}
                                             >
                                                 Delete
                                             </Button>

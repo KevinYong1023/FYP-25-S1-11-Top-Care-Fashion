@@ -125,7 +125,7 @@ export default function ManagerUsersDashboard({setUserEmail}) {
                             <tbody>
                                 {filteredUsers.map((user) => (
                                     <tr key={user.userId}>
-                                        <td>{user.id}</td>
+                                        <td>{user.userId}</td>
                                         <td>{user.username}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>

@@ -16,7 +16,6 @@ import CreateUser from "./Pages/CustomerSupport/CreateUser";
 import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
 import UserProfile from "./Pages/UserProfile";
-import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
 import ShippingDetail from "./Pages/ShippingDetail.js";
 import ManageList from "./Pages/ManageList.js";
@@ -101,8 +100,7 @@ function App() {
                         <Route path="/customer-support-profile" element={<CustomerSupportProfile email={email} setName={setName} />} />
                         <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate email={email} />} />
                         <Route path="/view-accounts" element={<ViewUsers />} />
-                        <Route path="/order/:username" element={<OrderHistory />} />
-                        <Route path="/order-details/:id/:username" element={<OrderDetails />} />
+                        <Route path="/order-history/:name" element={<OrderHistory />} />
                         <Route path="/assigned-ticket" element={<TotalTicket email={email} />} />
                         <Route path="/logout" element={<Logout setLogin={setLogin} />} />
                         <Route path="/update-account" element={<UpdateAccount email={email} />} />

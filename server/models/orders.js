@@ -7,8 +7,8 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         unique: true,  // Ensure the ticketNumber is unique
     },
-    seller:{ // User sell the product
-        type:String,
+    seller:{ // User sell the product: Product A: User1, Product B: User2 
+        type:String, 
         required:true
     },
     purchased:{
@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    total:{
+    total:{ // Total Price 
         type: String,
         required:true
     },
@@ -28,14 +28,14 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: "Processing"
     },
-    user:{ // User buy the product
+    buyer:{ // User buy the product
         type:String,
         required:true
     }
 });
 
 // Add auto-increment to the ticketNumber field
-orderSchema.plugin(AutoIncrement, {inc_field: 'productId'});
+orderSchema.plugin(AutoIncrement, {inc_field: 'orderNumber'});
 
 // Create the Ticket model
 const Order = mongoose.model('OrderHistory', orderSchema);

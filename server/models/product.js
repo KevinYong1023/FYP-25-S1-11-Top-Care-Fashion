@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
-const AutoIncrement = require('mongoose-sequence')(mongoose); // Import mongoose-sequence
 
 const productSchema = new mongoose.Schema({
-  productNo: {
-    type: Number,
-    unique: true
-},
   title: {
     type: String,
     required: true,
@@ -25,15 +20,15 @@ const productSchema = new mongoose.Schema({
     enum: ['Top', 'Bottom', 'Footwear', 'Other'],
     required: true
   },
-  ocassion:{
-    type:Array,
-    required: true
-  },
   imageUrl: {
     type: String,
     required: true
   },
-  email: {  // user email of uploader
+  seller: {  // user full name
+    type: String,
+    required: true
+  },
+  email: {  // user email
     type: String,
     required: true
   },
@@ -43,7 +38,5 @@ const productSchema = new mongoose.Schema({
   }
 });
 
-// Add auto-increment to the ticketNumber field
-productSchema.plugin(AutoIncrement, {inc_field: 'productNo'});
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

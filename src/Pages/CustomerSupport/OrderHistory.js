@@ -12,9 +12,13 @@ export default function OrderHistory() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/order-history/${name}`);
+                const response = await fetch(`/api/order-history`);
                 const data = await response.json();
-                setFilteredData(data);  // Initialize filtered data
+                const filtered = data.filter(order =>
+                    order.buyer === name || order.seller === name
+                );
+    
+                setFilteredData(filtered);
             } catch (error) {
                 console.error('Error fetching order history:', error);
             }
@@ -45,28 +49,21 @@ export default function OrderHistory() {
                                     <th>Seller</th>
                                     <th>Total</th>
                                     <th>Date Purchase</th>
-                                    <th>Action</th>
+                                    <th>Buyer</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredData.map((row) => (
-                                    <tr key={row.orderNumber}>
-                                        <td>{row.orderNumber}</td>
-                                        <td>{row.status}</td>
-                                        <td>{row.seller}</td>
-                                        <td>{row.total}</td>
-                                        <td>{row.purchased}</td>
-                                        <td>
-                                            <a href={`/order-details/${row.orderNumber}/${name}`}>Review</a>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {filteredData.length === 0 && (
-                                    <tr>
-                                        <td colSpan="5">No results found</td>
-                                    </tr>
-                                )}
-                            </tbody>
+    {filteredData.map((row) => (
+        <tr key={row.orderNumber}>
+            <td>{row.orderNumber}</td>
+            <td>{row.status}</td>
+            <td>{row.seller}</td>
+            <td>{row.total}</td>
+            <td>{row.purchased}</td>
+            <td>{row.buyer}</td> 
+        </tr>
+    ))}
+</tbody>
                         </table>
                     </Col>
                 </Row>

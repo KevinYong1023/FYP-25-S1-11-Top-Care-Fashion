@@ -31,6 +31,7 @@ const AdminCreateAccount = () => {
 
     const validateForm = () => {
         let formErrors = {};
+        const passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
         if (!formData.name) formErrors.name = ' Name is required.';
         if (!formData.username) formErrors.username = 'Username is required.';
@@ -42,9 +43,13 @@ const AdminCreateAccount = () => {
         if (!formData.phone) {
             formErrors.phone = 'Phone number is required.';
         } else if (!/^\d{8}$/.test(formData.phone)) {
-            formErrors.phone = 'Phone number must be 10 digits.';
+            formErrors.phone = 'Phone number must be 8 digits.';
         }
-        if (!formData.password) formErrors.password = 'Password is required.';
+        if (!formData.password) {
+            formErrors.password = 'Password is required.';
+        } else if (!passwordRegex.test(formData.password)) {
+            formErrors.password = 'Password must be at least 8 characters and include at least one symbol.';
+        }
         if (formData.password !== formData.confirmPassword)
             formErrors.confirmPassword = 'Passwords do not match.';
         if (!formData.position) formErrors.position = 'Position is required.';
@@ -165,7 +170,6 @@ const AdminCreateAccount = () => {
                                                 >
                                                     <option value="">Select  position</option>
                                                     <option value="admin">Admin</option>
-                                                    <option value="user">User</option>
                                                     <option value="manager">Manager</option>
                                                     <option value="customer support">Customer Support</option>
                                                 </Form.Select>

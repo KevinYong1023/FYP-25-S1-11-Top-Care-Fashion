@@ -1,6 +1,6 @@
 // src/pages/ProductPage.js
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button, Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Alert, OverlayTrigger, Tooltip,Form } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../Components/CartContext";
 import UserHeader from "../Components/Headers/userHeader";
@@ -9,6 +9,7 @@ const ProductPage = ({ email }) => {
   const { id } = useParams(); // Get product ID from route
   const [product, setProduct] = useState(null);
   const [error, setError] = useState("");
+  const [comment, setComments] = useState("")
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
@@ -97,6 +98,22 @@ const ProductPage = ({ email }) => {
         ) : (
           <p>Loading product...</p>
         )}
+        <div>
+        <Form>  
+                        <Form.Group controlId="formBasicComment">  
+                            <Form.Label>Your Comment</Form.Label>  
+                            <Form.Control  
+                                as="textarea"  
+                                rows={3}  
+                                placeholder="Write your comment..."  
+                                value={comment}  
+                                onChange={(e) => setComments(comment)}  
+                                required  
+                            />  
+                        </Form.Group>  
+                        <Button variant="primary" type="submit">Submit Comment</Button>  
+                    </Form>  
+        </div>
       </Container>
     </>
   );
