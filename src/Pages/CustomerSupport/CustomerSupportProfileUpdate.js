@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebar';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 import { useNavigate } from 'react-router-dom';  
 
-export default function CustomerSupportProfileUpdate({ email }) {
+export default function CustomerSupportProfileUpdate() {
     const navigate = useNavigate();
+    const { email } = useContext(AuthContext);  
+
     const [profile, setProfile] = useState({
         username: '',
         name: '',
@@ -64,6 +67,7 @@ export default function CustomerSupportProfileUpdate({ email }) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    username: profile.username,
                     name: profile.name,
                     dob: profile.dob,
                     gender: profile.gender,

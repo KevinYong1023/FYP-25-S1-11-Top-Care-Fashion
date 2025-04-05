@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Table, Button, Card, Pagination } from "react-bootstrap";
 import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader";
 
-export default function ManagerUsersIndividual({ userEmail }) {
+export default function ManagerUsersIndividual() {
+  const { userEmail } = useContext(AuthContext); 
   const [userData, setUserData] = useState(null);
   const [productPosts, setProductPosts] = useState([]);
   const [commentsList, setCommentList] = useState([]);
@@ -18,7 +20,6 @@ export default function ManagerUsersIndividual({ userEmail }) {
       const response = await fetch(`/api/comments/madeby/${user}`);
       if (!response.ok) throw new Error("Failed to fetch user comments");
       const data = await response.json();
-      console.log("User comments:", data);
       setCommentList(data);
     } catch (err) {
       console.error("Error fetching user comments:", err);

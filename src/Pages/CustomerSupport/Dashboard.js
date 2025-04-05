@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/Sidebar';
+import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { Link } from 'react-router-dom';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 import { AuthContext } from '../../App';
 
 export default function Dashboard() {
     const [ticketList, setTicketList] = useState([]);
-    const [userName, setUserName] = useState("");
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
-    const { email } = useContext(AuthContext);
+    const { name } = useContext(AuthContext);
     const ticketsPerPage = 10; // Number of tickets per page
 
     // Fetch tickets from the backend API
@@ -25,22 +24,6 @@ export default function Dashboard() {
         };
         fetchTickets();
     }, []);
-
-    // Fetch user details based on email
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            if (email) {
-                try {
-                    const response = await fetch(`/api/user/${email}`);
-                    const data = await response.json();
-                    setUserName(data.name);
-                } catch (error) {
-                    console.error('Error fetching user details:', error);
-                }
-            }
-        };
-        fetchUserDetails();
-    }, [email]);
 
     // Pagination Logic
     const openTickets = ticketList.filter((ticket) => ticket.status === 'Open' && ticket.assignee === "");
@@ -97,7 +80,7 @@ export default function Dashboard() {
     async function assignTicket(ticketId) {
         try {
             const requestBody = {
-                assignee: userName,
+                assignee: name,
                 status: "In Progress",
             };
 
@@ -111,7 +94,7 @@ export default function Dashboard() {
 
             if (response.ok) {
                 const updatedTickets = ticketList.map((ticket) =>
-                    ticket._id === ticketId ? { ...ticket, assignee: userName, status: 'In Progress' } : ticket
+                    ticket._id === ticketId ? { ...ticket, assignee: name, status: 'In Progress' } : ticket
                 );
                 setTicketList(updatedTickets);
             } else {
@@ -131,7 +114,7 @@ export default function Dashboard() {
                         <Sidebar />
                     </Col>
                     <Col style={{ margin: '10px' }}>
-                        <h1>Welcome {userName ? userName : "User"}</h1>
+                        <h1>Welcome {name ? name : "User"}</h1>
                         <p>Following are the tickets</p>
                         <hr />
                         <h2>All Available Tickets</h2>
@@ -149,28 +132,28 @@ export default function Dashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {currentTickets.map((row, index) => (
-                                        <tr key={row.ticketId}>
-                                            <td>{row.ticketId}</td>
-                                            <td>{row.user}</td>
-                                            <td>{row.status}</td>
-                                            <td>{row.created}</td>
+                                    {currentTickets.map((ticket, index) => (
+                                        <tr key={ticket.ticketId}>
+                                            <td>{ticket.ticketId}</td>
+                                            <td>{ticket.user}</td>
+                                            <td>{ticket.status}</td>
+                                            <td>{ticket.created}</td>
                                             <td>
                                                 <div style={{ display: 'flex', gap: '10px' }}>
-                                                    <Link to={`/ticket-info/${row._id}`} rel="noopener noreferrer">
+                                                    <Link to={`/ticket-info/${ticket.ticketId}`} rel="noopener noreferrer">
                                                         <Button variant="primary" size="sm">Review</Button>
                                                     </Link>
                                                     <Button
                                                         variant="danger"
                                                         size="sm"
-                                                        onClick={() => handleDelete(row._id)}
+                                                        onClick={() => handleDelete(ticket.ticketId)}
                                                     >
                                                         Delete
                                                     </Button>
                                                     <Button
                                                         variant="warning"
                                                         size="sm"
-                                                        onClick={() => assignTicket(row._id)}
+                                                        onClick={() => assignTicket(ticket.ticketId)}
                                                     >
                                                         Assign to me
                                                     </Button>
