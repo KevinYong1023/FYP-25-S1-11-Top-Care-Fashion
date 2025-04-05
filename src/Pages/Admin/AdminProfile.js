@@ -4,14 +4,14 @@ import AdminHeader from "../../Components/Headers/AdminHeader";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 import { useNavigate } from 'react-router-dom';
 
-const AdminProfile = ({ email }) => {
+const AdminProfile = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    const email = localStorage.getItem("email")
 
     // Fetch user details based on email
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log("Email:", email);
             if (email) {
                 try {
                     const response = await fetch(`/api/user/${email}`);  // Assuming your API follows this route

@@ -4,14 +4,16 @@ import Sidebar from "../../Components/Sidebars/Sidebar";
 import AuthorityHeader from "../../Components/Headers/CustomerSupportHeader";
 import { useNavigate } from 'react-router-dom';
 
-const CustomerSupportProfile = ({ email, setName }) => {  
+const CustomerSupportProfile = ({setName }) => {  
     const [user, setUser] = useState(null);  
     const navigate = useNavigate();
+    
+    // Get email from localStorage
+    const email = localStorage.getItem("email");
 
     // Fetch user details based on email
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log("Email:", email);
             if (email) {
                 try {
                     const response = await fetch(`/api/user/${email}`); 
@@ -24,7 +26,7 @@ const CustomerSupportProfile = ({ email, setName }) => {
             }
         };
         fetchUserDetails();
-    }, [email]);
+    }, [email, setName]);
 
     function updateProfile(){
         navigate('/customer-support-profile-update');  

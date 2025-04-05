@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader";
 
-export default function ManagerUsersDashboard({ setUserEmail }) {
+export default function ManagerUsersDashboard() {
+    
     const [users, setUsers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
@@ -95,7 +96,7 @@ export default function ManagerUsersDashboard({ setUserEmail }) {
     };
 
     function checkUserProducts(mail) {
-        setUserEmail(mail);
+        localStorage.setItem("selectedUserEmail", mail);
         navigate("/managerusersindividual");
     }
 

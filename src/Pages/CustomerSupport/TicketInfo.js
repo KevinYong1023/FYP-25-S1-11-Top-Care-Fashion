@@ -5,7 +5,7 @@ import Sidebar from '../../Components/Sidebars/Sidebar';
 import { useParams, useNavigate } from "react-router-dom";
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
-export default function TicketInfo({email}) {
+export default function TicketInfo() {
     const navigate = useNavigate();
     const { id } = useParams(); // Get the ticket ID from the URL
 
@@ -13,33 +13,36 @@ export default function TicketInfo({email}) {
     const [ticket, setTicket] = useState(null); // Store the ticket object
     const [ticketStatus, setTicketStatus] = useState('');
     const [userName, setUserName] = useState(""); // State to store user name
-    
-        // Fetch user details based on email and retrieve the user's name
-        useEffect(() => {
-            const fetchUserDetails = async () => {
-                if (email) {
-                    try {
-                        const response = await fetch(`/api/user/${email}`); 
-                        const data = await response.json();
-                        setUserName(data.name); // Set the user's name
-                    } catch (error) {
-                        console.error('Error fetching user details:', error);
-                    }
-                }else{
-                    console.log("EMAIL HAVENT PASS IN YET") // THE LOG SHOWED THIS
+
+    // Get email from localStorage
+    const email = localStorage.getItem("email");
+
+    // Fetch user details based on email and retrieve the user's name
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            if (email) {
+                try {
+                    const response = await fetch(`/api/user/${email}`);
+                    const data = await response.json();
+                    setUserName(data.name); // Set the user's name
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
                 }
-            };
-            fetchUserDetails();
-        }, [email]);
+            } else {
+                console.log("EMAIL HAVEN'T BEEN PASSED IN YET");
+            }
+        };
+        fetchUserDetails();
+    }, [email]);
 
     useEffect(() => {
         const fetchTicket = async () => {
-            console.log("ID",id)
+            console.log("ID", id);
             try {
                 const response = await fetch(`/api/tickets/${id}`); // Assuming your backend route is /api/tickets/:id
                 if (response.ok) {
                     const data = await response.json(); // Parse the response as JSON
-                    console.log(data)
+                    console.log(data);
                     setTicket(data); // Set the ticket data
                     setTicketStatus(data.status); // Set the ticket's current status
                 } else {
@@ -76,7 +79,7 @@ export default function TicketInfo({email}) {
                 },
                 body: JSON.stringify({ assignee: userName, status: "In Progress" }), // Send both assignee and status
             });
-    
+
             if (response.ok) {
                 navigate("/dashboard"); // Redirect after updating
             } else {
@@ -86,7 +89,6 @@ export default function TicketInfo({email}) {
             console.error('Error assigning the ticket:', error);
         }
     };
-    
 
     const handleUpdateTicket = async () => {
         try {
@@ -97,7 +99,7 @@ export default function TicketInfo({email}) {
                 },
                 body: JSON.stringify({ status: ticketStatus }), // Update the status based on the dropdown value
             });
-    
+
             if (response.ok) {
                 navigate("/dashboard"); // Redirect after update
             } else {
@@ -107,8 +109,8 @@ export default function TicketInfo({email}) {
             console.error('Error updating the ticket status:', error);
         }
     };
-    // Status didn't update back to Open
-    const handleRemoveTicket = async ()=>{
+
+    const handleRemoveTicket = async () => {
         try {
             const response = await fetch(`/api/tickets/${id}/assign`, {
                 method: 'PUT',
@@ -117,7 +119,7 @@ export default function TicketInfo({email}) {
                 },
                 body: JSON.stringify({ assignee: "", status: "Open" }),
             });
-    
+
             if (response.ok) {
                 alert('Removed');
                 navigate("/dashboard"); // Redirect after updating
@@ -127,14 +129,12 @@ export default function TicketInfo({email}) {
         } catch (error) {
             console.error('Error assigning the ticket:', error);
         }
-    }
-    
+    };
 
     // Simulate status update by changing the local state
     function handleStatusChange(event) {
         setTicketStatus(event.target.value); // Update the status state
     }
-
 
     if (!ticket) {
         return <p>Ticket not found</p>; // Handle if the ticket ID doesn't exist

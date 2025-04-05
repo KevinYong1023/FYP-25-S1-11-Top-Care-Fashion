@@ -4,7 +4,7 @@ import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import AdminHeader from '../../Components/Headers/AdminHeader';
 import { useNavigate } from 'react-router-dom';  
 
-export default function AdminProfileUpdate({ email }) {
+export default function AdminProfileUpdate() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState({
         username: '',
@@ -14,6 +14,7 @@ export default function AdminProfileUpdate({ email }) {
         gender: '',
         phone: ''
     });
+    const email = localStorage.getItem("email")
 
     // Fetch user data from the backend on component mount
     useEffect(() => {

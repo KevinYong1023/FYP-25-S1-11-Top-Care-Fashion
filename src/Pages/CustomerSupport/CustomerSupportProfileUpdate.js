@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebars/Sidebar';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 import { useNavigate } from 'react-router-dom';  
 
-export default function CustomerSupportProfileUpdate({ email }) {
+export default function CustomerSupportProfileUpdate() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState({
         username: '',
@@ -14,6 +14,9 @@ export default function CustomerSupportProfileUpdate({ email }) {
         gender: '',
         phone: ''
     });
+
+    // Get email from localStorage
+    const email = localStorage.getItem("email");
 
     // Fetch user data from the backend on component mount
     useEffect(() => {

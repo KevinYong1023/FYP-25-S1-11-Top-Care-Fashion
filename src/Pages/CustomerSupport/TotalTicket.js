@@ -4,11 +4,14 @@ import Sidebar from '../../Components/Sidebars/Sidebar';
 import { Link } from 'react-router-dom';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
-export default function TotalTicket({ email }) {
+export default function TotalTicket() {
     const [ticketList, setTicketList] = useState([]);
     const [userName, setUserName] = useState(""); // State to store user name
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const ticketsPerPage = 10; // Number of tickets per page
+
+    // Get email from localStorage
+    const email = localStorage.getItem("email");
 
     // Fetch user details based on email and retrieve the user's name
     useEffect(() => {
@@ -22,7 +25,7 @@ export default function TotalTicket({ email }) {
                     console.error('Error fetching user details:', error);
                 }
             } else {
-                console.log("EMAIL HAVEN'T PASSED IN YET");
+                console.log("EMAIL HAVEN'T BEEN PASSED IN YET");
             }
         };
         fetchUserDetails();

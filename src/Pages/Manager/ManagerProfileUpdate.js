@@ -4,7 +4,7 @@ import ManagerSidebar from '../../Components/Sidebars/ManagerSidebar';
 import ManagerHeader from '../../Components/Headers/ManagerHeader';
 import { useNavigate } from 'react-router-dom';  
 
-export default function ManagerProfileUpdate({ email }) {
+export default function ManagerProfileUpdate() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState({
         username: '',
@@ -14,7 +14,7 @@ export default function ManagerProfileUpdate({ email }) {
         gender: '',
         phone: ''
     });
-
+    const email = localStorage.getItem('email'); // Retrieve email from localStorage
     // Fetch user data from the backend on component mount
     useEffect(() => {
         const fetchUserDetails = async () => {

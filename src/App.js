@@ -47,7 +47,6 @@ function App() {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
-    const [userEmail, setUserEmail] = useState(""); // For manager to check the products that link to the user
 
     // Load data from localStorage when the app starts
     useEffect(() => {
@@ -84,7 +83,7 @@ function App() {
     }, [email, role, login, name, address]);
 
     return ( 
-        <AuthContext.Provider value={{ login, setLogin, role, setRole, email, setEmail, name, setName, address, setAddress }}>
+        <AuthContext.Provider value={{ login, setLogin, role, setRole, email, setEmail, name, setName, address, setAddress}}>
             <CartProvider email={email}>
                 <Router>
                     <Routes>
@@ -96,12 +95,12 @@ function App() {
                         <Route path="/productpage/:id" element={<ProductPage email={email} />} />
                         <Route path="/shoppage" element={<ShopPage loginStatus={login} email={email} />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/ticket-info/:id" element={<TicketInfo email={email}/>} />
-                        <Route path="/customer-support-profile" element={<CustomerSupportProfile email={email} setName={setName} />} />
-                        <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate email={email} />} />
+                        <Route path="/ticket-info/:id" element={<TicketInfo/>} />
+                        <Route path="/customer-support-profile" element={<CustomerSupportProfile setName={setName} />} />
+                        <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate />} />
                         <Route path="/view-accounts" element={<ViewUsers />} />
                         <Route path="/order-history/:name" element={<OrderHistory />} />
-                        <Route path="/assigned-ticket" element={<TotalTicket email={email} />} />
+                        <Route path="/assigned-ticket" element={<TotalTicket />} />
                         <Route path="/logout" element={<Logout setLogin={setLogin} />} />
                         <Route path="/update-account" element={<UpdateAccount email={email} />} />
                         <Route path="/your-orders" element={<UserOrders email={email}/>}/>
@@ -111,17 +110,17 @@ function App() {
                         <Route path="/shipping-detail" element={<ShippingDetail />} />
                         <Route path="/manage-list" element={<ManageList email={email} />} />
                         <Route path="/profit-page" element={<ProfitPage />} />
-                        <Route path="/view-all-accounts" element={<ViewAccounts email={email}/>} />
-                        <Route path="/admin-profile" element={<AdminProfile  email={email} />} />
+                        <Route path="/view-all-accounts" element={<ViewAccounts/>} />
+                        <Route path="/admin-profile" element={<AdminProfile />} />
                         <Route path="/admin-profile-update" element={<AdminProfileUpdate email={email}/>} />
                         <Route path="/create-account" element={<AdminCreateAccount />} />
                         <Route path="/delete-account" element={<DeleteAccount />} />
                         <Route path="/mixmatch" element={<MixMatch />} />
                         <Route path="/managerdashboard" element={<ManagerDashboard />} />
-                        <Route path="/managerprofile" element={<ManagerProfile email={email} />} />
-                        <Route path="/managerprofileupdate" element={<ManagerProfileUpdate email={email}/>} />
-                        <Route path="/managerusersdashboard" element={<ManagerUsersDashboard setUserEmail={setUserEmail}/>} />
-                        <Route path="/managerusersindividual" element={<ManagerUsersIndividual userEmail={userEmail} />} />
+                        <Route path="/managerprofile" element={<ManagerProfile />} />
+                        <Route path="/managerprofileupdate" element={<ManagerProfileUpdate/>} />
+                        <Route path="/managerusersdashboard" element={<ManagerUsersDashboard />} />
+                        <Route path="/managerusersindividual" element={<ManagerUsersIndividual/>} />
                         <Route path="/cart" element={<Cart email={email} />} />
                         <Route path="/payment" element={<Payment />} />
                     </Routes>

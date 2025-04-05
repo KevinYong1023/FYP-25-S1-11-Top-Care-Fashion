@@ -4,9 +4,12 @@ import ManagerHeader from "../../Components/Headers/ManagerHeader";
 import ManagerSideBar from "../../Components/Sidebars/ManagerSidebar";
 import { useNavigate } from 'react-router-dom';
 
-const ManagerProfile = ({ email, setName }) => {
+const ManagerProfile = ({ setName }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+
+    // Get email from localStorage
+    const email = localStorage.getItem('email'); // Retrieve email from localStorage
 
     // Fetch user details based on email
     useEffect(() => {

@@ -3,13 +3,14 @@ import { Container, Row, Col, Button, Form, Table, Card, Pagination } from 'reac
 import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import AdminHeader from '../../Components/Headers/AdminHeader';
 
-export default function ViewAccounts({ email }) {
+export default function ViewAccounts() {
     const [users, setUsers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterPosition, setFilterPosition] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const usersPerPage = 10; // Number of users per page
+    const email = localStorage.getItem("email")
 
     useEffect(() => {
         fetchUsers(); // Fetch all users on load
