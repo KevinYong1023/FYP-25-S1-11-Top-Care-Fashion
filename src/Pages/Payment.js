@@ -35,6 +35,18 @@ const Payment = () => {
         }
     }, [location.state, cartItems, navigate]);
 
+
+    useEffect(() => {
+ 
+        if (!location.state || !Array.isArray(cartItems) || cartItems.length === 0 || totalAmount <= 0) {
+            setMessage('Error: Invalid cart data for payment. Redirecting to cart...');
+            setMessageType('danger');
+            const timer = setTimeout(() => navigate('/cart'), 3000); 
+            return () => clearTimeout(timer); 
+        }
+    }, []); 
+
+  
     const checkFormFilled = () => {
         if (!cardNumber || !expirationDate || !cvv || !nameOnCard) {
             setMessage('Please fill in all fake card details to simulate payment.');

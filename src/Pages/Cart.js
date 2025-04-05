@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card as BootstrapCard, Button, Form, ListGroup, Image, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../Components/CartContext'; // Ensure this path is correct
-import '../css/Cart.css'; // Ensure this path is correct
-import UserHeader from '../Components/Headers/userHeader'; // Ensure this path is correct
+import { useCart } from '../Components/CartContext'; 
+import '../css/Cart.css'; 
+import UserHeader from '../Components/Headers/userHeader';
 
 // Placeholder - Make sure you have a real way to check login status
 const isLoggedIn = () => !!localStorage.getItem('authToken');
@@ -16,9 +16,9 @@ const Cart = () => {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [appliedDiscountCode, setAppliedDiscountCode] = useState('');
 
-  // --- Calculate subtotal (No quantity multiplier needed) --- CHANGED
+
   const subtotal = cart.reduce((total, item) => total + item.price, 0);
-  // --- END CHANGE ---
+
 
   // Calculate final total after discount
   const total = Math.max(0, subtotal - discountAmount); // Ensure total doesn't go below zero
@@ -31,8 +31,6 @@ const Cart = () => {
     setAppliedDiscountCode('');
   };
 
-
-  
   // Handler to navigate to the payment/checkout page
   const handleCheckout = () => {
     // Check for sellerId remains critical
@@ -46,9 +44,8 @@ const Cart = () => {
       return;
     }
 
-    // Prepare data to pass to the payment/checkout page
+ 
     const checkoutData = {
-      // Map cart items, 
       cartItems: cart.map(item => ({
         productId: item.id || item.productId,
         sellerId: item.sellerId,
@@ -56,7 +53,7 @@ const Cart = () => {
         sellerName: item.seller,
         productName:item.title,
       })),
-      totalAmount: total, // Pass the final calculated total
+      totalAmount: total, 
       
     };
     console.log("Cart Checkout Data:", checkoutData); // Check cart data
