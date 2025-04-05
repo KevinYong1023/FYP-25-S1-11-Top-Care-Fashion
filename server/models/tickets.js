@@ -7,6 +7,10 @@ const ticketSchema = new mongoose.Schema({
         type: Number,
         unique: true,  // Ensure the ticketNumber is unique
     },
+    orderId:{
+        type: Number,
+        required:true
+    },
     user:{
         type:String,
         required:true
@@ -17,11 +21,12 @@ const ticketSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        required: true
+        default: "Open"
     },
     assignee: {
         type: String,
-        required: false
+        required: false,
+        default:""
     },
     created: {
         type: Date,

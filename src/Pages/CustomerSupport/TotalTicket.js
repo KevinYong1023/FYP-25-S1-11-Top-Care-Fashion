@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
-import { Link } from 'react-router-dom'; // Import Link from React Router
+import { Link } from 'react-router-dom';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
-export default function TotalTicket({email}) {
+export default function TotalTicket({ email }) {
     const [ticketList, setTicketList] = useState([]);
     const [userName, setUserName] = useState(""); // State to store user name
+    const [currentPage, setCurrentPage] = useState(1); // Track the current page
+    const ticketsPerPage = 10; // Number of tickets per page
 
     // Fetch user details based on email and retrieve the user's name
     useEffect(() => {
         const fetchUserDetails = async () => {
             if (email) {
                 try {
-                    const response = await fetch(`/api/user/${email}`); 
+                    const response = await fetch(`/api/user/${email}`);
                     const data = await response.json();
                     setUserName(data.name); // Set the user's name
                 } catch (error) {
                     console.error('Error fetching user details:', error);
                 }
-            }else{
-                console.log("EMAIL HAVENT PASS IN YET") // THE LOG SHOWED THIS
+            } else {
+                console.log("EMAIL HAVEN'T PASSED IN YET");
             }
         };
         fetchUserDetails();
@@ -46,17 +48,49 @@ export default function TotalTicket({email}) {
         };
         fetchAssignedTickets();
     }, [userName]); // Run this effect when userName is set
-    
 
+    // Pagination Logic
+    const indexOfLastTicket = currentPage * ticketsPerPage;
+    const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
+    const currentTickets = ticketList.slice(indexOfFirstTicket, indexOfLastTicket);
+    const totalPages = Math.ceil(ticketList.length / ticketsPerPage);
 
-  // Function to handle deletion of a ticket
+    const renderPagination = () => {
+        let items = [];
+        for (let number = 1; number <= totalPages; number++) {
+            items.push(
+                <Pagination.Item
+                    key={number}
+                    active={number === currentPage}
+                    onClick={() => setCurrentPage(number)}
+                >
+                    {number}
+                </Pagination.Item>
+            );
+        }
+
+        return (
+            <Pagination className="justify-content-center mt-3">
+                <Pagination.Prev
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                />
+                {items}
+                <Pagination.Next
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                />
+            </Pagination>
+        );
+    };
+
+    // Function to handle deletion of a ticket
     async function handleDelete(id) {
         try {
             const response = await fetch(`/api/tickets/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
-                // Update ticket list after deleting the ticket using _id
                 const updatedTickets = ticketList.filter((ticket) => ticket._id !== id);
                 setTicketList(updatedTickets);
                 alert('Ticket deleted successfully');
@@ -68,51 +102,45 @@ export default function TotalTicket({email}) {
         }
     }
 
+    // Function to remove assignment and reopen the ticket
+    async function removeAssign(ticketId) {
+        try {
+            const requestBody = {
+                assignee: "", // Clear the assignee
+                status: "Open", // Reopen the ticket
+            };
 
-// Function to remove assignment and reopen the ticket
-async function removeAssign(ticketId) {
-    try {
-        const requestBody = {
-            assignee: "", // Clear the assignee
-            status: "Open", // Reopen the ticket
-        };
+            const response = await fetch(`/api/tickets/${ticketId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
 
-        const response = await fetch(`/api/tickets/${ticketId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-        });
-
-        if (response.ok) {
-            // Remove the ticket from the list if the assignee is cleared
-            const updatedTickets = ticketList.filter((ticket) => ticket._id !== ticketId);
-            setTicketList(updatedTickets); // Update the ticket list by removing the ticket
-            alert('Ticket assignment removed successfully');
-        } else {
-            alert('Failed to remove assignment');
+            if (response.ok) {
+                const updatedTickets = ticketList.filter((ticket) => ticket._id !== ticketId);
+                setTicketList(updatedTickets);
+                alert('Ticket assignment removed successfully');
+            } else {
+                alert('Failed to remove assignment');
+            }
+        } catch (error) {
+            console.error('Error updating the ticket:', error);
         }
-    } catch (error) {
-        console.error('Error updating the ticket:', error);
     }
-}
-
 
     return (
         <>
-        <AuthorityHeader/>
+            <AuthorityHeader />
             <Container fluid>
                 <Row className="d-flex">
-                    {/* Sidebar - fixed width, no padding */}
                     <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
                         <Sidebar />
                     </Col>
-
-                    {/* Main Content */}
                     <Col>
-                    <h2>Your Tickets</h2>
-                    <hr/>
+                        <h2>Your Tickets</h2>
+                        <hr />
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
@@ -123,19 +151,17 @@ async function removeAssign(ticketId) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {ticketList.map((row,index) => (
+                                {currentTickets.map((row, index) => (
                                     <tr key={row._id}>
-                                        <td>{index+1}</td>
+                                        <td>{index + 1}</td>
                                         <td>{row.user}</td>
                                         <td>{row.status}</td>
-                                                                                <td>
-                                            {/* Using Link to pass ticket ID to TicketInfo */}
+                                        <td>
                                             <div className="d-flex gap-2">
                                                 <Link to={`/ticket-info/${row._id}`} rel="noopener noreferrer">
                                                     <Button variant="primary" size="sm">Review</Button>
                                                 </Link>
 
-                                                {/* Delete Ticket Button */}
                                                 <Button
                                                     variant="danger"
                                                     size="sm"
@@ -144,7 +170,6 @@ async function removeAssign(ticketId) {
                                                     Delete
                                                 </Button>
 
-                                                {/* Remove Ticket Button */}
                                                 <Button
                                                     variant="secondary"
                                                     size="sm"
@@ -158,6 +183,8 @@ async function removeAssign(ticketId) {
                                 ))}
                             </tbody>
                         </table>
+                        {/* Pagination */}
+                        {renderPagination()}
                     </Col>
                 </Row>
             </Container>

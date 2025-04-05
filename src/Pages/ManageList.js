@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, Image, Container, Alert } from "react-bootstrap";
+import { Table, Button, Form, Image, Container, Alert, Pagination } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 
 const ManageList = ({ email }) => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(10); // Fixed to show 10 products per page
 
   // Fetch products on load
   useEffect(() => {
@@ -62,6 +64,19 @@ const ManageList = ({ email }) => {
     }
   };
 
+  // Get current products for the current page
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Total number of pages
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
   return (
     <>
       <UserHeader loginStatus={true} />
@@ -82,7 +97,7 @@ const ManageList = ({ email }) => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product, index) => (
+            {currentProducts.map((product, index) => (
               <tr key={product._id}>
                 <td>
                   <Image
@@ -155,10 +170,30 @@ const ManageList = ({ email }) => {
             ))}
           </tbody>
         </Table>
+
+        {/* Pagination */}
+        <Pagination className="justify-content-center mt-4">
+          <Pagination.Prev
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          />
+          {[...Array(totalPages)].map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
       </Container>
     </>
   );
 };
 
 export default ManageList;
-

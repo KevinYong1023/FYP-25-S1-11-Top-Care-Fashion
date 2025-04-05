@@ -32,8 +32,6 @@ export default function UserOrders({email}){
                      try {
                          const response = await fetch(`/api/order-history`);
                          const data = await response.json();
-                            // Filter sellList (orders where the user is the seller)
-                            console.log(data)
                     const sellOrders = data.filter(order => order.seller === name);
                     setSellList(sellOrders);
                     // Filter buyList (orders where the user is the buyer)
@@ -76,8 +74,8 @@ export default function UserOrders({email}){
         }
     };
 
-    function createTicket(){
-        navigate("raise-ticket")
+    function createTicket(orderId){
+        navigate(`/create-ticket/${orderId}`);
     }
 
 return (

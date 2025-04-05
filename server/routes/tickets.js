@@ -2,6 +2,28 @@ const express = require('express');
 const router = express.Router();
 const Ticket = require('../models/tickets.js');
 
+router.post('/tickets', async (req, res) => {
+    const { orderId, user, description } = req.body;
+    try {
+        // Validate required fields
+        if (!orderId || !user || !description) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        const newTicket = new Ticket({
+            orderId,
+            user: user.trim(),
+            description: description.trim()
+        });
+
+        await newTicket.save();
+        res.status(201).json({ message: 'Ticket created successfully', ticket: newTicket });
+    } catch (error) {
+        console.error('Error creating ticket:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
 // Get all Ticket
 router.get('/tickets', async (req, res) => {
     try {

@@ -8,12 +8,12 @@ const orderSchema = new mongoose.Schema({
         unique: true,  // Ensure the ticketNumber is unique
     },
     seller:{ // User sell the product: Product A: User1, Product B: User2 
-        type:String, 
+        type:Array, 
         required:true
     },
-    purchased:{
-        type: String,
-        required: true
+    created: {
+        type: Date,
+        default: Date.now
     },
     products:{
         type:String,
@@ -38,7 +38,7 @@ const orderSchema = new mongoose.Schema({
 orderSchema.plugin(AutoIncrement, {inc_field: 'orderNumber'});
 
 // Create the Ticket model
-const Order = mongoose.model('OrderHistory', orderSchema);
+const Order = mongoose.model('Order', orderSchema);
 
 // Export the model
 module.exports = Order;

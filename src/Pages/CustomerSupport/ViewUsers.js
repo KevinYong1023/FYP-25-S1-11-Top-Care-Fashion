@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Pagination } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/Sidebar';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function ViewUsers() {
     const [users, setUsers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1); // Track the current page
+    const usersPerPage = 10; // Number of users per page
 
     // Fetch users from the backend
     useEffect(() => {
@@ -24,9 +26,44 @@ export default function ViewUsers() {
     // Filter users with the position 'user'
     const filteredUsers = users.filter(user => user.position === 'user');
 
+    // Pagination Logic
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+    const renderPagination = () => {
+        let items = [];
+        for (let number = 1; number <= totalPages; number++) {
+            items.push(
+                <Pagination.Item
+                    key={number}
+                    active={number === currentPage}
+                    onClick={() => setCurrentPage(number)}
+                >
+                    {number}
+                </Pagination.Item>
+            );
+        }
+
+        return (
+            <Pagination className="justify-content-center mt-3">
+                <Pagination.Prev
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                />
+                {items}
+                <Pagination.Next
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                />
+            </Pagination>
+        );
+    };
+
     return (
         <>
-            <AuthorityHeader/>
+            <AuthorityHeader />
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar */}
@@ -48,7 +85,7 @@ export default function ViewUsers() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredUsers.map(user => (
+                                {currentUsers.map(user => (
                                     <tr key={user._id}>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
@@ -57,12 +94,14 @@ export default function ViewUsers() {
                                             <a href={`/order-history/${user.name}`} rel="noopener noreferrer">
                                                 Order History
                                             </a>
-
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+
+                        {/* Pagination */}
+                        {renderPagination()}
                     </Col>
                 </Row>
             </Container>

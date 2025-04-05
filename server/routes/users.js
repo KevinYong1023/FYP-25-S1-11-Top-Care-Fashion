@@ -5,7 +5,7 @@ const User = require('../models/users.js');
 
 // Login
 router.post('/login', async (req, res) => {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;  // Removed 'role' from request body
     try {
         // Check if the user exists
         const user = await User.findOne({ email });
@@ -16,12 +16,7 @@ router.post('/login', async (req, res) => {
         // Check if the password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        // Check if the user selected the correct role
-        if (user.position !== role) {
-            return res.status(400).json({ message: 'Incorrect role selected' });
+            return res.status(400).json({ message: 'Wrong Password' });
         }
 
         // If login is successful, return user data (without the password)
@@ -30,7 +25,7 @@ router.post('/login', async (req, res) => {
             user: {
                 id: user._id,
                 email: user.email,
-                role: user.position, // Use position instead of role
+                role: user.position,  // Use 'position' instead of 'role'
                 name: user.name,
                 profile_pic: user.profile_pic
             }
@@ -39,7 +34,6 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
 // Reset Password
 router.put('/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
@@ -124,15 +118,16 @@ router.put('/reset-password', async (req, res) => {
   });
   
   // Delete a user
-  router.delete('/user/:id', async (req, res) => {
-      try {
-          const ticket = await User.findByIdAndDelete(req.params.id);
-          if (!ticket) return res.status(404).json({ message: 'Ticket not found' });
-          res.json({ message: 'User deleted successfully' });
-      } catch (error) {
-          res.status(500).json({ message: 'Error deleting the ticket' });
-      }
-  });
+router.delete('/user/:email', async (req, res) => {
+    try {
+        const user = await User.findOneAndDelete({ email: req.params.email });  // Correctly find and delete the user by email
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error("Error deleting the user:", error);
+        res.status(500).json({ message: 'Error deleting the user' });
+    }
+});
   
   // Search users by name
   router.get('/user/search', async (req, res) => {
@@ -219,13 +214,13 @@ router.put('/reset-password', async (req, res) => {
   });
 
   //Update User status:
-  router.put('/user/:id/status', async (req, res) => {
-      const { id } = req.params; // Get user ID from the URL
+  router.put('/user/:email/status', async (req, res) => {
+      const { email } = req.params; // Get user ID from the URL
       const { status } = req.body; // Get the new status from the request body
   
       try {
           // Find the user by ID and update their status
-          const user = await User.findByIdAndUpdate(id, { status: status }, { new: true });
+          const user = await User.findOneAndUpdate({ email: email }, { status: status }, { new: true });
   
           if (!user) {
               return res.status(404).json({ message: 'User not found' });
