@@ -1,327 +1,240 @@
-// src/Pages/Payment.js
+// src/Pages/Payment.js (Refined for Cart Checkout Simulation)
 
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import '../css/Payment.css'; // Make sure this CSS file exists and the path is correct
-import UserHeader from '../Components/Headers/userHeader'; // Assuming this component exists
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Form, Button, Alert, ListGroup, Spinner } from 'react-bootstrap'; // Added Spinner
+import { useLocation, useNavigate } from 'react-router-dom';
+import '../css/Payment.css'; // Ensure this path is correct
+import UserHeader from '../Components/Headers/userHeader'; // Ensure path is correct
+import { getAuthToken } from '../utils/auth'; // Ensure path is correct
+import { useCart } from '../Components/CartContext'; // Ensure path is correct
 
-// Import the function to get the authentication token
-import { getAuthToken } from '../utils/auth'; // Adjust path if your utils folder is elsewhere
+// Helper to check login status (replace with context if available)
+const isLoggedIn = () => !!getAuthToken();
 
 const Payment = () => {
-    // State variables for form inputs needed for the transfer
-    const [recipientEmail, setRecipientEmail] = useState('');
-    const [amount, setAmount] = useState('');
-    const [description, setDescription] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { clearCart } = useCart();
 
-    // State for the fake card inputs (primarily for UI simulation)
+    // Get cart data passed via navigation state from Cart page
+    const { cartItems = [], totalAmount = 0 } = location.state || {};
+
+    // State for fake card inputs
     const [cardNumber, setCardNumber] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
     const [cvv, setCvv] = useState('');
     const [nameOnCard, setNameOnCard] = useState('');
 
-    // State for feedback messages and loading indicator
+    // State for feedback and loading
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState(''); // 'success' or 'danger'
     const [isLoading, setIsLoading] = useState(false);
 
-    // --- Basic Check if Simulation Fields Are Filled ---
-    // Ensures the user interacts with the fake card form for the simulation effect.
-    const checkFormFilled = () => {
-        if (!recipientEmail || !amount || parseFloat(amount) <= 0) {
-            setMessage('Recipient Email and a positive Amount are required.');
+    // Effect to check if necessary data was passed from the cart
+    useEffect(() => {
+        // Check runs only once on mount if data seems invalid initially
+        if (!location.state || !Array.isArray(cartItems) || cartItems.length === 0 || totalAmount <= 0) {
+            setMessage('Error: Invalid cart data for payment. Redirecting to cart...');
             setMessageType('danger');
-            return false;
+            const timer = setTimeout(() => navigate('/cart'), 3000); // Redirect back after 3s
+            return () => clearTimeout(timer); // Cleanup timer on unmount
         }
-        // Check if fake card fields seem filled (for UI simulation purpose only)
-        if (!cardNumber || !expirationDate || !cvv || !nameOnCard) {
-            setMessage('Please fill in the fake card details to simulate payment.');
-            setMessageType('danger');
-            return false;
-        }
-        // Optional: Add basic format checks here if desired for UI realism, e.g.,
-        // if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) { ... }
+    }, []); // Empty dependency array means this runs once on mount
 
-        setMessage(''); // Clear error if basic checks pass
+    // Basic check if card simulation fields look filled
+    const checkFormFilled = () => {
+        if (!cardNumber || !expirationDate || !cvv || !nameOnCard) {
+            setMessage('Please fill in all fake card details to simulate payment.');
+            setMessageType('danger');
+            return false;
+        }
+        // Add simple format checks if desired for better simulation
+        setMessage('');
         setMessageType('');
         return true;
     };
 
-    // --- Handle Form Submission ---
+    // Handle form submission -> Call backend checkout endpoint
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default HTML form submission
-        setMessage('');     // Clear previous messages
-        setMessageType('');
+        e.preventDefault();
+        if (!checkFormFilled()) return; // Stop if fake fields aren't filled
 
-        // Perform basic check if simulation fields are filled
-        if (!checkFormFilled()) {
+        setIsLoading(true);
+        setMessage('');
+        setMessageType('');
+        const token = getAuthToken(); // Get auth token
+
+        if (!token) {
+            setMessage('Authentication error. Please log in.');
+            setMessageType('danger');
+            setIsLoading(false);
             return;
         }
 
-        setIsLoading(true); // Set loading state
-        const token = getAuthToken(); // Retrieve the stored auth token
-
-        // Check if user is authenticated (token exists)
-        if (!token) {
-             setMessage('Authentication error. Please log in again.');
+        // Ensure cartItems are still valid before sending
+        if (!cartItems || cartItems.length === 0) {
+             setMessage('Cannot checkout with an empty cart.');
              setMessageType('danger');
              setIsLoading(false);
-             return; // Stop submission if not authenticated
+             return;
         }
 
-        // --- Call Backend API ---
-        // Send ONLY recipient, amount, description, and token
-        // DO NOT send fake card details
         try {
-            const response = await fetch('/api/virtual/transfer', { // The backend endpoint
+            // Call the backend endpoint for cart checkout
+            const response = await fetch('/api/virtual/checkout', { // Endpoint for cart processing
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Pass the JWT token
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    recipientEmail: recipientEmail,
-                    amount: amount,
-                    description: description
-                })
+                // Send the cart items array (ensure it contains productId, sellerId, price, quantity)
+                body: JSON.stringify({ cartItems: cartItems })
             });
 
-            const data = await response.json(); // Attempt to parse the JSON response body
-
+            const data = await response.json();
             if (!response.ok) {
-                // If response status is not 2xx, throw an error with backend message
-                throw new Error(data.message || `Server error: ${response.status}`);
+                throw new Error(data.message || `Checkout failed (Status: ${response.status})`);
             }
 
-            // --- Handle Success ---
-            setMessage(`Success! ${data.message || 'Transfer complete.'} ${data.newBalance !== null ? `Your new balance: ${data.newBalance.toFixed(2)}` : ''}`);
+            // Handle successful checkout
+            setMessage("Checkout Successful!");
             setMessageType('success');
-            // Reset form fields after successful submission
-            setRecipientEmail('');
-            setAmount('');
-            setDescription('');
+            clearCart(); // Clear the cart state via context/hook
+
+            // Reset card fields
             setCardNumber('');
             setExpirationDate('');
             setCvv('');
             setNameOnCard('');
+            
+             // Wait for a few seconds (e.g., 3000ms = 3s) before navigating
+             const redirectTimer = setTimeout(() => {
+                console.log("REDIRECT TIMER FIRED - Attempting navigation..."); // Add this line
+                navigate('/home'); // Navigate to home page
+            }, 3000);
 
         } catch (error) {
-            // --- Handle Errors (Network or Backend) ---
-            console.error('Transfer Error:', error);
+            console.error('Checkout Error:', error);
             setMessage(`Error: ${error.message}`);
             setMessageType('danger');
         } finally {
-            // --- Reset Loading State ---
-            setIsLoading(false); // Re-enable button, etc.
+            setIsLoading(false); // Ensure loading state is reset
         }
     };
 
-    // --- Render the Component JSX ---
+    // Determine if the form can be submitted
+    const canSubmit = cartItems.length > 0 && totalAmount > 0 && !isLoading;
+
     return (
         <>
-                         <UserHeader loginStatus={true}/>
-        <Container className="mt-4">  
-            <h1 style={{color: '#6f4e37'}}>Payment</h1>  
-            <Row className="payment-container">  
-                <Col className="payment-method">  
-                    <Form.Group>  
-                        <Form.Check   
-                            type="radio"   
-                            label="Credit/Debit Card"   
-                            name="paymentMethod"   
-                            id="creditCard"   
-                            checked={paymentMethod === 'credit'}   
-                            onChange={() => handlePaymentMethodChange('credit')}   
-                        />  
-                        <Form.Check   
-                            type="radio"   
-                            label="Paynow"   
-                            name="paymentMethod"   
-                            id="paynow"   
-                            checked={paymentMethod === 'paynow'}   
-                            onChange={() => handlePaymentMethodChange('paynow')}   
-                        />  
-                    </Form.Group>  
-                </Col>  
-                <Col className="payment-form">  
-                    <Form onSubmit={handleConfirm}>  
-                        {paymentMethod === 'credit' && (  
-                            <div className="card-details">  
-                                <Form.Group controlId="cardNumber">  
-                                    <Form.Label>Card Number</Form.Label>  
-                                    <Form.Control   
-                                        type="text"   
-                                        placeholder="Enter card number"   
-                                        value={cardNumber}  
-                                        onChange={(e) => setCardNumber(e.target.value)}   
-                                    />  
-                                </Form.Group>  
-                                <Row>  
-                                    <Col>  
-                                        <Form.Group controlId="expirationDate">  
-                                            <Form.Label>Expiration date (MM/YY)</Form.Label>  
-                                            <Form.Control   
-                                                type="text"   
-                                                placeholder="MM/YY"   
-                                                value={expirationDate}  
-                                                onChange={(e) => setExpirationDate(e.target.value)}   
-                                            />  
-                                        </Form.Group>  
-                                    </Col>  
-                                    <Col>  
-                                        <Form.Group controlId="cvv">  
-                                            <Form.Label>CVV</Form.Label>  
-                                            <Form.Control   
-                                                type="text"   
-                                                placeholder="CVV"   
-                                                value={cvv}  
-                                                onChange={(e) => setCvv(e.target.value)}   
-                                            />  
-                                        </Form.Group>  
-                                    </Col>  
-                                </Row>  
-                                <Form.Group controlId="nameOnCard">  
-                                    <Form.Label>Name on Card</Form.Label>  
-                                    <Form.Control   
-                                        type="text"   
-                                        placeholder="Enter name"   
-                                        value={nameOnCard}  
-                                        onChange={(e) => setNameOnCard(e.target.value)}   
-                                    />  
-                                </Form.Group>  
-                                <Form.Group>  
-                                    <Form.Check   
-                                        type="checkbox"   
-                                        label="Terms and conditions..."   
-                                    />  
-                                </Form.Group>  
-                                <Button style={{ backgroundColor: '#6e4f37', borderColor: '#6e4f37' }} type="submit">
-                                    Confirm
-                                </Button>
-  
-                            </div>  
-                        )}  
-                        {paymentMethod === 'paynow' && (  
-                            <div className="paynow-qr">  
-                                <div className="qr-placeholder">  
-                                    <img   
-                                        src="https://via.placeholder.com/150"   
-                                        alt=""   
-                                        className="qr-image"   
-                                    />  
-                                    <span>Paynow QR</span>  
-                                </div>  
-                                <Form.Group>  
-                                    
-                                </Form.Group>  
-                                <Button style={{ backgroundColor: '#6e4f37', borderColor: '#6e4f37' }} type="submit">
-                                    Confirm
-                                </Button>
-  
-                            </div>  
-                        )}  
-                    </Form>  
-                    {error && <Alert variant="danger" className="mt-3">{error}</Alert>}  
-                    {success && <Alert variant="success" className="mt-3">Payment Successful!</Alert>}  
-                </Col>  
-            </Row>  
-        </Container>  
+            <UserHeader loginStatus={isLoggedIn()} />
+            <Container className="mt-4 payment-page-container">
+                <h1>Confirm Payment</h1>
+                <Row>
+                    {/* Order Summary Column */}
+                    <Col md={7}>
+                        <h2>Order Summary</h2>
+                        {cartItems.length > 0 ? (
+                            <ListGroup variant="flush" className="mb-3 order-summary-box"> {/* Added class */}
+                                {/* You could optionally map cartItems here for a detailed summary */}
+                                <ListGroup.Item className="d-flex justify-content-between">
+                                    <span>Items ({cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)})</span>
+                                    {/* Maybe show subtotal/discount again if needed */}
+                                </ListGroup.Item>
+                                <ListGroup.Item className="d-flex justify-content-between">
+                                    <strong>Total Amount to Pay</strong>
+                                    <strong>${totalAmount.toFixed(2)}</strong>
+                                </ListGroup.Item>
+                            </ListGroup>
+                        ) : (
+                            // Show message if cart somehow became empty after navigation
+                            !message && <Alert variant="warning">Cart is empty or invalid.</Alert>
+                        )}
+                    </Col>
+
+                    {/* Payment Simulation Column */}
+                    <Col md={5}>
+                        <h2>Payment by Credit Card</h2>
+                        {!canSubmit && cartItems.length > 0 && !isLoading && <Alert variant="warning">Enter card details to proceed.</Alert> }
+
+                        <Form onSubmit={handleSubmit} className="payment-form-area">
+                            {/* --- Fake Card Details Section --- */}
+                            <fieldset className="fake-card-details mb-3" disabled={isLoading || !canSubmit}>
+                                <legend>Card Details</legend>
+                                {/* Card Number */}
+                                <Form.Group controlId="cardNumber" className="mb-2">
+                                    <Form.Label>Card Number</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="xxxx xxxx xxxx xxxx"
+                                        value={cardNumber}
+                                        onChange={(e) => setCardNumber(e.target.value)}
+                                        disabled={isLoading || !canSubmit}
+                                        required // Add basic required for simulation check
+                                    />
+                                </Form.Group>
+                                {/* Expiry and CVV */}
+                                <Row>
+                                    <Col>
+                                        <Form.Group controlId="expirationDate" className="mb-2">
+                                            <Form.Label>Expiration (MM/YY)</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="MM/YY"
+                                                value={expirationDate}
+                                                onChange={(e) => setExpirationDate(e.target.value)}
+                                                disabled={isLoading || !canSubmit}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group controlId="cvv" className="mb-2">
+                                            <Form.Label>CVV</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="123"
+                                                value={cvv}
+                                                onChange={(e) => setCvv(e.target.value)}
+                                                disabled={isLoading || !canSubmit}
+                                                maxLength={3}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                {/* Name on Card */}
+                                <Form.Group controlId="nameOnCard" className="mb-3">
+                                    <Form.Label>Name on Card</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Enter name"
+                                        value={nameOnCard}
+                                        onChange={(e) => setNameOnCard(e.target.value)}
+                                        disabled={isLoading || !canSubmit}
+                                        required
+                                    />
+                                </Form.Group>
+                               
+                            </fieldset>
+
+                             {/* Display Feedback Messages */}
+                            {message && (
+                                <Alert variant={messageType || 'info'} className="mt-3">
+                                    {message}
+                                </Alert>
+                            )}
+
+                            {/* Submit Button */}
+                            <Button variant="primary" type="submit" disabled={isLoading || !canSubmit} className="mt-3 w-100">
+                                {isLoading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : `Confirm & Pay $${totalAmount.toFixed(2)}`}
+                            </Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
         </>
-    );  
-};  
-
-                <Form onSubmit={handleSubmit} className="payment-form-area">
-                    {/* --- Fields for the Actual Transfer --- */}
-                    <Form.Group controlId="recipientEmail" className="mb-3">
-                        <Form.Label>Recipient Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            placeholder="recipient@example.com"
-                            value={recipientEmail}
-                            onChange={(e) => setRecipientEmail(e.target.value)}
-                            required
-                            disabled={isLoading}
-                        />
-                    </Form.Group>
-
-                    <Form.Group controlId="amount" className="mb-3">
-                        <Form.Label>Amount ($)</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="10.00"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            step="0.01"
-                            min="0.01"
-                            required
-                            disabled={isLoading}
-                        />
-                    </Form.Group>
-
-                     <Form.Group controlId="description" className="mb-3">
-                        <Form.Label>Description (Optional)</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="For virtual item"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            disabled={isLoading}
-                        />
-                    </Form.Group>
-
-                    {/* --- Fake Card Details Section (UI Simulation Only) --- */}
-                    <fieldset className="fake-card-details mb-3">
-                        <legend>Card Details (Simulation Only)</legend>
-                        {/* Card Number */}
-                        <Form.Group controlId="cardNumber" className="mb-2">
-                           <Form.Label>Card Number</Form.Label>
-                           <Form.Control
-                               type="text"
-                               placeholder="Enter 16 digits"
-                               value={cardNumber}
-                               onChange={(e) => setCardNumber(e.target.value)}
-                               disabled={isLoading}
-                               // Add maxLength={16} or formatting if desired
-                           />
-                       </Form.Group>
-                       {/* Expiry and CVV */}
-                       <Row>
-                           <Col>
-                               <Form.Group controlId="expirationDate" className="mb-2">
-                                   <Form.Label>Expiration (MM/YY)</Form.Label>
-                                   <Form.Control type="text" placeholder="MM/YY" value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} disabled={isLoading} />
-                               </Form.Group>
-                           </Col>
-                           <Col>
-                               <Form.Group controlId="cvv" className="mb-2">
-                                   <Form.Label>CVV</Form.Label>
-                                   <Form.Control type="text" placeholder="123" value={cvv} onChange={(e) => setCvv(e.target.value)} disabled={isLoading} maxLength={3}/>
-                               </Form.Group>
-                           </Col>
-                       </Row>
-                       {/* Name on Card */}
-                       <Form.Group controlId="nameOnCard" className="mb-3">
-                           <Form.Label>Name on Card</Form.Label>
-                           <Form.Control type="text" placeholder="Enter name" value={nameOnCard} onChange={(e) => setNameOnCard(e.target.value)} disabled={isLoading} />
-                       </Form.Group>
-                       <small>These card details are for simulation only and are not processed.</small>
-                   </fieldset>
-
-                    {/* Display Feedback Messages */}
-                   {message && (
-                       <Alert variant={messageType || 'info'} className="mt-3">
-                           {message}
-                       </Alert>
-                   )}
-
-                   {/* Submit Button */}
-                   <Button variant="primary" type="submit" disabled={isLoading} className="mt-3">
-                       {isLoading ? 'Processing...' : 'Confirm Payment'}
-                   </Button>
-               </Form>
-           </Container>
-       </>
-   );
+    );
 };
 
 export default Payment;

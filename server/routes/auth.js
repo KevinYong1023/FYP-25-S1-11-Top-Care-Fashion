@@ -7,9 +7,7 @@ const bcrypt = require('bcrypt'); // Changed from bcryptjs for consistency
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose'); // Still needed for session
 const User = require('../models/users.js'); // Assuming filename is users.js
-// const VirtualWallet = require('../models/VirtualWallet'); // <-- REMOVE THIS
-// const Ticket = require('../models/tickets.js'); // <-- REMOVE THIS
-// const OrderHistory = require('../models/orderhistory'); // <-- REMOVE THIS
+const Product = require('../models/product');
 const authenticate = require('../middleware/authenticate'); // Keep this
 
 // --- Login Route --- (No changes needed in its logic)

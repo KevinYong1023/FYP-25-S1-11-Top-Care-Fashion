@@ -459,6 +459,8 @@ router.put('/user/:id/status', async (req, res) => {
     }
 });
 
+/*
+
 // API/Route To upload product listing by email
 router.post('/products', async (req, res) => {
     const { title, description, price, category, imageUrl, email } = req.body;
@@ -617,6 +619,6 @@ router.get("/products/:id", async (req, res) => {
     }
   });
   
-
+*/
 
 module.exports = router;
