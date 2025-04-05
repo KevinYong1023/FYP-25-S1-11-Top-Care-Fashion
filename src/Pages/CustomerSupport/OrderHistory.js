@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Pagination } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';  // To get the URL params
-import Sidebar from '../../Components/Sidebars/Sidebar';
+import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function OrderHistory() {
@@ -19,7 +19,6 @@ export default function OrderHistory() {
                 const filtered = data.filter(order =>
                     order.buyer === name || order.seller === name
                 );
-    
                 setFilteredData(filtered);
             } catch (error) {
                 console.error('Error fetching order history:', error);

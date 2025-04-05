@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Table, Button, Form, Card, Pagination } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader";
 
-export default function ManagerUsersDashboard({ setUserEmail }) {
+export default function ManagerUsersDashboard() {
+     const { setUserEmail } = useContext(AuthContext); 
     const [users, setUsers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterStatus, setFilterStatus] = useState('');

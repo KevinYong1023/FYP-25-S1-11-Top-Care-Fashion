@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import AdminHeader from '../../Components/Headers/AdminHeader';
 import { useNavigate } from 'react-router-dom';  
 
-export default function AdminProfileUpdate({ email }) {
+export default function AdminProfileUpdate() {
+    const { email } = useContext(AuthContext); 
     const navigate = useNavigate();
     const [profile, setProfile] = useState({
         username: '',

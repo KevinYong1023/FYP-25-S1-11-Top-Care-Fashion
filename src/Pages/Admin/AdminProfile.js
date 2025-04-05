@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import AdminHeader from "../../Components/Headers/AdminHeader";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 import { useNavigate } from 'react-router-dom';
 
-const AdminProfile = ({ email }) => {
+const AdminProfile = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+   const { email } = useContext(AuthContext); 
 
     // Fetch user details based on email
     useEffect(() => {

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import ManagerSidebar from '../../Components/Sidebars/ManagerSidebar';
 import ManagerHeader from '../../Components/Headers/ManagerHeader';
 import { useNavigate } from 'react-router-dom';  
 
-export default function ManagerProfileUpdate({ email }) {
+export default function ManagerProfileUpdate() {
+    const { email } = useContext(AuthContext); 
     const navigate = useNavigate();
     const [profile, setProfile] = useState({
         username: '',

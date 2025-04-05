@@ -1,42 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/Sidebar';
+import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { Link } from 'react-router-dom';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
-export default function TotalTicket({ email }) {
+export default function TotalTicket() {
     const [ticketList, setTicketList] = useState([]);
-    const [userName, setUserName] = useState(""); // State to store user name
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const ticketsPerPage = 10; // Number of tickets per page
-
-    // Fetch user details based on email and retrieve the user's name
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            if (email) {
-                try {
-                    const response = await fetch(`/api/user/${email}`);
-                    const data = await response.json();
-                    setUserName(data.name); // Set the user's name
-                } catch (error) {
-                    console.error('Error fetching user details:', error);
-                }
-            } else {
-                console.log("EMAIL HAVEN'T PASSED IN YET");
-            }
-        };
-        fetchUserDetails();
-    }, [email]);
+    const { name } = useContext(AuthContext); 
 
     useEffect(() => {
         const fetchAssignedTickets = async () => {
-            if (userName) {
+            if (name) {
                 try {
                     const response = await fetch(`/api/tickets`);
                     if (response.ok) {
                         const data = await response.json();
                         // Filter by assignee and exclude tickets with status "Closed"
-                        const filteredData = data.filter(ticket => ticket.assignee === userName && ticket.status !== 'Close');
+                        const filteredData = data.filter(ticket => ticket.assignee === name && ticket.status !== 'Close');
                         setTicketList(filteredData); // Update the ticket list
                     } else {
                         console.error('Failed to fetch tickets');
@@ -47,7 +30,7 @@ export default function TotalTicket({ email }) {
             }
         };
         fetchAssignedTickets();
-    }, [userName]); // Run this effect when userName is set
+    }, [name]); // Run this effect when userName is set
 
     // Pagination Logic
     const indexOfLastTicket = currentPage * ticketsPerPage;

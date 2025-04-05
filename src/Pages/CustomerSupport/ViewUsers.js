@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Pagination } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/Sidebar';
+import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function ViewUsers() {

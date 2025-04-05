@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import {AuthContext} from '../../App';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import Sidebar from "../../Components/Sidebars/Sidebar";
+import Sidebar from "../../Components/Sidebars/CustomerSupportSidebar";
 import AuthorityHeader from "../../Components/Headers/CustomerSupportHeader";
 import { useNavigate } from 'react-router-dom';
 
-const CustomerSupportProfile = ({ email, setName }) => {  
+const CustomerSupportProfile = () => {  
+   const { email } = useContext(AuthContext); 
     const [user, setUser] = useState(null);  
     const navigate = useNavigate();
 
     // Fetch user details based on email
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log("Email:", email);
             if (email) {
                 try {
                     const response = await fetch(`/api/user/${email}`); 
                     const data = await response.json();
                     setUser(data); 
-                    setName(data.name);
                 } catch (error) {
                     console.error('Error fetching user details:', error);
                 }
