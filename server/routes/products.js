@@ -1,6 +1,8 @@
+
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
+const authenticate = require('../middleware/authenticate'); // Adjust path if middleware is elsewhere
 
 // Upload Product
 router.post('/products', async (req, res) => {
@@ -27,7 +29,7 @@ router.post('/products', async (req, res) => {
   });
 
 // Get the user products
-router.get("/products/user/:email", async (req, res) => {
+router.get("/products/user/:email", authenticate, async (req, res) => {
     try {
       const email = req.params.email;
       const products = await Product.find({ email });
@@ -39,7 +41,7 @@ router.get("/products/user/:email", async (req, res) => {
   });
   
 // Update Product
-router.put("/products/:id", async (req, res) => {
+router.put("/products/:id", authenticate, async (req, res) => {
     try {
       const updatedProduct = await Product.findByIdAndUpdate(
         req.params.id,
@@ -57,7 +59,7 @@ router.put("/products/:id", async (req, res) => {
   });
 
 // Delete Product
-router.delete("/products/:id", async (req, res) => {
+router.delete("/products/:id", authenticate, async (req, res) => {
     try {
       const deletedProduct = await Product.findByIdAndDelete(req.params.id);
       if (!deletedProduct) {
@@ -140,7 +142,7 @@ router.get("/products", async (req, res) => {
   }
 });
   // GET /api/products/:id - Fetch product by ID
- router.get("/products/:id", async (req, res) => {
+ router.get("/products/:id", authenticate, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Not found" });
@@ -153,3 +155,4 @@ router.get("/products", async (req, res) => {
 
 
 module.exports = router;
+

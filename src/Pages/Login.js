@@ -33,6 +33,7 @@ const Login = () => {
 
       const data = await response.json(); // Get the response data (contains token or error message)
 
+
       if (response.ok) {
         // --- EDIT: Retrieve and Store Token ---
         if (data.token) {
