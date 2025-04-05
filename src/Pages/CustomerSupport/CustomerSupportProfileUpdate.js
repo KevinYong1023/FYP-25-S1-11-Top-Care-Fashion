@@ -60,13 +60,14 @@ export default function CustomerSupportProfileUpdate() {
         e.preventDefault();
 
         try {
-            // Send PUT request to update the user profile
+            // Send PUT request to update the user profile 
             const response = await fetch(`/api/user/${email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    username: profile.username,
                     name: profile.name,
                     dob: profile.dob,
                     gender: profile.gender,
