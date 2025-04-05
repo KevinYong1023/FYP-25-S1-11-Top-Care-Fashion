@@ -26,7 +26,7 @@ export default function AdminHeader({ loginStatus }) {
                         <Nav.Link href="/view-all-accounts" style={{ color: 'white', marginBottom: '10px' }}>
                                 <House style={{ marginRight: '10px' }} /> Manage Accounts
                             </Nav.Link>
-                            <Nav.Link href="/AdminDashboard" style={{ color: 'white', marginBottom: '10px' }}>
+                            <Nav.Link href="/admin-profile" style={{ color: 'white', marginBottom: '10px' }}>
                                 <Person style={{ marginRight: '10px' }} /> Profile
                             </Nav.Link>
                            <Nav.Link href="/create-account" style={{ color: 'white', marginBottom: '10px' }}>

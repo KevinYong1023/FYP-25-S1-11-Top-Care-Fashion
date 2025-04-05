@@ -1,12 +1,11 @@
-import React, { useState,useContext} from "react";
+import React, { useState, useContext } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App"; // Import AuthContext
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "", role: "" });
-  const [user, setUser] = useState(false)
+  const [formData, setFormData] = useState({ email: "", password: "" }); // Removed role from formData
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const { setEmail, setRole, setLogin } = useContext(AuthContext); // Destructure setters from AuthContext
@@ -18,47 +17,45 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Corrected API request URL to match the backend route
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-        // Handle the response (example)
-        const data = await response.json();
+      // Handle the response (example)
+      const data = await response.json();
 
-        if (response.ok) {
-          console.log(response)
-          setEmail(formData.email); 
-          setRole(formData.role);   
-          setLogin(true);           
-          if (formData.role === "user") {
-            navigate("/home");} 
-            else if (formData.role === "admin"){
-                navigate("/view-all-accounts");
-            } 
-            else if (formData.role === "manager"){
-                navigate("/ManagerDashboard");
-            }
-            else {
-                navigate("/dashboard")
-        }
+      if (response.ok) {
+        const loginRole = data.user.role;
+        setEmail(formData.email);
+        setRole(loginRole);
+        setLogin(true);
+
+        // Redirect based on the user's role
+        if (loginRole === "user") {
+          navigate("/home");
+        } else if (loginRole === "admin") {
+          navigate("/view-all-accounts");
+        } else if (loginRole === "manager") {
+          navigate("/ManagerDashboard");
         } else {
-            console.error("Login failed", data.message);
-            alert(`Login failed: ${data.message}`);
-            // Display error message to the user
+          navigate("/dashboard");
         }
+      } else {
+        console.error("Login failed", data.message);
+        setError(data.message);  // Display error message to the user
+      }
     } catch (error) {
-        console.error("An error occurred during login:", error);
-        alert("An error occurred during login. Please try again.");
+      console.error("An error occurred during login:", error);
+      setError("An error occurred during login. Please try again.");
     }
-};
-
+  };
 
   return (
     <>
@@ -70,60 +67,35 @@ const Login = () => {
         <Form className="w-50" onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>Email Address</Form.Label>
-            <Form.Control type="email" name="email" placeholder="Enter your email" onChange={handleChange} required />
+            <Form.Control
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              onChange={handleChange}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" name="password" placeholder="Enter your password" onChange={handleChange} required />
+            <Form.Control
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              onChange={handleChange}
+              required
+            />
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Login As:</Form.Label>
-            <Form.Group>
-              <div>
-                <Form.Check 
-                  type="radio" 
-                  label="User" 
-                  name="role" 
-                  value="user" 
-                  onChange={handleChange} 
-                  required
-                  checked={formData.role === "user"} 
-                />
-                <br/>
-                <Form.Check 
-                  type="radio" 
-                  label="Admin" 
-                  name="role" 
-                  value="admin" 
-                  onChange={handleChange} 
-                  required
-                  checked={formData.role === "admin"} 
-                /><br/>
-                <Form.Check 
-                  type="radio" 
-                  label="Customer Support" 
-                  name="role" 
-                  value="customer support" 
-                  onChange={handleChange} 
-                  required
-                  checked={formData.role === "customer support"} 
-                /><br/>
-                <Form.Check 
-                  type="radio" 
-                  label="Manager" 
-                  name="role" 
-                  value="manager" 
-                  onChange={handleChange} 
-                  required
-                  checked={formData.role === "manager"} 
-                />
-              </div>
-            </Form.Group>
-          </Form.Group>
-          <Button variant="primary" type="submit" className="w-100">Login</Button>
+
+          <Button variant="primary" type="submit" className="w-100">
+            Login
+          </Button>
         </Form>
-        <p className="mt-3">Don't have an account? <a href="/register">Register here</a></p>
-        <p className="mt-3">Forgot Password? <a href="/reset-password">Reset here</a></p>
+        <p className="mt-3">
+          Don't have an account? <a href="/register">Register here</a>
+        </p>
+        <p className="mt-3">
+          Forgot Password? <a href="/reset-password">Reset here</a>
+        </p>
       </Container>
     </>
   );

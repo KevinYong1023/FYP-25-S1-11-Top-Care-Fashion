@@ -12,11 +12,9 @@ import ViewUsers from "./Pages/CustomerSupport/ViewUsers";
 import OrderHistory from "./Pages/CustomerSupport/OrderHistory";
 import Logout from "./Pages/Logout";
 import TicketInfo from "./Pages/CustomerSupport/TicketInfo";
-import CreateUser from "./Pages/CustomerSupport/CreateUser";
 import UploadProduct from './Pages/UploadProduct.js';
 import UpdateAccount from "./Pages/UpdateAccount";
 import UserProfile from "./Pages/UserProfile";
-import OrderDetails from "./Pages/CustomerSupport/OrderDetails";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
 import ShippingDetail from "./Pages/ShippingDetail.js";
 import ManageList from "./Pages/ManageList.js";
@@ -37,6 +35,8 @@ import Payment from './Pages/Payment';
 import CustomerSupportProfileUpdate from "./Pages/CustomerSupport/CustomerSupportProfileUpdate.js";
 import AdminProfileUpdate from "./Pages/Admin/AdminProfileUpdate.js";
 import ResetPassword from "./Pages/ResetPassword.js";
+import UserOrders from "./Pages/UserOrders.js";
+import CreateTicket from "./Pages/CreateTicket.js";
 
 // Create the context
 export const AuthContext = createContext();
@@ -100,17 +100,18 @@ function App() {
                         <Route path="/customer-support-profile" element={<CustomerSupportProfile email={email} setName={setName} />} />
                         <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate email={email} />} />
                         <Route path="/view-accounts" element={<ViewUsers />} />
-                        <Route path="/order-history/:username" element={<OrderHistory />} />
-                        <Route path="/order-details/:id/:username" element={<OrderDetails />} />
+                        <Route path="/order-history/:name" element={<OrderHistory />} />
                         <Route path="/assigned-ticket" element={<TotalTicket email={email} />} />
                         <Route path="/logout" element={<Logout setLogin={setLogin} />} />
                         <Route path="/update-account" element={<UpdateAccount email={email} />} />
+                        <Route path="/your-orders" element={<UserOrders email={email}/>}/>
+                        <Route path="/create-ticket/:orderId" element={<CreateTicket email={email}/>}/>
                         <Route path="/user-profile" element={<UserProfile email={email} setName={setName} setAddress={setAddress}/>} />
                         <Route path="/upload-product" element={<UploadProduct email={email} />} />
                         <Route path="/shipping-detail" element={<ShippingDetail />} />
                         <Route path="/manage-list" element={<ManageList email={email} />} />
                         <Route path="/profit-page" element={<ProfitPage />} />
-                        <Route path="/view-all-accounts" element={<ViewAccounts />} />
+                        <Route path="/view-all-accounts" element={<ViewAccounts email={email}/>} />
                         <Route path="/admin-profile" element={<AdminProfile  email={email} />} />
                         <Route path="/admin-profile-update" element={<AdminProfileUpdate email={email}/>} />
                         <Route path="/create-account" element={<AdminCreateAccount />} />
@@ -123,7 +124,6 @@ function App() {
                         <Route path="/managerusersindividual" element={<ManagerUsersIndividual userEmail={userEmail} />} />
                         <Route path="/cart" element={<Cart email={email} />} />
                         <Route path="/payment" element={<Payment />} />
-                        <Route path="/createuser" element={<CreateUser />} />
                     </Routes>
                 </Router>
             </CartProvider>

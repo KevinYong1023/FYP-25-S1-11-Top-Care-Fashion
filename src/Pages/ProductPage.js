@@ -1,6 +1,5 @@
-// src/pages/ProductPage.js
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button, Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Alert, OverlayTrigger, Tooltip, Form, ListGroup } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../Components/CartContext";
 import UserHeader from "../Components/Headers/userHeader";
@@ -9,9 +8,29 @@ const ProductPage = ({ email }) => {
   const { id } = useParams(); // Get product ID from route
   const [product, setProduct] = useState(null);
   const [error, setError] = useState("");
+  const [user, setUser] = useState("");
+  const [comment, setComment] = useState("");
+  const [productComments, setProductComments] = useState([]);
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
+  // Fetch user information
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (email) {
+        try {
+          const response = await fetch(`/api/user/${email}`);  // Assuming your API follows this route
+          const data = await response.json();
+          setUser(data.name);
+        } catch (error) {
+          console.error('Error fetching user details:', error);
+        }
+      }
+    };
+    fetchUserDetails();
+  }, [email]);
+
+  // Fetch the product
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -24,9 +43,27 @@ const ProductPage = ({ email }) => {
         setError("Unable to load product details.");
       }
     };
-
     fetchProduct();
   }, [id]);
+
+  const fetchComments = async (product) => {
+    if (product) {
+      try {
+        const res = await fetch(`/api/comments/latest/${product}`);
+        const data = await res.json();
+        setProductComments(data);
+      } catch (err) {
+        console.error("Error fetching comments:", err);
+        setError("Unable to load comments.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (product) {
+      fetchComments(product.title);
+    }
+  }, [product]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -40,7 +77,31 @@ const ProductPage = ({ email }) => {
     }
   };
 
-  const isUserProduct = product && email === product.email;
+  const handleSubmitComment = async (e) => {
+    e.preventDefault();
+    const requestBody = {
+      description: comment,
+      madeBy: user,
+      product: product.title,
+    };
+    if (comment.trim()) {
+      try {
+        const res = await fetch(`/api/comments/${product.title}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
+        if (res.ok) {
+          fetchComments(requestBody.product);
+          setComment(""); // Reset comment field
+        }
+      } catch (err) {
+        console.error("Error submitting comment:", err);
+      }
+    }
+  };
 
   return (
     <>
@@ -67,11 +128,11 @@ const ProductPage = ({ email }) => {
                 <p><strong>Price:</strong> ${product.price}</p>
                 <p><strong>Category:</strong> {product.category}</p>
                 <p><strong>Description:</strong><br />{product.description}</p>
-
+                <p><strong>Seller:</strong><br/>{product.seller}</p>
                 {/* Add to Cart Button */}
                 <OverlayTrigger
                   overlay={
-                    isUserProduct ? (
+                    email === product.email ? (
                       <Tooltip id="tooltip-disabled">
                         Cannot add to cart as you posted this product
                       </Tooltip>
@@ -84,8 +145,8 @@ const ProductPage = ({ email }) => {
                     <Button
                       variant="primary"
                       onClick={handleAddToCart}
-                      disabled={isUserProduct}
-                      style={isUserProduct ? { pointerEvents: "none" } : {}}
+                      disabled={email === product.email}
+                      style={email === product.email ? { pointerEvents: "none" } : {}}
                     >
                       Add to Cart
                     </Button>
@@ -93,14 +154,47 @@ const ProductPage = ({ email }) => {
                 </OverlayTrigger>
               </Card>
             </Col>
-          </Row>
-        ) : (
+      
+
+        {/* Comments Section */}
+        <div>
+          <h3>Comments:</h3>
+          {productComments.length > 0 ? (
+            <ListGroup variant="flush">
+              {productComments.map((comment) => (
+                <ListGroup.Item key={comment.commentNo}>
+                  <h5>{comment.description}</h5>
+                  <p><strong>Made By:</strong> {comment.madeBy}</p>
+                  <p><strong>Made At:</strong> {new Date(comment.created).toLocaleString()}</p>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : (
+            <p>No comments yet. Be the first to leave a comment!</p>
+          )}
+
+          {/* Comment Form */}
+          <Form onSubmit={handleSubmitComment} className="mt-4">
+            <Form.Group controlId="formBasicComment">
+              <Form.Label>Your Comment</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={4}
+                placeholder="Write your comment..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit" className="mt-2">Submit Comment</Button>
+          </Form>
+        </div>
+        </Row>) : (
           <p>Loading product...</p>
         )}
-      </Container>
+      </Container> 
     </>
   );
 };
 
 export default ProductPage;
-

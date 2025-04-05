@@ -13,8 +13,8 @@ const Register = () => {
         confirmPassword: '',
         position: '',
         gender: '',
-        dob: '', // Date of Birth field added
-        address: '' // Address field added
+        dob: '', 
+        address: '' 
     });
 
     const [errors, setErrors] = useState({});
@@ -31,6 +31,7 @@ const Register = () => {
 
     const validateForm = () => {
         let formErrors = {};
+        const passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
         if (!formData.name) formErrors.name = ' Name is required.';
         if (!formData.username) formErrors.username = 'Username is required.';
@@ -42,14 +43,18 @@ const Register = () => {
         if (!formData.phone) {
             formErrors.phone = 'Phone number is required.';
         } else if (!/^\d{8}$/.test(formData.phone)) {
-            formErrors.phone = 'Phone number must be 10 digits.';
+            formErrors.phone = 'Phone number must be 8 digits.';
         }
-        if (!formData.password) formErrors.password = 'Password is required.';
+        if (!formData.password) {
+            formErrors.password = 'Password is required.';
+        } else if (!passwordRegex.test(formData.password)) {
+            formErrors.password = 'Password must be at least 8 characters and include at least one symbol.';
+        }
         if (formData.password !== formData.confirmPassword)
             formErrors.confirmPassword = 'Passwords do not match.';
         if (!formData.position) formErrors.position = 'Position is required.';
         if (!formData.gender) formErrors.gender = 'Gender is required.';
-        if (!formData.address) formErrors.address = 'Address is required.';
+        if (formData.position === "user" && !formData.address) formErrors.address = 'Address is required.';
 
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
@@ -144,17 +149,6 @@ const Register = () => {
                         />
                         {errors.phone && <Alert variant="danger">{errors.phone}</Alert>}
                     </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Address</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            placeholder="Enter your address"
-                        />
-                        {errors.address && <Alert variant="danger">{errors.address}</Alert>}
-                    </Form.Group>
                     {/* Position Field */}
                     <Form.Group className="mb-3">
                         <Form.Label>Position</Form.Label>
@@ -171,6 +165,19 @@ const Register = () => {
                         </Form.Select>
                         {errors.position && <Alert variant="danger">{errors.position}</Alert>}
                     </Form.Group>
+                   {/* Address Field - Only show if position is 'user' */}
+                {formData.position === "user" && (
+                    <Form.Group className="mb-3">
+                        <Form.Label>Address</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            placeholder="Enter your address"
+                        />
+                        {errors.address && <Alert variant="danger">{errors.address}</Alert>}
+                    </Form.Group>)}
                     {/* Gender Field */}
                     <Form.Group className="mb-3">
                         <Form.Label>Gender</Form.Label>
@@ -190,15 +197,6 @@ const Register = () => {
                                 name="gender"
                                 value="Female"
                                 checked={formData.gender === "Female"}
-                                onChange={handleChange}
-                                inline
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="Other"
-                                name="gender"
-                                value="Other"
-                                checked={formData.gender === "Other"}
                                 onChange={handleChange}
                                 inline
                             />

@@ -13,8 +13,25 @@ const UploadProduct = ({ email }) => {
   });
 
   const [previewUrl, setPreviewUrl] = useState("");
+  const [name, setName] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+
+   // Fetch user details based on email
+        useEffect(() => {
+            const fetchUserDetails = async () => {
+                if (email) {
+                    try {
+                        const response = await fetch(`/api/user/${email}`); 
+                        const data = await response.json();
+                        setName(data.name);
+                    } catch (error) {
+                        console.error('Error fetching user details:', error);
+                    }
+                }
+            };
+            fetchUserDetails();
+        }, [email]);
 
   useEffect(() => {
     if (form.imageUrl.trim() !== "") {
@@ -59,7 +76,8 @@ const UploadProduct = ({ email }) => {
     const productData = {
       ...form,
       price: parseFloat(form.price),
-      email
+      seller:name,
+      email:email
     };
 
     try {
@@ -167,7 +185,6 @@ const UploadProduct = ({ email }) => {
                           <option value="Top">Top</option>
                           <option value="Bottom">Bottom</option>
                           <option value="Footwear">Footwear</option>
-                          <option value="Other">Other</option>
                         </Form.Select>
                       </Form.Group>
                     </Col>

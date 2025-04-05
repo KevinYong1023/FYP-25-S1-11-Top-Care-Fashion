@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import userpic from '../../images/profile.png';
 import AdminHeader from "../../Components/Headers/AdminHeader";
 import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 import { useNavigate } from 'react-router-dom';

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import UserHeader from '../Components/Headers/userHeader';
 import { useNavigate } from 'react-router-dom';
-import { MdOutlineEmail } from "react-icons/md";
+
 
 const UserProfile = ({ email, setName, setAddress }) => {  
     const [user, setUser] = useState(null);  
@@ -30,6 +30,10 @@ const UserProfile = ({ email, setName, setAddress }) => {
 
     function updateProfile(){
         navigate('/update-account');  
+    }
+
+    function checkOrders(){
+        navigate('/your-orders');
     }
 
     // If user data is not loaded, show a loading message
@@ -60,6 +64,8 @@ const UserProfile = ({ email, setName, setAddress }) => {
                             <h4>Address: {user.address}</h4>
                         </Card>
                         <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
+                       
+                        <Button variant="secondary" onClick={checkOrders}>Check Your Orders</Button>
                     </Col>
                 </Row>
             </Container>

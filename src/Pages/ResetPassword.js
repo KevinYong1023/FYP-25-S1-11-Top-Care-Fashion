@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button, Alert,Row } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from "react-router-dom";
 
@@ -23,15 +23,26 @@ export default function ResetPassword() {
   };
 
   const validateForm = () => {
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
-      return true;
-    }else if (!email) {
+    const passwordRegex = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!email) {
       setError("Please enter your email.");
       return true;
+    } else if (newPassword !== confirmPassword) {
+      setError("Passwords do not match.");
+      return true;
+    } else if (!passwordRegex.test(newPassword)) {
+      setError("Password must be at least 8 characters and include at least one symbol.");
+      return true;
     }
+
+    setError(null);
     return false;
   };
+
+  
+  function backToLogin(){
+    navigate("/login")
+  }
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -48,7 +59,7 @@ export default function ResetPassword() {
       const data = await response.json();
       if (response.ok) {
         setSuccess("Password reset successfully!");
-        setTimeout(() => navigate("/login"), 2000); // Redirect to login after success
+        backToLogin()
       } else {
         setError(data.message || "Failed to reset password.");
       }
@@ -100,9 +111,15 @@ export default function ResetPassword() {
               required
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100">
+          <Row>
+            <Button variant="primary" type="submit" className="w-100">
             Reset Password
           </Button>
+          <Button variant="primary" onClick={backToLogin} >
+            Back to Login
+          </Button>
+          </Row>
+         
         </Form>
       </Container>
     </>

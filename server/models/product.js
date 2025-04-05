@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    default: ''
+    default: '',
+    required: true
   },
   price: {
     type: Number,
@@ -23,7 +24,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {  // user email of uploader
+  seller: {  // user full name
+    type: String,
+    required: true
+  },
+  email: {  // user email
     type: String,
     required: true
   },
