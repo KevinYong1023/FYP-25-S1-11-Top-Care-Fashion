@@ -25,15 +25,18 @@ const MixMatch = () => {
                 {/* Input Section */}
                 <Row className="justify-content-center mb-4">
                     <Col md={6} className="d-flex align-items-center gap-2">
-                    <Form onSubmit={ handleMixMatch}>
-                        <Form.Control
-                            type="text"
-                            placeholder="Input an occasion"
-                            value={occasion}
-                            onChange={(e) => setOccasion(e.target.value)}
-                        />
-                        <Button type="submit">Mix-And-Match</Button>
-                    </Form>
+                    <Form onSubmit={handleMixMatch}>
+  <Form.Group className="d-flex align-items-center gap-2">
+    <Form.Label className="mb-0">Occasion:</Form.Label>
+    <Form.Control
+      type="text"
+      placeholder="Input an occasion"
+      value={occasion}
+      onChange={(e) => setOccasion(e.target.value)}
+    />
+    <Button type="submit" className="w-100">Mix-And-Match</Button>
+  </Form.Group>
+</Form>
                     </Col>
                 </Row>
 
