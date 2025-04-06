@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
-const AutoIncrement = require('mongoose-sequence')(mongoose); // Import mongoose-sequence
 
 // Define the user schema
 const userSchema = new mongoose.Schema({
   userId: {
     type: Number,
-    unique: true,  // Ensure the ticketNumber is unique
+    unique: true,  // Ensure the userId is unique
   },
   username: {
     type: String,
@@ -40,11 +39,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  joined:{
+  joined: {
     type: Date,
     default: Date.now
   },
-  status:{
+  status: {
     type: String,
     required: true
   },
@@ -52,14 +51,24 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  revenue:{
-    type: String, // Change it to the correspond value
-    required:false
+  revenue: {
+    type: String, // Change it to the corresponding value
+    required: false
   }
 });
 
-// Add auto-increment to the ticketNumber field
-userSchema.plugin(AutoIncrement, {inc_field: 'userId'});
+// Pre-save hook to set auto-increment userId
+userSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    try {
+      const lastUser = await User.findOne().sort({ userId: -1 });
+      this.userId = lastUser ? lastUser.userId + 1 : 1; // Start from 1 if no users exist
+    } catch (error) {
+      console.error('Error auto-incrementing userId:', error);
+    }
+  }
+  next();
+});
 
 // Create the User model
 const User = mongoose.model('User', userSchema);

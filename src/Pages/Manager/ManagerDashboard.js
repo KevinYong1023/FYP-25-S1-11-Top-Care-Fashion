@@ -27,11 +27,9 @@ export default function ManagerDashboard() {
                 const filteredUsers = users.filter(user => user.position === "user");
             
                 const totalUsers = filteredUsers.length;
-                console.log(totalUsers)
                 // Count active users (assuming 'status' field contains "Active")
                 const activeNow = filteredUsers.filter(user => user.status === "Active" && user.position === "user").length;
                 const suspensedNow = filteredUsers.filter(user => user.status === "Suspended" && user.position === "user").length;
-                console.log(activeNow, suspensedNow)
                 setDashboardData(prevData => ({
                     ...prevData,
                     totalUsers,
@@ -45,21 +43,41 @@ export default function ManagerDashboard() {
 
         const fetchProductInsights = async () => {
             try {
-                const response = await fetch("/api/products/insights");
+                const response = await fetch("/api/products");
                 const data = await response.json();
+        
+                // Initialize counts
+                let totalProducts = 0;
+                let categoryCounts = {
+                    Footwear: 0,
+                    Top: 0,
+                    Bottom: 0
+                };
+        
+                // Count total products and products per category
+                data.forEach(product => {
+                    totalProducts += 1;
+        
+                    if (product.category === "Footwear") {
+                        categoryCounts.Footwear += 1;
+                    } else if (product.category === "Top") {
+                        categoryCounts.Top += 1;
+                    } else if (product.category === "Bottom") {
+                        categoryCounts.Bottom += 1;
+                    }
+                });
+        
+                // Update dashboard data
                 setDashboardData(prevData => ({
                     ...prevData,
-                    totalProducts: data.totalProducts || 0,
-                    categoryCounts: {
-                        Footwear: data.categoryCounts?.Footwear || 0,
-                        Top: data.categoryCounts?.Top || 0,
-                        Bottom: data.categoryCounts?.Bottom || 0
-                    }
+                    totalProducts: totalProducts,
+                    categoryCounts: categoryCounts
                 }));
             } catch (error) {
                 console.error("Error fetching product insights:", error);
             }
         };
+        
 
         fetchUsers();
         fetchProductInsights();

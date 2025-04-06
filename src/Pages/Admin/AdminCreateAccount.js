@@ -197,15 +197,7 @@ const AdminCreateAccount = () => {
                                                         onChange={handleChange}
                                                         inline
                                                     />
-                                                    <Form.Check
-                                                        type="radio"
-                                                        label="Other"
-                                                        name="gender"
-                                                        value="Other"
-                                                        checked={formData.gender === "Other"}
-                                                        onChange={handleChange}
-                                                        inline
-                                                    />
+                                                   
                                                 </div>
                                                 {errors.gender && <Alert variant="danger">{errors.gender}</Alert>}
                                             </Form.Group>

@@ -208,7 +208,7 @@ export default function ViewAccounts() {
                             </thead>
                             <tbody>
                                 {currentUsers.map((user) => (
-                                    <tr key={user._id}>
+                                    <tr key={user.userId}>
                                         <td>{user.userId}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>

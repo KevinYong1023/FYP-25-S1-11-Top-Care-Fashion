@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Orders = require('../models/orders');
 
-//get all order-history
-router.get('/order-history', async (req, res) => {    
+// Get all order history
+router.get('/order-history', async (req, res) => {
     try {
         const orders = await Orders.find();
         res.json(orders);
@@ -13,11 +13,10 @@ router.get('/order-history', async (req, res) => {
     }
 });
 
-
-// Update order status
-router.put('/update-order-status/:id', async (req, res) => {
-    const { id } = req.params; // Get the order ID from the URL parameter
-    const { status } = req.body; // Get the new status from the request body
+// Update order status by orderNumber
+router.put('/update-order-status/:orderNumber', async (req, res) => {
+    const { orderNumber } = req.params;  // Get the order number from the URL parameter
+    const { status } = req.body;  // Get the new status from the request body
 
     // Validate that the status is one of the allowed values
     const validStatuses = ['Processing', 'Shipped', 'Delivered', 'Cancelled'];
@@ -26,9 +25,9 @@ router.put('/update-order-status/:id', async (req, res) => {
     }
 
     try {
-        // Find the order by ID and update the status
-        const order = await Orders.findByIdAndUpdate(
-            id,
+        // Find the order by orderNumber and update the status
+        const order = await Orders.findOneAndUpdate(
+            { orderNumber }, // Use orderNumber to find the order
             { status },
             { new: true } // Return the updated order
         );
@@ -44,13 +43,13 @@ router.put('/update-order-status/:id', async (req, res) => {
     }
 });
 
-//Create a new order
+// Create a new order
 router.post('/create-order', async (req, res) => {
     const { seller, purchased, total, product, user } = req.body;
 
     // Validate the request body
     if (!seller || !purchased || !total || !product || !user) {
-        return res.status(400).json({ message: 'All field are required' });
+        return res.status(400).json({ message: 'All fields are required' });
     }
 
     try {
