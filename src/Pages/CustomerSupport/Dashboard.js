@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Button, Pagination, Form } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { Link } from 'react-router-dom';
 import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
@@ -8,7 +8,7 @@ import { AuthContext } from '../../App';
 export default function Dashboard() {
     const [ticketList, setTicketList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
-    const { name } = useContext(AuthContext);
+    const { name } = useContext(AuthContext); // Get the current user's name
     const ticketsPerPage = 10; // Number of tickets per page
 
     // Fetch tickets from the backend API
@@ -67,7 +67,7 @@ export default function Dashboard() {
                 method: 'DELETE',
             });
             if (response.ok) {
-                const updatedTickets = ticketList.filter((ticket) => ticket._id !== id);
+                const updatedTickets = ticketList.filter((ticket) => ticket.ticketId !== id);
                 setTicketList(updatedTickets);
             } else {
                 alert('Failed to delete the ticket');
@@ -94,7 +94,7 @@ export default function Dashboard() {
 
             if (response.ok) {
                 const updatedTickets = ticketList.map((ticket) =>
-                    ticket._id === ticketId ? { ...ticket, assignee: name, status: 'In Progress' } : ticket
+                    ticket.ticketId === ticketId ? { ...ticket, assignee: name, status: 'In Progress' } : ticket
                 );
                 setTicketList(updatedTickets);
             } else {

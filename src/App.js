@@ -100,7 +100,7 @@ function App() {
                         <Route path="/productpage/:id" element={<ProductPage email={email} />} />
                         <Route path="/shoppage" element={<ShopPage loginStatus={login} email={email} />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/ticket-info/:id" element={<TicketInfo email={email}/>} />
+                        <Route path="/ticket-info/:ticketId" element={<TicketInfo email={email}/>} />
                         <Route path="/customer-support-profile" element={<CustomerSupportProfile/>} />
                         <Route path="/customer-support-profile-update" element={<CustomerSupportProfileUpdate/>}/>
                         <Route path="/view-accounts" element={<ViewUsers />} />

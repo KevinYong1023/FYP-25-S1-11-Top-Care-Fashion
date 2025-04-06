@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const AutoIncrement = require('mongoose-sequence')(mongoose); // Import mongoose-sequence
 
 // Define the ticket schema
 const ticketSchema = new mongoose.Schema({
@@ -7,15 +6,15 @@ const ticketSchema = new mongoose.Schema({
         type: Number,
         unique: true,  // Ensure the ticketNumber is unique
     },
-    orderId:{
+    orderId: {
         type: Number,
-        required:true
+        required: true
     },
-    user:{
-        type:String,
-        required:true
+    user: {
+        type: String,
+        required: true
     },
-    description:{
+    description: {
         type: String,
         required: true
     },
@@ -26,16 +25,26 @@ const ticketSchema = new mongoose.Schema({
     assignee: {
         type: String,
         required: false,
-        default:""
+        default: ""
     },
     created: {
         type: Date,
         default: Date.now
-      }
+    }
 });
 
-// Add auto-increment to the ticketNumber field
-ticketSchema.plugin(AutoIncrement, {inc_field: 'ticketId'});
+// Pre-save hook to set auto-increment ticketId
+ticketSchema.pre('save', async function(next) {
+    if (this.isNew) {
+        try {
+            const lastTicket = await Ticket.findOne().sort({ ticketId: -1 });
+            this.ticketId = lastTicket ? lastTicket.ticketId + 1 : 1; // Start from 1 if no tickets exist
+        } catch (error) {
+            console.error('Error auto-incrementing ticketId:', error);
+        }
+    }
+    next();
+});
 
 // Create the Ticket model
 const Ticket = mongoose.model('Ticket', ticketSchema);

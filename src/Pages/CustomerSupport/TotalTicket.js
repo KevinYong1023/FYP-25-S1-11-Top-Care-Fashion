@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {AuthContext} from '../../App';
+import { AuthContext } from '../../App';
 import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,7 @@ export default function TotalTicket() {
     const [ticketList, setTicketList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const ticketsPerPage = 10; // Number of tickets per page
-    const { name } = useContext(AuthContext); 
+    const { name } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchAssignedTickets = async () => {
@@ -68,13 +68,13 @@ export default function TotalTicket() {
     };
 
     // Function to handle deletion of a ticket
-    async function handleDelete(id) {
+    async function handleDelete(ticketId) {
         try {
-            const response = await fetch(`/api/tickets/${id}`, {
+            const response = await fetch(`/api/tickets/${ticketId}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
-                const updatedTickets = ticketList.filter((ticket) => ticket._id !== id);
+                const updatedTickets = ticketList.filter((ticket) => ticket.ticketId !== ticketId);
                 setTicketList(updatedTickets);
                 alert('Ticket deleted successfully');
             } else {
@@ -102,7 +102,7 @@ export default function TotalTicket() {
             });
 
             if (response.ok) {
-                const updatedTickets = ticketList.filter((ticket) => ticket._id !== ticketId);
+                const updatedTickets = ticketList.filter((ticket) => ticket.ticketId !== ticketId);
                 setTicketList(updatedTickets);
                 alert('Ticket assignment removed successfully');
             } else {
@@ -135,20 +135,20 @@ export default function TotalTicket() {
                             </thead>
                             <tbody>
                                 {currentTickets.map((row, index) => (
-                                    <tr key={row._id}>
-                                        <td>{index + 1}</td>
+                                    <tr key={row.ticketId}> {/* Use ticketId instead of _id */}
+                                        <td>{row.ticketId}</td>
                                         <td>{row.user}</td>
                                         <td>{row.status}</td>
                                         <td>
                                             <div className="d-flex gap-2">
-                                                <Link to={`/ticket-info/${row._id}`} rel="noopener noreferrer">
+                                                <Link to={`/ticket-info/${row.ticketId}`} rel="noopener noreferrer"> {/* Update to use ticketId in URL */}
                                                     <Button variant="primary" size="sm">Review</Button>
                                                 </Link>
 
                                                 <Button
                                                     variant="danger"
                                                     size="sm"
-                                                    onClick={() => handleDelete(row._id)}
+                                                    onClick={() => handleDelete(row.ticketId)} 
                                                 >
                                                     Delete
                                                 </Button>
@@ -156,7 +156,7 @@ export default function TotalTicket() {
                                                 <Button
                                                     variant="secondary"
                                                     size="sm"
-                                                    onClick={() => removeAssign(row._id)}
+                                                    onClick={() => removeAssign(row.ticketId)}
                                                 >
                                                     Remove
                                                 </Button>
