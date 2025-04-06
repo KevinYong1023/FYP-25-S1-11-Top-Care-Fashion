@@ -10,10 +10,11 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
     
 
     const handleLogout = () => {
-        navigate("/login");  // Redirect to login page
+        localStorage.clear();
         setLogin(false);
         setRole("");
         setEmail("");
+        navigate("/login");
     };
 
     return (
