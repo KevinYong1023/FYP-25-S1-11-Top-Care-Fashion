@@ -8,7 +8,17 @@ const User = require('../models/users.js');                      // Ensure path/
 const transaction = require('../models/transaction.js'); // Ensure path/casing is correct
 // const Product = require('../models/product.js'); // Optional: Only if verifying prices server-side
 
-// --- Route 1: Direct User-to-User Transfer (Sender balance NOT deducted) ---
+// Define getNumericUserId at the top of the file
+function getNumericUserId(userId) {
+    const numericUserId = typeof userId === 'number' ? userId : parseInt(userId, 10);
+    if (isNaN(numericUserId)) {
+        console.error("Invalid userId (not a number):", userId);
+        return null;
+    }
+    return numericUserId;
+}
+
+// --- Route 1: Direct User-to-User Transfer (Sender revenue NOT deducted) ---
 router.post('/transfer', authenticate, async (req, res) => {
     const { recipientEmail, amount, description } = req.body;
     const senderUserId = req.userId;
@@ -37,17 +47,17 @@ router.post('/transfer', authenticate, async (req, res) => {
             throw new Error('Cannot send virtual currency to yourself.');
         }
 
-        // --- Sender balance check and decrement ARE REMOVED ---
+        // --- Sender revenue check and decrement ARE REMOVED ---
 
-        // Increment receiver's balance
+        // Increment receiver's revenue
         const receiverUpdateResult = await User.updateOne(
             { _id: recipientUserId },
-            { $inc: { balance: transferAmount } } // Target 'balance' field on User model
+            { $inc: { revenue: transferAmount } } // Target 'revenue' field on User model
         ).session(session);
 
         if (receiverUpdateResult.modifiedCount === 0) {
             // This could happen if the recipient User document was deleted mid-transaction
-            throw new Error('Failed to credit receiver balance.');
+            throw new Error('Failed to credit receiver revenue.');
         }
 
         // Log the transaction
@@ -63,13 +73,13 @@ router.post('/transfer', authenticate, async (req, res) => {
         // Commit Transaction
         await session.commitTransaction();
 
-        // Optionally get sender's current balance (it shouldn't have changed)
-        const currentSenderData = await User.findById(senderUserId).select('balance');
+        // Optionally get sender's current Revenue (it shouldn't have changed)
+        const currentSenderData = await User.findById(senderUserId).select('revenue');
 
         res.status(200).json({
-            message: 'Virtual currency transfer successful! (Sender balance not deducted)',
+            message: 'Virtual currency transfer successful! (Sender revenue not deducted)',
             transactionId: transactionLog._id,
-            newBalance: currentSenderData ? currentSenderData.balance : null // Reflects sender's unchanged balance
+            newRevenue: currentSenderData ? currentSenderData.revenue : null // Reflects sender's unchanged revenue
         });
 
     } catch (error) {
@@ -82,10 +92,11 @@ router.post('/transfer', authenticate, async (req, res) => {
 });
 
 
-// --- Route 2: Cart Checkout (Buyer balance NOT deducted) ---
+// --- Route 2: Cart Checkout (Buyer Revenue NOT deducted) ---
 router.post('/checkout', authenticate, async (req, res) => {
     const { cartItems } = req.body;
     const buyerUserId = req.userId; // Authenticated buyer
+    const numericBuyerUserId = getNumericUserId(req.userId); 
 
     // Validation & Calculate totalAmount / sellerPayouts
     if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) return res.status(400).json({ message: 'Cart invalid.' });
@@ -111,19 +122,19 @@ router.post('/checkout', authenticate, async (req, res) => {
 
     try {
         // 1. Find Buyer (Still needed for senderId in logs & self-payout check)
-        const buyerUser = await User.findById(buyerUserId).select('_id').lean().session(session); // Only need ID
+        const buyerUser = await User.findById(buyerUserId).select('userId').lean().session(session); // Only need ID
         if (!buyerUser) throw new Error('Buyer user not found.');
 
-        // --- Buyer balance check and decrement ARE REMOVED ---
+        // --- Buyer revenue check and decrement ARE REMOVED ---
 
-        // 3. Increment Each Seller's Balance
+        // 3. Increment Each Seller's revenue
         const sellerUpdatePromises = [];
         for (const [sellerId, payoutAmount] of sellerPayouts.entries()) {
             if(buyerUserId.toString() === sellerId.toString()) { console.warn(`Skipping self-payout`); continue; }
 
             const updatePromise = User.updateOne(
-                { _id: sellerId },
-                { $inc: { balance: payoutAmount } } // Target 'balance' field
+                { userId: sellerId },
+                { $inc: { revenue: payoutAmount } } // Target 'revenue' field
             ).session(session);
             sellerUpdatePromises.push(updatePromise);
         }
@@ -134,25 +145,51 @@ router.post('/checkout', authenticate, async (req, res) => {
              const sellerId = Array.from(sellerPayouts.keys())[index];
              if(buyerUserId.toString() === sellerId.toString()) return; // Skip check if self-payout was skipped
             if (result.modifiedCount === 0 && result.matchedCount === 0) throw new Error(`Failed to credit seller ${sellerId}: Not found.`);
-            if (result.modifiedCount === 0 && result.matchedCount === 1) console.warn(`Seller ${sellerId} balance unmodified.`);
+            if (result.modifiedCount === 0 && result.matchedCount === 1) console.warn(`Seller ${sellerId} revenue unmodified.`);
         });
 
         // 4. Log the transactions
         const transactionLogs = Array.from(sellerPayouts.entries())
-             .filter(([sellerId, payoutAmount]) => buyerUserId.toString() !== sellerId.toString())
-             .map(([sellerId, payoutAmount]) => ({ /* ... log data ... */
-                senderId: buyerUserId, receiverId: sellerId, amount: payoutAmount,
-                description: `Payment for cart items from seller ${sellerId}`, status: 'completed'
-             }));
-        if (transactionLogs.length > 0) {
-            await transaction.insertMany(transactionLogs, { session });
+    .filter(([sellerId, payoutAmount]) => buyerUserId.toString() !== numericBuyerUserId.toString())
+    .map(([sellerId, payoutAmount]) => {
+        // Ensure buyerUserId is a number
+        const numericBuyerUserId = typeof buyerUserId === 'number' ? buyerUserId : parseInt(buyerUserId, 10);
+
+        // Check if conversion was successful
+        if (isNaN(numericBuyerUserId)) {
+            console.error("Invalid buyerUserId (not a number):", buyerUserId);
+            // Handle the error appropriately (e.g., throw an error, skip this transaction)
+            return null; // Skip this transaction
         }
+
+        // Ensure sellerId is a number
+        const numericSellerId = typeof sellerId === 'number' ? sellerId : parseInt(sellerId, 10);
+
+        // Check if conversion was successful
+        if (isNaN(numericSellerId)) {
+            console.error("Invalid sellerId (not a number):", sellerId);
+            // Handle the error appropriately (e.g., throw an error, skip this transaction)
+            return null; // Skip this transaction
+        }
+
+        return {
+            senderId: numericBuyerUserId,
+            receiverId: numericSellerId,
+            amount: payoutAmount,
+            description: `Payment for cart items from seller ${sellerId}`,
+            status: 'completed'
+        };
+    }).filter(log => log !== null); // Remove null entries due to invalid ids
+
+if (transactionLogs.length > 0) {
+    await transaction.insertMany(transactionLogs, { session });
+}
 
         // 5. Commit Transaction
         await session.commitTransaction();
 
-        // Get buyer's balance (which shouldn't have changed)
-        const updatedBuyer = await User.findById(buyerUserId).select('balance');
+        // Get buyer's revenue (which shouldn't have changed)
+        const updatedBuyer = await User.findById(buyerUserId).select('revenue');
 
         res.status(200).json({
             message: 'Checkout successful!'
