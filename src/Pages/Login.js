@@ -21,17 +21,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
+      
+      console.log("Full login response:", response);
       const data = await response.json();
-
+      console.log("Received token from server:", data.token);
 
       if (response.ok) {
+        storeAuthToken(data.token); 
         const loginRole = data.user.role;
         setEmail(formData.email);
         setRole(loginRole);
@@ -48,13 +51,8 @@ const Login = () => {
         setError(data.message);
       }
     } catch (error) {
-      console.error("An error occurred during login fetch:", error);
-      // --- EDIT: Use setError state instead of alert ---
+      console.error("An error occurred during login:", error);
       setError("An error occurred during login. Please try again.");
-      // --- END EDIT ---
-    } finally {
-        // Consider adding setIsLoading(false) here if using loading state
-
     }
   };
 
