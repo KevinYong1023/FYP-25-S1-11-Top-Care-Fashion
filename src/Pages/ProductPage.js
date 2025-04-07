@@ -25,9 +25,14 @@ const ProductPage = () => {
             setIsLoading(true);
             setError("");
             try {
+                const token = localStorage.getItem('authToken'); // Retrieve token
                 const apiUrl = `/api/products/${productId}`;
                 console.log("Fetching product from:", apiUrl);
-                const res = await fetch(apiUrl);
+                const res = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Include token in headers
+                    }
+                });
                 if (!res.ok) {
                     const errorData = await res.json().catch(() => ({}));
                     throw new Error(errorData.message || `Failed to fetch product (Status: ${res.status})`);

@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/users.js');
 
-// Login
+ // Login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
-});
+}); 
 // Reset Password
 router.put('/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
@@ -112,6 +112,44 @@ router.get('/user', async (req, res) => {
         res.status(500).json({ message: 'Error fetching users' });
     }
 });
+ /* // Register
+  router.post('/register', async (req, res) => {
+      const {username, name, email, phone, password, dob, gender, position, address } = req.body;
+      try {
+          // Check if the user already exists
+          const existingUser = await User.findOne({ email });
+          if (existingUser) {
+              return res.status(400).json({ message: 'User with this email already exists' });
+          }
+  
+          // Hash the password
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(password, salt);
+  
+          // Create a new user instance
+          const newUser = new User({
+              username,
+              name,
+              email,
+              phone,
+              password: hashedPassword, // Store the hashed password
+              dob, // Optional field
+              gender, // Required field
+              position, // Required field
+              joined: new Date().toISOString().split('T')[0], 
+              status:"Active",
+              address,
+          });
+  
+          // Save the user in the database
+          await newUser.save();
+  
+          // Send success response
+          res.status(201).json({ message: 'User registered successfully' });
+      } catch (error) {
+          res.status(500).json({ message: 'Server error' });
+      }
+  }); */
 
   // Delete a user
   router.delete('/user/:email', async (req, res) => {

@@ -8,12 +8,14 @@ const dotenv = require('dotenv');
 
 
 // Import the API-related routes
+const virtualPaymentsRoutes = require('./routes/virtualPayments');
 const userRoutes = require('./routes/users'); // Import the user-related routes
 const ticketRoutes = require('./routes/tickets'); 
 const orderRoutes = require('./routes/orders'); 
 const productRoutes = require('./routes/products'); 
 const commentsRoutes = require('./routes/comments')
-const virtualPaymentsRoutes = require('./routes/virtualPayments');
+
+
 
 
 // Load environment variables from .env file
@@ -63,7 +65,7 @@ app.use('/api', productRoutes);
 app.use('/api', commentsRoutes);
 
 // Use '/api/virtual' for all transactions-related routes
-app.use('/api', virtualPaymentsRoutes);
+app.use('/api/virtual', virtualPaymentsRoutes);
 
 
 
