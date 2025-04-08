@@ -58,7 +58,7 @@ app.use('/api', productRoutes);
 app.use('/api', commentsRoutes);
 
 // Define the port the server will listen on (from .env or default to 5000)
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Start the server
 app.listen(PORT, () => {
