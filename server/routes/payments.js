@@ -21,7 +21,7 @@ function getNumericUserId(userId) {
 // --- Route 1: Direct User-to-User Transfer (Sender revenue NOT deducted) ---
 router.post('/transfer', authenticate, async (req, res) => {
     const { recipientEmail, amount, description } = req.body;
-    const senderUserId = req.userId;
+    const senderUserId = req.numericUserId;
 
     // Validation
     if (!recipientEmail || !amount) return res.status(400).json({ message: 'Recipient email and amount required.' });
@@ -64,6 +64,8 @@ router.post('/transfer', authenticate, async (req, res) => {
         const transactionLog = new transaction({
             senderId: senderUserId,
             receiverId: recipientUserId,
+            senderName: senderUser.name, // Add senderName
+            receiverName: recipientUser.name, // Add receiverName
             amount: transferAmount,
             description: description,
             status: 'completed'
@@ -95,106 +97,124 @@ router.post('/transfer', authenticate, async (req, res) => {
 // --- Route 2: Cart Checkout (Buyer Revenue NOT deducted) ---
 router.post('/checkout', authenticate, async (req, res) => {
     const { cartItems } = req.body;
-    const buyerUserId = req.userId; // Authenticated buyer
-    const numericBuyerUserId = getNumericUserId(req.userId); 
+    let buyerUserId = req.userId;
+
+    // Convert buyerUserId to a number if it's an ObjectId string
+    if (typeof buyerUserId === 'string' && mongoose.Types.ObjectId.isValid(buyerUserId)) {
+        try {
+            const user = await User.findOne({ _id: buyerUserId }).select('userId');
+            if (user) {
+                buyerUserId = user.userId;
+            } else {
+                return res.status(400).json({ message: 'Buyer user not found.' });
+            }
+        } catch (dbError) {
+            console.error("Database error during ObjectId conversion:", dbError);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    } else if (typeof buyerUserId !== 'number') {
+        return res.status(400).json({ message: 'Invalid buyerUserId type.' });
+    }
+
+    const numericBuyerUserId = buyerUserId;
 
     // Validation & Calculate totalAmount / sellerPayouts
-    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) return res.status(400).json({ message: 'Cart invalid.' });
+    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+        return res.status(400).json({ message: 'Cart invalid.' });
+    }
+
     let totalAmount = 0;
     const sellerPayouts = new Map();
-    try {
-        cartItems.forEach(item => { /* ... calculate total, aggregate sellerPayouts ... */
-             const price = parseFloat(item.price);
-             const quantity = parseInt(item.quantity, 10) || 1;
-             const sellerId = item.sellerId;
-             if (isNaN(price) || price <= 0 || !sellerId) throw new Error(`Invalid cart item`);
-             const itemTotal = Math.round(price * quantity * 100) / 100;
-             totalAmount += itemTotal;
-             sellerPayouts.set(sellerId, (sellerPayouts.get(sellerId) || 0) + itemTotal);
-        });
-        totalAmount = Math.round(totalAmount * 100) / 100;
-        if (totalAmount <= 0) throw new Error('Total must be positive.');
-    } catch (validationError) { return res.status(400).json({ message: `Invalid cart data: ${validationError.message}` }); }
 
+    try {
+        cartItems.forEach(item => {
+            const price = parseFloat(item.price);
+            const quantity = parseInt(item.quantity, 10) || 1;
+            const sellerId = item.sellerId;
+
+            if (isNaN(price) || price <= 0 || !sellerId) {
+                throw new Error(`Invalid cart item`);
+            }
+
+            const itemTotal = Math.round(price * quantity * 100) / 100;
+            totalAmount += itemTotal;
+            sellerPayouts.set(sellerId, (sellerPayouts.get(sellerId) || 0) + itemTotal);
+        });
+
+        totalAmount = Math.round(totalAmount * 100) / 100;
+
+        if (totalAmount <= 0) {
+            throw new Error('Total must be positive.');
+        }
+    } catch (validationError) {
+        return res.status(400).json({ message: `Invalid cart data: ${validationError.message}` });
+    }
 
     const session = await mongoose.startSession();
     session.startTransaction();
 
     try {
-        // 1. Find Buyer (Still needed for senderId in logs & self-payout check)
-        const buyerUser = await User.findById(buyerUserId).select('userId').lean().session(session); // Only need ID
-        if (!buyerUser) throw new Error('Buyer user not found.');
-
-        // --- Buyer revenue check and decrement ARE REMOVED ---
-
-        // 3. Increment Each Seller's revenue
-        const sellerUpdatePromises = [];
-        for (const [sellerId, payoutAmount] of sellerPayouts.entries()) {
-            if(buyerUserId.toString() === sellerId.toString()) { console.warn(`Skipping self-payout`); continue; }
-
-            const updatePromise = User.updateOne(
-                { userId: sellerId },
-                { $inc: { revenue: payoutAmount } } // Target 'revenue' field
-            ).session(session);
-            sellerUpdatePromises.push(updatePromise);
+        const buyerUser = await User.findOne({ userId: numericBuyerUserId }).select('userId name').lean().session(session);
+        if (!buyerUser) {
+            throw new Error('Buyer user not found.');
         }
+
+        const sellerUpdatePromises = [];
+        let transactionLogs = []; // Declare transactionLogs outside the loop
+
+        for (const [sellerId, payoutAmount] of sellerPayouts.entries()) {
+            if (numericBuyerUserId !== sellerId) {
+                const sellerUser = await User.findOne({ userId: sellerId }).select('name').lean().session(session);
+                if (!sellerUser) {
+                    throw new Error(`Seller ${sellerId} not found.`);
+                }
+
+                 // Place the productName definition HERE:
+                 const cartItem = cartItems.find(item => item.sellerId === sellerId);
+                 const productName = cartItem ? cartItem.productName : null;
+
+                const updatePromise = User.updateOne(
+                    { userId: sellerId },
+                    { $inc: { revenue: payoutAmount } }
+                ).session(session);
+                sellerUpdatePromises.push(updatePromise);
+
+                transactionLogs.push({
+                    senderId: numericBuyerUserId,
+                    receiverId: sellerId,
+                    senderName: buyerUser.name,
+                    receiverName: sellerUser.name,
+                    amount: payoutAmount,
+                    date: new Date(),
+                    description: `Payment for cart items from seller ${sellerUser.name}`,
+                    status: 'completed',
+                    productName: productName,
+
+                });
+            }
+        }
+
         const sellerUpdateResults = await Promise.all(sellerUpdatePromises);
 
-        // Check seller results
         sellerUpdateResults.forEach((result, index) => {
-             const sellerId = Array.from(sellerPayouts.keys())[index];
-             if(buyerUserId.toString() === sellerId.toString()) return; // Skip check if self-payout was skipped
-            if (result.modifiedCount === 0 && result.matchedCount === 0) throw new Error(`Failed to credit seller ${sellerId}: Not found.`);
-            if (result.modifiedCount === 0 && result.matchedCount === 1) console.warn(`Seller ${sellerId} revenue unmodified.`);
+            const sellerId = Array.from(sellerPayouts.keys())[index];
+            if (numericBuyerUserId !== sellerId) {
+                if (result.modifiedCount === 0 && result.matchedCount === 0) {
+                    throw new Error(`Failed to credit seller ${sellerId}: Not found.`);
+                }
+                if (result.modifiedCount === 0 && result.matchedCount === 1) {
+                    console.warn(`Seller ${sellerId} revenue unmodified.`);
+                }
+            }
         });
 
-        // 4. Log the transactions
-        const transactionLogs = Array.from(sellerPayouts.entries())
-    .filter(([sellerId, payoutAmount]) => buyerUserId.toString() !== numericBuyerUserId.toString())
-    .map(([sellerId, payoutAmount]) => {
-        // Ensure buyerUserId is a number
-        const numericBuyerUserId = typeof buyerUserId === 'number' ? buyerUserId : parseInt(buyerUserId, 10);
-
-        // Check if conversion was successful
-        if (isNaN(numericBuyerUserId)) {
-            console.error("Invalid buyerUserId (not a number):", buyerUserId);
-            // Handle the error appropriately (e.g., throw an error, skip this transaction)
-            return null; // Skip this transaction
+        if (transactionLogs.length > 0) {
+            await transaction.insertMany(transactionLogs, { session });
         }
 
-        // Ensure sellerId is a number
-        const numericSellerId = typeof sellerId === 'number' ? sellerId : parseInt(sellerId, 10);
-
-        // Check if conversion was successful
-        if (isNaN(numericSellerId)) {
-            console.error("Invalid sellerId (not a number):", sellerId);
-            // Handle the error appropriately (e.g., throw an error, skip this transaction)
-            return null; // Skip this transaction
-        }
-
-        return {
-            senderId: numericBuyerUserId,
-            receiverId: numericSellerId,
-            amount: payoutAmount,
-            description: `Payment for cart items from seller ${sellerId}`,
-            status: 'completed'
-        };
-    }).filter(log => log !== null); // Remove null entries due to invalid ids
-
-if (transactionLogs.length > 0) {
-    await transaction.insertMany(transactionLogs, { session });
-}
-
-        // 5. Commit Transaction
         await session.commitTransaction();
 
-        // Get buyer's revenue (which shouldn't have changed)
-        const updatedBuyer = await User.findById(buyerUserId).select('revenue');
-
-        res.status(200).json({
-            message: 'Checkout successful!'
-        });
-
+        res.status(200).json({ message: 'Checkout successful!' });
     } catch (error) {
         await session.abortTransaction();
         console.error('Checkout Failed:', error);

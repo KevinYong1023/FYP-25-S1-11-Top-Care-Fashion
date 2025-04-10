@@ -1,51 +1,49 @@
 const mongoose = require('mongoose');
 
-// Define the orderHistory schema
 const orderSchema = new mongoose.Schema({
     orderNumber: {
-        type: Number,
-        unique: true,  // Ensure the orderNumber is unique
+        type: String, // Changed to String for flexibility
+        unique: true,
     },
-    seller: {  // User sells the product
-        type: Array,
-        required: true
-    },
+    items: [{ // Array of product objects
+        sellerName: { type: String, required: true },
+        productName: { type: String, required: true },
+        quantity: { type: Number, required: true },
+    }],
     created: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
-    products: {
-        type: String,
-        required: true
-    },
-    total: { // Total Price
-        type: String,
-        required: true
+    total: { // total price of the order
+        type: Number, // Changed to Number
+        required: true,
     },
     status: {
         type: String,
         required: true,
-        default: "Processing"
+        default: 'Processing',
+        enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], // added enum for validation.
     },
-    buyer: {  // User buys the product
+    buyerName: { // Changed to buyerName for clarity
         type: String,
-        required: true
-    }
-});
+        required: true,
+    },
+}, { timestamps: false });
 
-// Custom auto-increment method for orderNumber
-orderSchema.statics.getNextOrderNumber = async function() {
-    const lastOrder = await this.findOne().sort({ orderNumber: -1 });  // Get the last order
+// Custom auto-increment method for orderNumber (using string format)
+orderSchema.statics.getNextOrderNumber = async function () {
+    const lastOrder = await this.findOne().sort({ orderNumber: -1 });
     if (!lastOrder) {
-        return 1;  // If no orders exist, start from 1
+        return '1'; // Start from '1' as a string
     }
-    return lastOrder.orderNumber + 1;  // Increment the last order number
+    const nextNumber = parseInt(lastOrder.orderNumber, 10) + 1;
+    return nextNumber.toString();
 };
 
 // Pre-save hook to set the orderNumber before saving
-orderSchema.pre('save', async function(next) {
+orderSchema.pre('save', async function (next) {
     if (!this.orderNumber) {
-        this.orderNumber = await this.constructor.getNextOrderNumber();  // Get the next order number
+        this.orderNumber = await this.constructor.getNextOrderNumber();
     }
     next();
 });
