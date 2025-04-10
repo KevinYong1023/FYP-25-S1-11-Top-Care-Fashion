@@ -1,3 +1,4 @@
+
 // src/Pages/Payment.js (Refined for Cart Checkout Simulation)
 
 import React, { useState, useEffect } from 'react';
@@ -20,10 +21,10 @@ const Payment = () => {
     const { cartItems = [], totalAmount = 0 } = location.state || {};
 
     // State for fake card inputs
-    const [cardNumber, setCardNumber] = useState('');
-    const [expirationDate, setExpirationDate] = useState('');
-    const [cvv, setCvv] = useState('');
-    const [nameOnCard, setNameOnCard] = useState('');
+    const [cardNumber, setCardNumber] = useState('1234123412341234');
+    const [expirationDate, setExpirationDate] = useState('12/26');
+    const [cvv, setCvv] = useState('123');
+    const [nameOnCard, setNameOnCard] = useState('JJ');
 
     // State for feedback and loading
     const [message, setMessage] = useState('');
@@ -57,7 +58,7 @@ const Payment = () => {
     // Handle form submission -> Call backend checkout endpoint
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!checkFormFilled()) return; // Stop if fake fields aren't filled
+        if (!checkFormFilled()) return; // Stop if fields aren't filled
 
         setIsLoading(true);
         setMessage('');
@@ -73,10 +74,10 @@ const Payment = () => {
 
         // Ensure cartItems are still valid before sending
         if (!cartItems || cartItems.length === 0) {
-             setMessage('Cannot checkout with an empty cart.');
-             setMessageType('danger');
-             setIsLoading(false);
-             return;
+            setMessage('Cannot checkout with an empty cart.');
+            setMessageType('danger');
+            setIsLoading(false);
+            return;
         }
 
         try {
@@ -106,12 +107,14 @@ const Payment = () => {
             setExpirationDate('');
             setCvv('');
             setNameOnCard('');
-            
-             // Wait for a few seconds (e.g., 3000ms = 3s) before navigating
-             const redirectTimer = setTimeout(() => {
+
+           // await createOrder(cartItems, totalAmount, token);
+
+           /* // Wait for a few seconds (e.g., 3000ms = 3s) before navigating
+            const redirectTimer = setTimeout(() => {
                 console.log("REDIRECT TIMER FIRED - Attempting navigation..."); // Add this line
                 navigate('/home'); // Navigate to home page
-            }, 3000);
+            }, 3000); */
 
         } catch (error) {
             console.error('Checkout Error:', error);
@@ -121,7 +124,35 @@ const Payment = () => {
             setIsLoading(false); // Ensure loading state is reset
         }
     };
-
+/*
+    const createOrder = async (cartItems, totalAmount, token) => {
+        try {
+            const orderResponse = await fetch('/api/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ cartItems, total: totalAmount.toFixed(2) }), // Send cartItems and total
+            });
+    
+            if (!orderResponse.ok) {
+                const orderData = await orderResponse.json();
+                throw new Error(orderData.message || 'Failed to create order');
+            }
+    
+            const orderData = await orderResponse.json(); // Get the order details from the response.
+            console.log('Order created successfully', orderData.orderDetails);
+            // Do something with the orderData.orderDetails, for example display to the user.
+    
+        } catch (orderError) {
+            console.error('Order creation error:', orderError);
+            setMessage(`Order creation failed: ${orderError.message}`);
+            setMessageType('danger');
+        }
+    }; */
+    
+   
     // Determine if the form can be submitted
     const canSubmit = cartItems.length > 0 && totalAmount > 0 && !isLoading;
 
@@ -155,7 +186,7 @@ const Payment = () => {
                     {/* Payment Simulation Column */}
                     <Col md={5}>
                         <h2>Payment by Credit Card</h2>
-                        {!canSubmit && cartItems.length > 0 && !isLoading && <Alert variant="warning">Enter card details to proceed.</Alert> }
+                        {!canSubmit && cartItems.length > 0 && !isLoading && <Alert variant="warning">Enter card details to proceed.</Alert>}
 
                         <Form onSubmit={handleSubmit} className="payment-form-area">
                             {/* --- Fake Card Details Section --- */}
@@ -215,10 +246,10 @@ const Payment = () => {
                                         required
                                     />
                                 </Form.Group>
-                               
+
                             </fieldset>
 
-                             {/* Display Feedback Messages */}
+                            {/* Display Feedback Messages */}
                             {message && (
                                 <Alert variant={messageType || 'info'} className="mt-3">
                                     {message}

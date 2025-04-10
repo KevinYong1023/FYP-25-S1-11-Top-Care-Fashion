@@ -71,17 +71,17 @@ const ManageList = ({ email }) => {
         method: "DELETE",
       });
 
-      if (res.ok) {
-        setProducts((prev) => prev.filter((p) => p._id !== id));
-        setMessage("Product deleted.");
-      } else {
-        setMessage("Error deleting product.");
-      }
-    } catch (err) {
-      console.error(err);
-      setMessage("Server error during delete.");
-    }
-  };
+            if (res.ok) {
+                setProducts((prev) => prev.filter((p) => p._id !== id));
+                setMessage("Product deleted.");
+            } else {
+                setMessage("Error deleting product.");
+            }
+        } catch (err) {
+            console.error(err);
+            setMessage("Server error during delete.");
+        }
+    };
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
