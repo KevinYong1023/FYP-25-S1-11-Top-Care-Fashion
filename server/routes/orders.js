@@ -59,7 +59,6 @@ router.put('/update-order-status/:orderNumber', async (req, res) => {
 });
 
 
-
 // routes/orders.js
 router.post('/create-order', authenticate, async (req, res) => {
     try {

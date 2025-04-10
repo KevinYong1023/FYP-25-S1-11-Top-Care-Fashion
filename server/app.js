@@ -16,8 +16,6 @@ const productRoutes = require('./routes/products');
 const commentsRoutes = require('./routes/comments')
 
 
-
-
 // Load environment variables from .env file
 dotenv.config();
 
@@ -66,7 +64,6 @@ app.use('/api', commentsRoutes);
 
 // Use '/api/virtual' for all transactions-related routes
 app.use('/api/virtual', paymentsRoutes);
-
 
 
 

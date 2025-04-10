@@ -35,24 +35,60 @@ const Payment = () => {
         }
     }, [location.state, cartItems, navigate]);
 
+     const isCardNumberValid = () => {
+        const trimmed = cardNumber.replace(/\s+/g, '');
+        return /^\d{16}$/.test(trimmed);
+    };
 
-    useEffect(() => {
- 
-        if (!location.state || !Array.isArray(cartItems) || cartItems.length === 0 || totalAmount <= 0) {
-            setMessage('Error: Invalid cart data for payment. Redirecting to cart...');
-            setMessageType('danger');
-            const timer = setTimeout(() => navigate('/cart'), 3000); 
-            return () => clearTimeout(timer); 
-        }
-    }, []); 
+    const isExpiryValid = () => {
+        const [month, year] = expirationDate.split('/');
+        if (!month || !year || !/^\d{2}\/\d{2}$/.test(expirationDate)) return false;
 
-  
+        const now = new Date();
+        const expMonth = parseInt(month, 10);
+        const expYear = parseInt('20' + year, 10);
+
+        if (expMonth < 1 || expMonth > 12) return false;
+
+        const expiryDate = new Date(expYear, expMonth);
+        return expiryDate > now;
+    };
+
+    const isCvvValid = () => /^\d{3}$/.test(cvv);
+
+    const isNameValid = () => /^[A-Za-z ]{2,}$/.test(nameOnCard.trim());
+
     const checkFormFilled = () => {
         if (!cardNumber || !expirationDate || !cvv || !nameOnCard) {
             setMessage('Please fill in all fake card details to simulate payment.');
             setMessageType('danger');
             return false;
         }
+
+        if (!isCardNumberValid()) {
+            setMessage('Invalid card number. It must be 16 digits.');
+            setMessageType('danger');
+            return false;
+        }
+
+        if (!isExpiryValid()) {
+            setMessage('Invalid expiry date. Format must be MM/YY and in the future.');
+            setMessageType('danger');
+            return false;
+        }
+
+        if (!isCvvValid()) {
+            setMessage('Invalid CVV. It must be 3 digits.');
+            setMessageType('danger');
+            return false;
+        }
+
+        if (!isNameValid()) {
+            setMessage('Name must only contain letters and spaces.');
+            setMessageType('danger');
+            return false;
+        }
+
         setMessage('');
         setMessageType('');
         return true;
@@ -81,7 +117,6 @@ const Payment = () => {
 
                 const userData = await response.json();
                 setLoggedInUserName(userData.name);
-                
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 setMessage(`Error fetching user data: ${error.message}`);
@@ -90,6 +125,8 @@ const Payment = () => {
         };
 
         fetchUserName();
+        const token = getAuthToken();
+        console.log("Token from localStorage:", token);
     }, []);
 
     const handleSubmit = async (e) => {
@@ -139,16 +176,14 @@ const Payment = () => {
             setCvv('');
             setNameOnCard('');
             console.log("cartItems within handleSubmit: ", cartItems)
-            console.log("User Name within handleSubmit: ", loggedInUserName); //CHECK HERE
+            console.log("User Name within handleSubmit: ", loggedInUserName);
 
             await createOrder(cartItems, totalAmount, token, loggedInUserName);
 
-            //  Disable button and show "Redirecting to home..."
-                setIsRedirecting(true);
-
-                setTimeout(() => {
-                    navigate('/home');
-                }, 3000);
+            setIsRedirecting(true);
+            setTimeout(() => {
+                navigate('/home');
+            }, 3000);
 
         } catch (error) {
             console.error('Checkout Error:', error);
@@ -158,6 +193,8 @@ const Payment = () => {
             setIsLoading(false);
         }
     };
+
+    
 
     const createOrder = async (cartItems, totalAmount, token, userName) => {
         let allSellerNames = "";
@@ -188,6 +225,8 @@ const Payment = () => {
         }
         console.log("Total Amount To Send: ", totalAmountToSend);
         console.log("createOrder - userName:", userName);  // Add this line
+
+    
         try {
             const orderResponse = await fetch("/api/create-order", {
                 method: "POST",
@@ -216,12 +255,36 @@ const Payment = () => {
                     
                 }),
             });
-
             if (!orderResponse.ok) {
                 const orderData = await orderResponse.json();
                 throw new Error(orderData.message || "Failed to create order");
             }
-
+    
+            // 🔁 Update each product's isOrdered to true
+            for (const item of cartItems) {
+                try {
+                    console.log("⏫ Updating product with name:", item.productName);
+                    const res = await fetch(`/api/products/update-product-status`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ productName: item.productName, isOrdered: true }),
+                    });
+    
+                    const data = await res.json();
+                    if (res.ok) {
+                        console.log(`Product "${item.productName}" order status updated`);
+                    } else {
+                        console.error(`Failed to update "${item.productName}":`, data.message);
+                        setMessage(`Product order status update failed: ${data.message}`);
+                        setMessageType("danger");
+                    }
+                } catch (err) {
+                    console.error(`Error updating "${item.productName}":`, err);
+                }
+            }
+    
             const orderData = await orderResponse.json();
             console.log("Order created successfully", orderData.orderDetails);
             setMessage("Order created successfully!");
@@ -234,6 +297,7 @@ const Payment = () => {
             throw orderError;
         }
     };
+    
 
     const canSubmit = cartItems.length > 0 && totalAmount > 0 && !isLoading && !isRedirecting;
 
@@ -320,4 +384,3 @@ const Payment = () => {
 };
 
 export default Payment;
-
