@@ -15,9 +15,6 @@ const orderRoutes = require('./routes/orders');
 const productRoutes = require('./routes/products'); 
 const commentsRoutes = require('./routes/comments')
 
-
- const route = require('./routes/routers'); // Import the user-related routes */
- const virtualPaymentsRoutes = require('./routes/virtualPayments');
 // Load environment variables from .env file
 dotenv.config();
 
