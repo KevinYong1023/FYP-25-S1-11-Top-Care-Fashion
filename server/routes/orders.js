@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Orders = require('../models/orders');
+const Product = require('../models/product');
+const User = require('../models/users');
+const authenticate = require('../middleware/authenticate');          // Ensure path is correct
 
 // Get all order history
 router.get('/order-history', async (req, res) => {
@@ -43,35 +46,57 @@ router.put('/update-order-status/:orderNumber', async (req, res) => {
     }
 });
 
-// Create a new order
-router.post('/create-order', async (req, res) => {
-    const { seller, purchased, total, product, user } = req.body;
-
-    // Validate the request body
-    if (!seller || !purchased || !total || !product || !user) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
+router.post('/create-order', authenticate, async (req, res) => {
+    const { cartItems, total } = req.body;
+    const buyerName = req.name; // Get the user name from the token
 
     try {
-        // Create a new order object
-        const newOrder = new Orders({
-            seller,
-            purchased,
-            total,
-            product,
-            user,
-            status: 'Processing',  // Default status is Processing
+        if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0 || !total) {
+            return res.status(400).json({ message: 'Invalid order data.' });
+        }
+
+        // Prepare arrays to store seller names and product names with quantities
+        const orderItems = [];
+
+        for (const item of cartItems) {
+            // we are assuming that the front end sends the sellerName.
+            const product = await Product.findOne({ _id: item.productId }).select('name').lean();
+
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found.' });
+            }
+
+            orderItems.push({
+                sellerName: item.sellerName, // Assuming sellerName is provided by the frontend
+                productName: product.name,
+                quantity: item.quantity,
+            });
+        }
+
+        // Create the order
+        const order = new Orders({
+            items: orderItems,
+            total: total,
+            buyerName: buyerName,
         });
 
-        // Save the new order to the database
-        await newOrder.save();
+        await order.save();
 
-        // Return the newly created order
-        res.status(201).json({ message: 'Order created successfully', order: newOrder });
+        res.status(200).json({
+            message: 'Order created successfully!',
+            orderDetails: {
+                items: orderItems,
+                total: total,
+                buyerName: buyerName,
+            },
+        });
     } catch (error) {
-        console.error('Error creating order:', error);
-        res.status(500).json({ message: 'Server error while creating the order' });
+        console.error('Order creation failed:', error);
+        res.status(400).json({ message: `Order creation failed: ${error.message}` });
     }
 });
+
+
+
 
 module.exports = router;

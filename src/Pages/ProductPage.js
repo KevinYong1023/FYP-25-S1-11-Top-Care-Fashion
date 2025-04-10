@@ -25,23 +25,33 @@ const ProductPage = () => {
             setIsLoading(true);
             setError("");
             try {
-                const token = localStorage.getItem('authToken'); // Retrieve token
+                const token = localStorage.getItem('authToken');
+                console.log("Token:", token); // Log the token
+    
                 const apiUrl = `/api/products/${productId}`;
                 console.log("Fetching product from:", apiUrl);
+    
                 const res = await fetch(apiUrl, {
                     headers: {
-                        'Authorization': `Bearer ${token}` // Include token in headers
+                        'Authorization': `Bearer ${token}`
                     }
                 });
+    
+                console.log("Response:", res); // Log the response
+    
                 if (!res.ok) {
                     const errorData = await res.json().catch(() => ({}));
                     throw new Error(errorData.message || `Failed to fetch product (Status: ${res.status})`);
                 }
+    
                 const data = await res.json();
+                console.log("Data:", data); // Log the data
+    
                 if (!data || !data.userId) {
                     console.error("Fetched product data is missing userId:", data);
                     throw new Error("Product data loaded, but seller information is missing.");
                 }
+    
                 setProduct(data);
             } catch (err) {
                 console.error("Error fetching product:", err);
