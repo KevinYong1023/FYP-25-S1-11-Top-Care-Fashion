@@ -1,83 +1,193 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
+import * as mobilenet from "@tensorflow-models/mobilenet";
+import * as tf from "@tensorflow/tfjs";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserHeader from "../Components/Headers/userHeader";
+
+const categoryMap = {
+  'shirt': 'Top',
+  't-shirt': 'Top',
+  'tank top': 'Top',
+  'coat': 'Top',
+  'poncho': 'Top',
+
+  'pants': 'Bottom',
+  'jean': 'Bottom',
+  'shorts': 'Bottom',
+  'trunks': 'Bottom',
+
+  'shoe': 'Footwear',
+  'sneaker': 'Footwear',
+  'slipper': 'Footwear',
+  'sandal': 'Footwear'
+};
 
 const UploadProduct = ({ email }) => {
   const [form, setForm] = useState({
     title: "",
     description: "",
     price: "",
-    category: "Top",
+    category: "",
+    image: null,
     imageUrl: ""
   });
 
   const [previewUrl, setPreviewUrl] = useState("");
+  const [imageInfo, setImageInfo] = useState({ width: 0, height: 0, sizeKB: 0 });
   const [name, setName] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-
-   // Fetch user details based on email
-        useEffect(() => {
-            const fetchUserDetails = async () => {
-                if (email) {
-                    try {
-                        const response = await fetch(`/api/user/${email}`); 
-                        const data = await response.json();
-                        setName(data.name);
-                    } catch (error) {
-                        console.error('Error fetching user details:', error);
-                    }
-                }
-            };
-            fetchUserDetails();
-        }, [email]);
+  const [model, setModel] = useState(null);
 
   useEffect(() => {
-    if (form.imageUrl.trim() !== "") {
-      setPreviewUrl(form.imageUrl);
-    } else {
-      setPreviewUrl("");
+    const fetchUserDetails = async () => {
+      if (email) {
+        try {
+          const response = await fetch(`/api/user/${email}`);
+          const data = await response.json();
+          setName(data.name);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      }
+    };
+    fetchUserDetails();
+  }, [email]);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      await tf.ready();
+      const loadedModel = await mobilenet.load();
+      setModel(loadedModel);
+      console.log("Model loaded");
+    };
+    loadModel();
+  }, []);
+
+  const resizeAndConvertToBase64 = (file, maxSize = 800, quality = 0.7) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height && width > maxSize) {
+            height *= maxSize / width;
+            width = maxSize;
+          } else if (height > maxSize) {
+            width *= maxSize / height;
+            height = maxSize;
+          }
+
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+
+          const base64 = canvas.toDataURL("image/jpeg", quality);
+          const approxSizeKB = Math.round((base64.length * 3) / 4 / 1024);
+
+          setImageInfo({ width: Math.round(width), height: Math.round(height), sizeKB: approxSizeKB });
+          resolve(base64);
+        };
+        img.onerror = reject;
+        img.src = event.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const classifyImage = async (imageDataUrl) => {
+    if (!imageDataUrl) { 
+        return;
+    } else {   
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = imageDataUrl;
+          img.onload = async () => {
+            try {
+              const predictions = await model.classify(img);
+              for (let prediction of predictions) {
+                const className = prediction.className.toLowerCase();
+                console.log("Detected Class:", className);
+                for (const keyword in categoryMap) {
+                  if (className.includes(keyword)) {
+                    resolve(categoryMap[keyword]);
+                    console.log(keyword);
+                    console.log(categoryMap[keyword]);
+                    return;
+                  }
+                }
+              }
+              alert("Image provided is not a suitable product, please upload another image");
+              resolve("Uncategorized");
+            } catch (error) {
+              console.error("Error during classification:", error);
+              reject("Error during classification");
+            }
+          };
+          
+          img.onerror = () => {
+            console.error("Error loading the image.");
+            reject("Error loading the image");
+          };
+        });
+      }
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!model) {
+      console.log("Model not loaded yet");
+      alert("Model is not loaded yet. Please re-upload the image.");
+      return;
     }
-  }, [form.imageUrl]);
+
+    try {
+      const resizedBase64 = await resizeAndConvertToBase64(file);
+      const detectedCategory = await classifyImage(resizedBase64);
+      setPreviewUrl(resizedBase64);
+      setForm((prev) => ({
+        ...prev,
+        category: detectedCategory,
+        imageUrl: resizedBase64,
+      }));
+      console.log("Category is" + form.category);
+    } catch (err) {
+      console.error("Image processing failed:", err);
+      alert("There was a problem processing the image.");
+    }
+  };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
-
-    // ✅ Frontend validation
-    if (!form.title.trim()) {
-      setError("Title is required.");
-      return;
-    }
-
-    if (!form.price || isNaN(form.price) || parseFloat(form.price) <= 0) {
-      setError("Please enter a valid price greater than 0.");
-      return;
-    }
-
-    if (!form.imageUrl.trim()) {
-      setError("Image URL is required.");
-      return;
-    }
-
-    // ✅ Relaxed URL validation: just checks if it's a proper URL
-    const urlRegex = /^https?:\/\/.+/i;
-    if (!urlRegex.test(form.imageUrl)) {
-      setError("Please enter a valid public image URL (must start with http or https).");
+    console.log(form);
+    if (!form.title || !form.price || !form.imageUrl || !form.category) {
+      setError("Please complete all fields including image upload.");
       return;
     }
 
     const productData = {
-      ...form,
+      title: form.title,
+      description: form.description,
       price: parseFloat(form.price),
-      seller:name,
-      email:email
+      category: form.category,
+      imageUrl: form.imageUrl,
+      seller: name,
+      email
     };
 
     try {
@@ -88,19 +198,16 @@ const UploadProduct = ({ email }) => {
       });
 
       const data = await res.json();
-
-      if (res.ok) {
+      console.log("DATA STARTS HERE")
+      console.log(data.category);
+      console.log(res)
+      if (res.ok && form.category !== "Uncategorized") {
         setSuccess(true);
-        setForm({
-          title: "",
-          description: "",
-          price: "",
-          category: "Top",
-          imageUrl: ""
-        });
+        setForm({ title: "", description: "", price: "", image: null, imageUrl: "", category: "" });
         setPreviewUrl("");
+        setImageInfo({ width: 0, height: 0, sizeKB: 0 });
       } else {
-        setError(data.message || "Upload failed");
+        setError("Upload failed, please try again.");
       }
     } catch (err) {
       console.error(err);
@@ -115,22 +222,26 @@ const UploadProduct = ({ email }) => {
         <Card>
           <Card.Body>
             <Row>
-              {/* Left: Image Preview */}
               <Col md={5} className="border-end text-center d-flex flex-column align-items-center justify-content-center">
                 <h4>Image Preview</h4>
                 {previewUrl ? (
-                  <img
-                    src={previewUrl}
-                    alt="Preview"
-                    className="img-thumbnail mt-2"
-                    style={{ width: "300px", height: "300px", objectFit: "cover" }}
-                  />
+                  <>
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="img-thumbnail mt-2"
+                      style={{ width: "100%", objectFit: "cover", maxHeight: "300px" }}
+                    />
+                    <div className="text-muted mt-2" style={{ fontSize: "0.9rem" }}>
+                      Dimensions: {imageInfo.width} × {imageInfo.height}px<br />
+                      Estimated Size: {imageInfo.sizeKB} KB
+                    </div>
+                  </>
                 ) : (
-                  <div className="text-muted mt-3">Enter an image URL to preview it here.</div>
+                  <div className="text-muted mt-3">No image selected.</div>
                 )}
               </Col>
 
-              {/* Right: Product Form */}
               <Col md={7}>
                 <h3 className="mb-3">Upload Product</h3>
                 {success && <Alert variant="success">Product uploaded successfully!</Alert>}
@@ -173,35 +284,32 @@ const UploadProduct = ({ email }) => {
                         />
                       </Form.Group>
                     </Col>
-
                     <Col md={6}>
                       <Form.Group className="mb-3">
                         <Form.Label>Category</Form.Label>
-                        <Form.Select
-                          name="category"
+                        <Form.Control
+                          type="text"
                           value={form.category}
-                          onChange={handleChange}
-                        >
-                          <option value="Top">Top</option>
-                          <option value="Bottom">Bottom</option>
-                          <option value="Footwear">Footwear</option>
-                        </Form.Select>
+                          readOnly
+                          placeholder="Detected automatically"
+                        />
                       </Form.Group>
                     </Col>
                   </Row>
 
                   <Form.Group className="mb-3">
-                    <Form.Label>Image URL</Form.Label>
+                    <Form.Label>Upload Image</Form.Label>
                     <Form.Control
-                      name="imageUrl"
-                      value={form.imageUrl}
-                      onChange={handleChange}
-                      placeholder="Paste a public image URL"
-                      required
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      onChange={handleImageChange}
                     />
                   </Form.Group>
 
-                  <Button variant="primary" type="submit">Upload</Button>
+                  <Button type="submit" variant="primary">
+                    Upload
+                  </Button>
                 </Form>
               </Col>
             </Row>
