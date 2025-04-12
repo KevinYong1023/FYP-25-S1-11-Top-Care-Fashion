@@ -1,0 +1,29 @@
+.ticket-container {
+    padding: 20px;
+}
+
+.ticket-heading {
+    font-size: 30px;
+    font-weight: bold;
+    color: #6f4e37;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.ticket-table thead {
+    background-color: #343a40;
+    color: white;
+}
+
+.ticket-table tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+.ticket-table td,
+.ticket-table th {
+    vertical-align: middle;
+}
+
+button + button {
+    margin-left: 5px;
+}

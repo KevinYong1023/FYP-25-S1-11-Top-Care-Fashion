@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
-import userData from '../../mockdata/users.json'; // Adjust the path to your actual json file
+import userData from '../../mockdata/users.json';
 import AdminHeader from '../../Components/Headers/AdminHeader';
+import '../../css/ViewAccounts.css';
 
 export default function ViewAccounts() {
-    // Filter users with the position
     const filteredUsers = userData.filter(user => user.position);
-
-    // State to store the search query
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Function to handle search input changes
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value.toLowerCase());
     };
 
-    // Function to filter users based on search query
     const filteredUsersBySearch = filteredUsers.filter((user) => {
         return (
             user.id.toString().toLowerCase().includes(searchQuery) ||
@@ -27,21 +23,24 @@ export default function ViewAccounts() {
 
     return (
         <div>
-            <AdminHeader/>
+            <AdminHeader />
             <Container fluid>
                 <Row className="d-flex">
-                    {/* Sidebar */}
-                    <Col xs={11} md={2} id="AdminSidebar" className="p-0" style={{ minHeight: '100vh' }}>
+                    <Col xs={11} md={2} id="AdminSidebar" className="p-0 sidebar-container">
                         <AdminSidebar />
                     </Col>
-                   
-                    {/* Main Content */}
-                    <Col md={10} style={{ padding: '20px' }}>
-                        <div>
-                            Search: <input type='text' onChange={handleSearchChange} value={searchQuery} />
+                    <Col md={10} className="content-container">
+                        <div className="search-bar">
+                            <label>Search: </label>
+                            <input
+                                type="text"
+                                onChange={handleSearchChange}
+                                value={searchQuery}
+                                className="search-input"
+                            />
                         </div>
-                        <br/>
-                        <table className="table table-bordered">
+                        <br />
+                        <table className="table table-bordered custom-table">
                             <thead>
                                 <tr>
                                     <th>Account ID</th>
@@ -57,7 +56,7 @@ export default function ViewAccounts() {
                                         <td>{user.id}</td>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td>{user.phone.slice(0, 8)}</td> {/* Limits phone to 8 characters */}
+                                        <td>{user.phone.slice(0, 8)}</td>
                                         <td>{user.position}</td>
                                     </tr>
                                 ))}

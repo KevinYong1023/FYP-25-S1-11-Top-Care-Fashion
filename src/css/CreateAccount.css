@@ -1,0 +1,26 @@
+.form-container {
+    padding: 20px;
+}
+
+.account-form {
+    max-width: auto;
+}
+
+.create-account-header {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #6f4e37;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.create-account-register {
+    background-color: #b08968;
+    border-color: #b08968;
+    padding: 0.5rem 2rem;
+}
+
+.create-account-register:hover {
+    background-color: #9f7e69;
+    border-color: #9f7e69;
+}

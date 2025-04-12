@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/Sidebar';
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 
 export default function OrderDetails() {
@@ -35,19 +34,15 @@ export default function OrderDetails() {
         <>
             <AuthorityHeader />
             <Container fluid>
-                <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-                    <Col>
+                <Row className="justify-content-center">
+                    <Col xs={12} md={10} style={{ padding: '20px' }}>
                         <h2>Order Details</h2>
                         <hr />
                         {loading ? (
                             <p>Loading...</p>
                         ) : orderDetails ? (
                             <div>
-                                {console.log(orderDetails)}
-                                <h2> Invoice #{orderDetails._id}</h2>
+                                <h2>Invoice #{orderDetails._id}</h2>
                                 <br />
                                 <p>Status: {orderDetails.status}</p>
                                 <p>Seller: {orderDetails.seller}</p>
@@ -56,8 +51,10 @@ export default function OrderDetails() {
                         ) : (
                             <p>Order not found.</p>
                         )}
-                        <hr/>
-                        <Button onClick={BackToOrderHistory}>Back</Button>
+                        <hr />
+                        <div className="text-center mt-4">
+                            <Button variant="secondary" onClick={BackToOrderHistory}>Back</Button>
+                        </div>
                     </Col>
                 </Row>
             </Container>

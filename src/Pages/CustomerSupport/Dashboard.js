@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
 import AuthorityHeader from '../../Components/Headers/authrotiyHeaders';
 import { AuthContext } from '../../App';
 
@@ -8,6 +8,7 @@ export default function Dashboard() {
     const [ticketList, setTicketList] = useState([]);
     const [userName, setUserName] = useState(""); 
     const { email } = useContext(AuthContext); 
+    const navigate = useNavigate(); // Initialize useNavigate
 
     // Fetch tickets from the backend API
     useEffect(() => {
@@ -82,6 +83,7 @@ export default function Dashboard() {
             console.error('Error assigning the ticket:', error);
         }
     }
+
     const openTickets = ticketList.filter((ticket) => ticket.status === 'Open' && ticket.assignee === "");
 
     return (
@@ -115,7 +117,7 @@ export default function Dashboard() {
                                             <td>{row.status}</td>
                                             <td>{row.created}</td>
                                             <td>
-                                                <div style={{ display: 'flex', gap: '10px' }}> {/* Flexbox container with spacing */}
+                                                <div style={{ display: 'flex', gap: '10px' }}>
                                                     <Link to={`/ticket-info/${row._id}`} rel="noopener noreferrer"> 
                                                         <Button variant="primary" size="sm">Review</Button>
                                                     </Link>
@@ -139,6 +141,11 @@ export default function Dashboard() {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+
+                        {/* Back button at the bottom */}
+                        <div className="text-center mt-4">
+                            <Button variant="secondary" onClick={() => navigate(-1)}>Back</Button>
                         </div>
                     </Col>
                 </Row>

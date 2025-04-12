@@ -22,7 +22,7 @@ export default function AdminHeader(loginStatus){
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto">
-                                <div className="text-center p-3 bg-dark text-white">
+                                <div className="text-center p-3 text-white">
                                    <h1 className="m-0">Welcome Admin <br/> {getName}</h1>
                                 </div>
                             </Nav>

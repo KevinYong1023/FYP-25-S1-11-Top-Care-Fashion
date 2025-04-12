@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import AdminSidebar from "../../Components/Sidebars/AdminSidebar";
 import AdminHeader from "../../Components/Headers/AdminHeader";
+import "../../css/CreateAccount.css";
 
 const CreateAccount = () => {
     const [formData, setFormData] = useState({
@@ -41,17 +42,15 @@ const CreateAccount = () => {
         if (!formData.phone) {
             formErrors.phone = 'Phone number is required.';
         } else if (!/^\d{8}$/.test(formData.phone)) {
-            formErrors.phone = 'Phone number must be 10 digits.';
+            formErrors.phone = 'Phone number must be 8 digits.';
         }
         if (!formData.password) formErrors.password = 'Password is required.';
-
         if (formData.password !== formData.confirmPassword)
             formErrors.confirmPassword = 'Passwords do not match.';
-        if(formData.roles === "")
+        if (formData.roles === "")
             formErrors.roles = 'Choose a role';
-        else if (!acceptedRoles.includes(formData.roles.toLowerCase())) 
+        else if (!acceptedRoles.includes(formData.roles.toLowerCase()))
             formErrors.roles = "Invalid role, choose another role";
-
 
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
@@ -67,8 +66,7 @@ const CreateAccount = () => {
                                 \nEmail: ${formData.email}
                                 \nPhone: ${formData.phone}
                                 \nRole: ${formData.roles.toLowerCase()}\n`;
-            
-            // Create a Blob and trigger download
+
             const blob = new Blob([userInfo], { type: "text/plain" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -76,7 +74,7 @@ const CreateAccount = () => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-    
+
             alert("User Created Successfully!");
             setFormData({
                 firstName: '',
@@ -85,8 +83,11 @@ const CreateAccount = () => {
                 email: '',
                 phone: '',
                 password: '',
-                confirmPassword: ''
+                confirmPassword: '',
+                roles: ''
             });
+            setError("");
+            setErrors({});
         } else {
             setError("Please correct the errors before submitting.");
         }
@@ -94,110 +95,34 @@ const CreateAccount = () => {
 
     return (
         <div>
-            <AdminHeader/>
+            <AdminHeader />
             <Container fluid>
                 <Row>
-                    {/* Sidebar */}
                     <Col xs={11} md={2} id="AdminSidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                            <AdminSidebar />
+                        <AdminSidebar />
                     </Col>
-
-                    {/* Create account Form */}
-                    <Col md={10} style={{ padding: '20px' }}>
-                        <h2 className="mb-4">Create an Account</h2>
+                    <Col md={10} className="form-container">
+                        <h2 className="create-account-header">Create an Account</h2>
                         {error && <Alert variant="danger">{error}</Alert>}
-                        <Form className="w-50" onSubmit={handleSubmit}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>First Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                    placeholder="First name"
-                                />
-                                {errors.firstName && <Alert variant="danger">{errors.firstName}</Alert>}
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Last Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    placeholder="Last name"
-                                />
-                                {errors.lastName && <Alert variant="danger">{errors.lastName}</Alert>}
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                    placeholder="Username"
-                                />
-                                {errors.username && <Alert variant="danger">{errors.username}</Alert>}
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Email Address</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="Enter your email"
-                                />
-                                {errors.email && <Alert variant="danger">{errors.email}</Alert>}
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Phone Number</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    placeholder="Phone number"
-                                />
-                                {errors.phone && <Alert variant="danger">{errors.phone}</Alert>}
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    placeholder="Create a password"
-                                />
-                                {errors.password && <Alert variant="danger">{errors.password}</Alert>}
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    placeholder="Confirm your password"
-                                />
-                                {errors.confirmPassword && <Alert variant="danger">{errors.confirmPassword}</Alert>}
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Roles</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="roles"
-                                    value={formData.roles}
-                                    onChange={handleChange}
-                                    placeholder="Choose a role"
-                                />
-                                {errors.roles && <Alert variant="danger">{errors.roles}</Alert>}
-                            </Form.Group>
-                            <Button variant="primary" type="submit" className="w-100">
-                                Register
-                            </Button>
+                        <Form className="account-form" onSubmit={handleSubmit}>
+                            {["firstName", "lastName", "username", "email", "phone", "password", "confirmPassword", "roles"].map((field, index) => (
+                                <Form.Group className="mb-3" key={index}>
+                                    <Form.Label>{field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</Form.Label>
+                                    <Form.Control
+                                        type={field.toLowerCase().includes("password") ? "password" : "text"}
+                                        name={field}
+                                        value={formData[field]}
+                                        onChange={handleChange}
+                                        placeholder={`Enter ${field}`}
+                                    />
+                                    {errors[field] && <Alert variant="danger">{errors[field]}</Alert>}
+                                </Form.Group>
+                            ))}
+                            <div className="d-flex justify-content-end mt-3">
+                                <Button type="submit" className="create-account-register">
+                                    Register
+                                </Button>
+                            </div>
                         </Form>
                     </Col>
                 </Row>
