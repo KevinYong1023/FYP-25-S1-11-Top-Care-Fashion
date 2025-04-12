@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Button, Pagination, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Pagination, Spinner } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { Link } from 'react-router-dom';
-import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
+import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 import { AuthContext } from '../../App';
 
 export default function Dashboard() {
@@ -10,16 +10,20 @@ export default function Dashboard() {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const { name } = useContext(AuthContext); // Get the current user's name
     const ticketsPerPage = 10; // Number of tickets per page
+    const [isLoading,setIsLoading] = useState(false)
 
     // Fetch tickets from the backend API
     useEffect(() => {
         const fetchTickets = async () => {
             try {
+                setIsLoading(true)
                 const response = await fetch('/api/tickets');
                 const data = await response.json();
                 setTicketList(data);
             } catch (error) {
                 console.error('Error fetching tickets:', error);
+            }finally {
+                setIsLoading(false); // Set loading to false when fetch completes
             }
         };
         fetchTickets();
@@ -63,6 +67,7 @@ export default function Dashboard() {
 
     async function handleDelete(id) {
         try {
+            setIsLoading(true)
             const response = await fetch(`/api/tickets/${id}`, {
                 method: 'DELETE',
             });
@@ -74,16 +79,18 @@ export default function Dashboard() {
             }
         } catch (error) {
             console.error('Error deleting the ticket:', error);
+        }finally{
+            setIsLoading(false)
         }
     }
 
     async function assignTicket(ticketId) {
         try {
+            setIsLoading(true)
             const requestBody = {
                 assignee: name,
                 status: "In Progress",
             };
-
             const response = await fetch(`/api/tickets/${ticketId}`, {
                 method: 'PUT',
                 headers: {
@@ -102,24 +109,40 @@ export default function Dashboard() {
             }
         } catch (error) {
             console.error('Error assigning the ticket:', error);
+        }finally{
+            setIsLoading(false)
         }
     }
 
     return (
         <>
-            <AuthorityHeader />
+            <CustomerSupportHeader />
             <Container fluid>
                 <Row className="d-flex">
                     <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
                         <Sidebar />
                     </Col>
                     <Col style={{ margin: '10px' }}>
-                        <h1>Welcome {name ? name : "User"}</h1>
-                        <p>Following are the tickets</p>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <h2>All Available Tickets</h2>
+                            <Button 
+                                as="a" 
+                                href="/assigned-ticket" 
+                                variant="outline-primary" 
+                                size="lg"
+                            >
+                                Your Tickets
+                            </Button>
+                        </div>
                         <hr />
-                        <h2>All Available Tickets</h2>
-                        <a href="/assigned-ticket">Your Tickets</a>
-                        <hr />
+                        {isLoading ? (
+                            <div className="text-center" style={{ marginTop: '100px' }}>
+                                <Spinner animation="border" role="status" variant="primary">
+                                    <span className="visually-hidden">Loading</span>
+                                </Spinner>
+                                <p className="mt-2">Loading...</p>
+                            </div>
+                        ) : (
                         <div>
                             <table className="table table-bordered">
                                 <thead>
@@ -163,10 +186,9 @@ export default function Dashboard() {
                                     ))}
                                 </tbody>
                             </table>
+                            {renderPagination()}
                         </div>
-
-                        {/* Pagination */}
-                        {renderPagination()}
+                    )}
                     </Col>
                 </Row>
             </Container>

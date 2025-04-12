@@ -22,7 +22,6 @@ import ProfitPage from "./Pages/ProfitPage.js";
 import ViewAccounts from "./Pages/Admin/ViewAccounts";
 import AdminProfile from "./Pages/Admin/AdminProfile.js";
 import AdminCreateAccount from "./Pages/Admin/AdminCreateAccount";
-import DeleteAccount from "./Pages/Admin/DeleteAccount.js";
 import MixMatch from "./Pages/MixMatch.js";
 import ManagerDashboard from "./Pages/Manager/ManagerDashboard";
 import ManagerProfile from "./Pages/Manager/ManagerProfile";
@@ -74,7 +73,7 @@ function App() {
             setAddress(savedAddress);
         }
         if (savedUserEmail) {
-            setAddress(savedUserEmail);
+            setUserEmail(savedUserEmail);
         }
     }, []);
 
@@ -119,7 +118,6 @@ function App() {
                         <Route path="/admin-profile" element={<AdminProfile />} />
                         <Route path="/admin-profile-update" element={<AdminProfileUpdate/>} />
                         <Route path="/create-account" element={<AdminCreateAccount />} />
-                        <Route path="/delete-account" element={<DeleteAccount />} />
                         <Route path="/mixmatch" element={<MixMatch />} />
                         <Route path="/managerdashboard" element={<ManagerDashboard />} />
                         <Route path="/managerprofile" element={<ManagerProfile/>} />

@@ -8,7 +8,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" }); // Removed role from formData
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const { setEmail, setRole, setLogin } = useContext(AuthContext); // Destructure setters from AuthContext
+  const { setEmail, setRole, setLogin,setName,setAddress } = useContext(AuthContext); // Destructure setters from AuthContext
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,7 +36,8 @@ const Login = () => {
         setEmail(formData.email);
         setRole(loginRole);
         setLogin(true);
-
+        setAddress(data.user.address)
+        setName(data.user.name)
         // Redirect based on the user's role
         if (loginRole === "user") {
           navigate("/home");

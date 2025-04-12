@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
+import { Container, Form, Button, Alert, Row, Col,Spinner} from "react-bootstrap";
 import AdminSidebar from "../../Components/Sidebars/AdminSidebar";
 import AdminHeader from "../../Components/Headers/AdminHeader";
 import { useNavigate } from "react-router-dom";
 
 const AdminCreateAccount = () => {
+    const [isLoading,setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
         name: '',
         username: '',
@@ -65,8 +66,8 @@ const AdminCreateAccount = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log('Form Data:', formData);
             try {
+                setIsLoading(true)
                 const response = await fetch("/api/register", {
                     method: "POST",
                     headers: {
@@ -93,6 +94,8 @@ const AdminCreateAccount = () => {
                 }
             } catch (error) {
                 setError("Server error. Please try again later.");
+            }finally{
+                setIsLoading(false)
             }
         } else {
             setError("Please correct the errors before submitting.");
@@ -111,6 +114,14 @@ const AdminCreateAccount = () => {
 
                     {/* Create account Form */}
                     <Col md={10} style={{ padding: '20px' }}>
+                    {isLoading ? (
+                            <div className="text-center" style={{ marginTop: '100px' }}>
+                                <Spinner animation="border" role="status" variant="primary">
+                                    <span className="visually-hidden">Loading</span>
+                                </Spinner>
+                                <p className="mt-2">Loading...</p>
+                            </div>
+                        ) : (<>
                     <Button onClick={backtoDashboard}>Back</Button>
                     <hr/>
                         <h2 className="mb-4">Create an Account</h2>
@@ -237,7 +248,7 @@ const AdminCreateAccount = () => {
                                                 Register
                                             </Button>
                                         </Form>
-                       
+                                        </>)}
                     </Col>
                 </Row>
             </Container>
