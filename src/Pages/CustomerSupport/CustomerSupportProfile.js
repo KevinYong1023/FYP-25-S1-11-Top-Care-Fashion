@@ -10,6 +10,7 @@ const CustomerSupportProfile = () => {
     const [user, setUser] = useState();  
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
+    const [error,setError] = useState("")
 
     // Fetch user details based on email
     useEffect(() => {
@@ -21,6 +22,7 @@ const CustomerSupportProfile = () => {
                     const data = await response.json();
                     setUser(data); 
                 } catch (error) {
+                    setError("Server Error: Please Refresh the Page");
                     console.error('Error fetching user details:', error);
                 } finally {
                     setIsLoading(false); // Stop loading in both success/failure
@@ -42,6 +44,7 @@ const CustomerSupportProfile = () => {
                     <Col xs={12} md={3} className="p-0">
                         <Sidebar/>
                     </Col>
+                    
                     {
                          isLoading ?  
                          <div className="text-center" style={{ marginTop: '100px' }}>
@@ -52,6 +55,9 @@ const CustomerSupportProfile = () => {
                                                     </div>:
                     
                     <Col md={9} className="p-4">
+                        {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                         <Card className={`p-4`}>
                             {
                                 !user ? <></> 

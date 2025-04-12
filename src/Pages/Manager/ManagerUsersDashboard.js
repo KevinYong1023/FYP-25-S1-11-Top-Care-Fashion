@@ -14,6 +14,7 @@ export default function ManagerUsersDashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 10;
     const navigate = useNavigate();
+    const [error, setError] = useState("")
 
     // Fetch users from the backend with search and filter status
     const fetchUsers = async (query = '', status = '') => {
@@ -27,6 +28,7 @@ export default function ManagerUsersDashboard() {
 
             setUsers(filteredData); // Set filtered users in state
         } catch (error) {
+            setError("Server Error: Please Refresh the Page.")
             console.error("Error fetching users:", error);
         } finally {
             setIsLoading(false);
@@ -99,10 +101,11 @@ export default function ManagerUsersDashboard() {
             if (response.ok) {
                 await fetchUsers(); // Refetch users to refresh the list
             } else {
-                console.error("Error suspending user");
+                console.error("Error update status user");
             }
         } catch (error) {
-            console.error("Error suspending user:", error);
+            setError("Server Error: Please Try Again")
+            console.error("Error update status user:", error);
         } finally {
             setIsLoading(false);
         }
@@ -125,6 +128,9 @@ export default function ManagerUsersDashboard() {
 
                     {/* Main Content */}
                     <Col md={9} lg={10} className="px-md-4">
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                         {isLoading ? (
                             <div className="text-center" style={{ marginTop: '100px' }}>
                                 <Spinner animation="border" role="status" variant="primary">

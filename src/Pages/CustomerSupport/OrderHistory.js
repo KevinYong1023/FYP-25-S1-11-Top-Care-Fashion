@@ -10,7 +10,8 @@ export default function OrderHistory() {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const ordersPerPage = 10; // Number of orders per page
     const [isLoading, setIsLoading] = useState(false); // Add loading state
-
+    const [error, setError] = useState("")
+    
     // Fetch data from the backend API
     useEffect(() => {
         const fetchData = async () => {
@@ -23,6 +24,7 @@ export default function OrderHistory() {
                 );
                 setFilteredData(filtered);
             } catch (error) {
+                setError("Server Error:Please Refresh the Page")
                 console.error('Error fetching order history:', error);
             } finally {
                 setIsLoading(false); // Set loading to false when fetch completes
@@ -77,6 +79,9 @@ export default function OrderHistory() {
                     </Col>
 
                     <Col md={10} style={{ padding: '20px' }}>
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                         <h2>Order History</h2>
                         <hr />
                         

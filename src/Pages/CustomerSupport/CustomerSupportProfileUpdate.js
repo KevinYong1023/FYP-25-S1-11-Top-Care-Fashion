@@ -41,6 +41,7 @@ export default function CustomerSupportProfileUpdate() {
                         console.error('Failed to fetch user details');
                     }
                 } catch (error) {
+                    setErrorMessage("Server Error: Please Refresh the Page")
                     console.error('Error fetching user details:', error);
                 }finally {
                     setIsLoading(false); // Set loading to false when fetch completes

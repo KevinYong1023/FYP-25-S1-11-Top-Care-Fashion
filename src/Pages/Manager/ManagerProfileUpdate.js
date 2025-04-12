@@ -37,6 +37,7 @@ export default function ManagerProfileUpdate() {
                             phone: userData.phone
                         });
                     } else {
+                        setErrorMessage("Server Error: Please Refresh the Page")
                         console.error('Failed to fetch user details');
                     }
                 } catch (error) {
@@ -96,6 +97,7 @@ export default function ManagerProfileUpdate() {
                 console.error('Error updating profile');
             }
         } catch (error) {
+            setErrorMessage("Server Error: Please Try Again")
             console.error('Error updating profile:', error);
         }finally{
             setIsLoading(false)

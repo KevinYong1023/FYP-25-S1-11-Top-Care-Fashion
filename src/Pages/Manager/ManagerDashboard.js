@@ -4,6 +4,7 @@ import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader"; 
 
 export default function ManagerDashboard() {
+        const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [dashboardData, setDashboardData] = useState({
         totalUsers: 0,
@@ -38,6 +39,7 @@ export default function ManagerDashboard() {
                     suspense: suspensedNow  // Use 'suspense' here
                 }));
             } catch (error) {
+                setError("Server Error: Please Refresh the Page")
                 console.error("Error fetching users:", error);
             }finally{
                 setIsLoading(false)
@@ -78,6 +80,7 @@ export default function ManagerDashboard() {
                     categoryCounts: categoryCounts
                 }));
             } catch (error) {
+                setError("Server Error: Please Refresh the Page")
                 console.error("Error fetching product insights:", error);
             }finally{
                 setIsLoading(false)
@@ -99,6 +102,9 @@ export default function ManagerDashboard() {
 
                 {/* Main Dashboard Content */}
                 <Col md={9} lg={10} className="px-md-4">
+                {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                 {
                         isLoading ? (
                             <div className="text-center" style={{ marginTop: '100px' }}>
