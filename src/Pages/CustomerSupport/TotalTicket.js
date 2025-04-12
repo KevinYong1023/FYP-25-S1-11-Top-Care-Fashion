@@ -11,6 +11,7 @@ export default function TotalTicket() {
     const ticketsPerPage = 10; // Number of tickets per page
     const { name } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false); // Add loading state
+    const [error, setError] = useState("")
 
     useEffect(() => {
         const fetchAssignedTickets = async () => {
@@ -27,6 +28,7 @@ export default function TotalTicket() {
                         console.error('Failed to fetch tickets');
                     }
                 } catch (error) {
+                    setError("Server Error: Please Refresh the Page")
                     console.error('Error fetching tickets:', error);
                 }finally{
                     setIsLoading(false)
@@ -85,6 +87,7 @@ export default function TotalTicket() {
                 alert('Failed to delete the ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Refresh the Page")
             console.error('Error deleting the ticket:', error);
         }
     }
@@ -113,6 +116,7 @@ export default function TotalTicket() {
                 alert('Failed to remove assignment');
             }
         } catch (error) {
+            setError("Server Error: Please Refresh the Page")
             console.error('Error updating the ticket:', error);
         }
     }
@@ -126,6 +130,9 @@ export default function TotalTicket() {
                         <Sidebar />
                     </Col>
                     <Col>
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                     {
                          isLoading ? (
                             <div className="text-center" style={{ marginTop: '100px' }}>

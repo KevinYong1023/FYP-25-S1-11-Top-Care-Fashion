@@ -40,6 +40,7 @@ export default function AdminProfileUpdate() {
                         console.error('Failed to fetch user details');
                     }
                 } catch (error) {
+                    errorMessage("Server Error: Please Refresh the Page")
                     console.error('Error fetching user details:', error);
                 } finally {
                     setIsLoading(false); // 🟦 stop loading
@@ -92,6 +93,7 @@ export default function AdminProfileUpdate() {
                 console.error('Error updating profile');
             }
         } catch (error) {
+            setErrorMessage("Server Error: Please Try Again")
             console.error('Error updating profile:', error);
         } finally {
             setIsLoading(false); // 🟦 stop loading

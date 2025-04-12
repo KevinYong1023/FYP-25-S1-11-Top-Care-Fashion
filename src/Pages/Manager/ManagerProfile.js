@@ -10,6 +10,7 @@ const ManagerProfile = () => {
     const navigate = useNavigate();
     const { email } = useContext(AuthContext); 
     const [isLoading, setIsLoading] = useState(false)
+        const [error, setError] = useState("")
 
     // Fetch user details based on email
     useEffect(() => {
@@ -21,6 +22,7 @@ const ManagerProfile = () => {
                     const data = await response.json();
                     setUser(data); 
                 } catch (error) {
+                  setError("Server Error: Please Refresh the Page")
                     console.error('Error fetching user details:', error);
                 }finally{
                     setIsLoading(false)
@@ -43,6 +45,9 @@ const ManagerProfile = () => {
                         <ManagerSideBar />
                     </Col>
                     <Col md={9} className="p-4">
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                     {isLoading ? (
   <div className="text-center" style={{ marginTop: '100px' }}>
     <Spinner animation="border" role="status" variant="primary">

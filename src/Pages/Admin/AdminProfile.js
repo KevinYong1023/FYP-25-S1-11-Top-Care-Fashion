@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AdminProfile = () => {
     const [user, setUser] = useState(null);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     const { email } = useContext(AuthContext); 
     const [isLoading, setIsLoading] = useState(false)
@@ -21,7 +22,8 @@ const AdminProfile = () => {
                     const data = await response.json();
                     setUser(data);
                 } catch (error) {
-                    console.error('Error fetching user details:', error);
+                    setError("Server Error, Please Refresh the Page")
+                    console.log('Error fetching user details:', error);
                 }finally{
                     setIsLoading(false)
                 }
@@ -43,6 +45,9 @@ const AdminProfile = () => {
                         <AdminSideBar />
                     </Col>
                     <Col md={9} className="p-4">
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                     {
                             isLoading ?  
                                                  <div className="text-center" style={{ marginTop: '100px' }}>

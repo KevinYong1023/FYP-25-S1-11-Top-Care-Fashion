@@ -11,6 +11,7 @@ export default function Dashboard() {
     const { name } = useContext(AuthContext); // Get the current user's name
     const ticketsPerPage = 10; // Number of tickets per page
     const [isLoading,setIsLoading] = useState(false)
+    const [error, setError] = useState("")
 
     // Fetch tickets from the backend API
     useEffect(() => {
@@ -21,6 +22,7 @@ export default function Dashboard() {
                 const data = await response.json();
                 setTicketList(data);
             } catch (error) {
+                setError("Server Error: Please Refresh the Page")
                 console.error('Error fetching tickets:', error);
             }finally {
                 setIsLoading(false); // Set loading to false when fetch completes
@@ -78,6 +80,7 @@ export default function Dashboard() {
                 alert('Failed to delete the ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error deleting the ticket:', error);
         }finally{
             setIsLoading(false)
@@ -108,6 +111,7 @@ export default function Dashboard() {
                 alert('Failed to assign the ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error assigning the ticket:', error);
         }finally{
             setIsLoading(false)
@@ -123,6 +127,9 @@ export default function Dashboard() {
                         <Sidebar />
                     </Col>
                     <Col style={{ margin: '10px' }}>
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                         <div className="d-flex justify-content-between align-items-center">
                             <h2>All Available Tickets</h2>
                             <Button 

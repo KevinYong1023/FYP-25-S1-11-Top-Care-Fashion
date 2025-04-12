@@ -93,7 +93,7 @@ const AdminCreateAccount = () => {
                     setError(data.message || "Registration failed. Please try again.");
                 }
             } catch (error) {
-                setError("Server error. Please try again later.");
+                setError("Server error. Please Try Agin.");
             }finally{
                 setIsLoading(false)
             }

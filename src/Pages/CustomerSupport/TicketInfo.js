@@ -13,6 +13,7 @@ export default function TicketInfo({ email }) {
     const [ticketStatus, setTicketStatus] = useState('');
     const [userName, setUserName] = useState("");
     const [isLoading, setIsLoading] = useState(false); // Add loading state
+    const [error, setError] = useState("")
 
     // Fetch user details based on email and retrieve the user's name
     useEffect(() => {
@@ -24,6 +25,7 @@ export default function TicketInfo({ email }) {
                     const data = await response.json();
                     setUserName(data.name); // Set the user's name
                 } catch (error) {
+                    setError("Server Error: Please Refresh the Page")
                     console.error('Error fetching user details:', error);
                 }finally {
                     setIsLoading(false); // Set loading to false when fetch completes
@@ -50,6 +52,7 @@ export default function TicketInfo({ email }) {
                     console.error('Error fetching ticket:', response.statusText);
                 }
             } catch (error) {
+                setError("Server Error: Please Refresh the Page")
                 console.error('Error fetching ticket:', error);
             }finally{
                 setIsLoading(false)
@@ -70,6 +73,7 @@ export default function TicketInfo({ email }) {
                 alert('Failed to delete ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error deleting the ticket:', error);
         }finally{
             setIsLoading(false)
@@ -93,6 +97,7 @@ export default function TicketInfo({ email }) {
                 alert('Failed to assign ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error assigning the ticket:', error);
         }finally{
             setIsLoading(false)
@@ -116,6 +121,7 @@ export default function TicketInfo({ email }) {
                 alert('Failed to update ticket status');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error updating the ticket status:', error);
         }finally{
             setIsLoading(false)
@@ -140,6 +146,7 @@ export default function TicketInfo({ email }) {
                 alert('Failed to assign ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error removing the ticket:', error);
         }finally{
             setIsLoading(false)
@@ -160,6 +167,9 @@ export default function TicketInfo({ email }) {
                     </Col>
                     <Col md={10} style={{ padding: '20px' }}>
                     <Row>
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                         {isLoading ? (
                             <div className="text-center" style={{ marginTop: '100px' }}>
                                 <Spinner animation="border" role="status" variant="primary">

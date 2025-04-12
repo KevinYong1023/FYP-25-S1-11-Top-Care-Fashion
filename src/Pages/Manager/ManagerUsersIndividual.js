@@ -10,7 +10,6 @@ export default function ManagerUsersIndividual() {
   const [isLoading, setIsLoading] = useState(false);
   const [productPosts, setProductPosts] = useState([]);
   const [commentsList, setCommentList] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [currentPageProducts, setCurrentPageProducts] = useState(1);
   const [currentPageComments, setCurrentPageComments] = useState(1);
   const productsPerPage = 3;
@@ -24,6 +23,7 @@ export default function ManagerUsersIndividual() {
       const data = await response.json();
       setCommentList(data);
     } catch (err) {
+      setError("Server Error: Please Refresh the Page")
       console.error("Error fetching user comments:", err);
       setCommentList([]);
     } finally {
@@ -42,6 +42,7 @@ export default function ManagerUsersIndividual() {
         fetchUserProducts(data.email); // Fetch products related to the user's email
         fetchUserComments(data.name);
       } catch (err) {
+        setError("Server Error: Please Refresh the Page")
         console.error("Error fetching user data:", err);
       } finally {
         setIsLoading(false)
@@ -57,6 +58,7 @@ export default function ManagerUsersIndividual() {
         setProductPosts(products); // Set the product posts in the state
         setLoading(false);
       } catch (err) {
+        setError("Server Error: Please Refresh the Page")
         console.error("Error fetching user products:", err);
         setLoading(false);
       } finally {
@@ -81,6 +83,7 @@ export default function ManagerUsersIndividual() {
         console.error("Failed to delete comment");
       }
     } catch (err) {
+      setError("Server Error: Please Try Again")
       console.error("Error deleting comment:", err);
     } finally {
       setIsLoading(false)
@@ -170,6 +173,9 @@ export default function ManagerUsersIndividual() {
 
           {/* Main Content */}
           <Col md={9} lg={10} className="px-md-4">
+          {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
             {isLoading ? (
               <div className="text-center" style={{ marginTop: '100px' }}>
                 <Spinner animation="border" role="status" variant="primary">

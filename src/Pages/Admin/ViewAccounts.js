@@ -9,6 +9,7 @@ export default function ViewAccounts() {
     const [isLoading, setIsLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterPosition, setFilterPosition] = useState('');
+    const [error, setError] = useState("")
     const [filterStatus, setFilterStatus] = useState('');
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const usersPerPage = 10; // Number of users per page
@@ -27,6 +28,7 @@ export default function ViewAccounts() {
             const filteredData = data.filter(user => user.email !== email); // Avoid showing the current admin
             setUsers(filteredData);
         } catch (error) {
+            setError("Server Error, Please Refresh the Page")
             console.error('Error fetching users:', error);
         } finally {
             setIsLoading(false);
@@ -76,6 +78,7 @@ export default function ViewAccounts() {
             const data = await response.json();
             setUsers(data);
         } catch (error) {
+            setError("Server Error: Please Try Again");
             console.error('Error searching users:', error);
         } finally {
             setIsLoading(false);
@@ -102,6 +105,7 @@ export default function ViewAccounts() {
             const data = await response.json();
             setUsers(data);
         } catch (error) {
+            setError("Server Error: Please Try Again");
             console.error('Error filtering users:', error);
         } finally {
             setIsLoading(false);
@@ -124,6 +128,7 @@ export default function ViewAccounts() {
                 console.error("Error suspending user");
             }
         } catch (error) {
+            setError("Server Error: Please Try Again");
             console.error("Error suspending user:", error);
         } finally {
             setIsLoading(false);
@@ -144,6 +149,7 @@ export default function ViewAccounts() {
                 console.error("Error deleting user");
             }
         } catch (error) {
+            setError("Server Error: Please Try Again");
             console.error("Error deleting user:", error);
         } finally {
             setIsLoading(false);
@@ -162,6 +168,9 @@ export default function ViewAccounts() {
 
                     {/* Main Content */}
                     <Col md={10} style={{ padding: '20px' }}>
+                    {!error?<></>: <div className="alert alert-danger" role="alert">
+                                  {error}
+                                </div>}
                         {isLoading ? (
                             <div className="text-center" style={{ marginTop: '100px' }}>
                                 <Spinner animation="border" role="status" variant="primary">
