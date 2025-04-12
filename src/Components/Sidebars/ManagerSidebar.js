@@ -19,7 +19,8 @@ export default function ManagerSidebar(){
                 <Person style={{ marginRight: '10px' }} /> Profile
             </Nav.Link>
             <Nav.Link href="/ManagerUsersDashboard" style={{ color: 'white', marginBottom: '10px' }}>
-                <Eye style={{ marginRight: '10px' }} />Users
+                <Eye style={{ marginRight: '10px' }} />User Accounts
+
             </Nav.Link>
             <Nav.Link href="/logout" style={{ color: 'white', marginBottom: '10px' }}>
                 <BoxArrowRight style={{ marginRight: '10px' }} /> Logout

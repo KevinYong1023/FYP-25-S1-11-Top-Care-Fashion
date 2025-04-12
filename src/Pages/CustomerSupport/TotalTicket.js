@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
-import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Button, Pagination,Spinner } from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { Link } from 'react-router-dom';
-import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
+import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function TotalTicket() {
     const [ticketList, setTicketList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const ticketsPerPage = 10; // Number of tickets per page
     const { name } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(false); // Add loading state
 
     useEffect(() => {
         const fetchAssignedTickets = async () => {
             if (name) {
                 try {
+                    setIsLoading(true)
                     const response = await fetch(`/api/tickets`);
                     if (response.ok) {
                         const data = await response.json();
@@ -26,6 +28,8 @@ export default function TotalTicket() {
                     }
                 } catch (error) {
                     console.error('Error fetching tickets:', error);
+                }finally{
+                    setIsLoading(false)
                 }
             }
         };
@@ -115,13 +119,24 @@ export default function TotalTicket() {
 
     return (
         <>
-            <AuthorityHeader />
+            <CustomerSupportHeader />
             <Container fluid>
                 <Row className="d-flex">
                     <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
                         <Sidebar />
                     </Col>
                     <Col>
+                    {
+                         isLoading ? (
+                            <div className="text-center" style={{ marginTop: '100px' }}>
+                                <Spinner animation="border" role="status" variant="primary">
+                                    <span className="visually-hidden">Loading</span>
+                                </Spinner>
+                                <p className="mt-2">Loading...</p>
+                            </div>
+                        ):<>
+                        
+                  
                         <h2>Your Tickets</h2>
                         <hr />
                         <table className="table table-bordered">
@@ -167,8 +182,8 @@ export default function TotalTicket() {
                             </tbody>
                         </table>
                         {/* Pagination */}
-                        {renderPagination()}
-                    </Col>
+                        {renderPagination()}</>}
+                    </Col>  
                 </Row>
             </Container>
         </>

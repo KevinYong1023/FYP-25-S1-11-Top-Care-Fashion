@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Pagination,Spinner} from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
-import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
+import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function ViewUsers() {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const usersPerPage = 10; // Number of users per page
+    const [isLoading, setIsLoading] = useState(false); // Add loading state
 
     // Fetch users from the backend
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                setIsLoading(true)
                 const response = await fetch('/api/user'); // Fetch users from backend route
                 const data = await response.json();
                 setUsers(data); // Set the fetched users to the state
             } catch (error) {
                 console.error('Error fetching users:', error);
+            }finally{
+                setIsLoading(false)
             }
         };
 
@@ -63,7 +67,7 @@ export default function ViewUsers() {
 
     return (
         <>
-            <AuthorityHeader />
+            <CustomerSupportHeader />
             <Container fluid>
                 <Row className="d-flex">
                     {/* Sidebar */}
@@ -73,7 +77,16 @@ export default function ViewUsers() {
 
                     {/* Main Content */}
                     <Col md={10} style={{ padding: '20px' }}>
-                        <h2>Users List</h2>
+                    {
+                        isLoading ? (
+                            <div className="text-center" style={{ marginTop: '100px' }}>
+                                <Spinner animation="border" role="status" variant="primary">
+                                    <span className="visually-hidden">Loading</span>
+                                </Spinner>
+                                <p className="mt-2">Loading...</p>
+                            </div>
+                        ):(<>
+                        <h2>User Accounts</h2>
                         <hr />
                         <table className="table table-bordered">
                             <thead>
@@ -102,6 +115,7 @@ export default function ViewUsers() {
 
                         {/* Pagination */}
                         {renderPagination()}
+                        </>) }
                     </Col>
                 </Row>
             </Container>

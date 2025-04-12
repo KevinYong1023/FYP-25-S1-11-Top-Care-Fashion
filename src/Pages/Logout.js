@@ -6,15 +6,20 @@ import { AuthContext } from "../App";  // Import context from App.js
 
 export default function Logout() {  // Accept setIsLoggedIn as a prop
     const navigate = useNavigate();
-    const { setLogin, setRole, setEmail } = useContext(AuthContext);  // Use context to set email, login, and role
+    const { setLogin, setRole, setEmail,setName,setAddress,setUserEmail } = useContext(AuthContext);  // Use context to set email, login, and role
     
 
     const handleLogout = () => {
-        navigate("/login");  // Redirect to login page
+        localStorage.clear(); // this already clears everything
         setLogin(false);
         setRole("");
         setEmail("");
+        setName("");        // 👈 Reset name
+        setAddress("");     // 👈 Reset address
+        setUserEmail("");   // (optional) if you're using this too
+        navigate("/login");
     };
+    
 
     return (
         <>

@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Pagination, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';  // To get the URL params
 import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
-import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
+import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function OrderHistory() {
     const { name } = useParams();  // Get the username from the URL
     const [filteredData, setFilteredData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const ordersPerPage = 10; // Number of orders per page
+    const [isLoading, setIsLoading] = useState(false); // Add loading state
 
     // Fetch data from the backend API
     useEffect(() => {
         const fetchData = async () => {
+            setIsLoading(true); // Set loading to true when fetch starts
             try {
                 const response = await fetch(`/api/order-history`);
                 const data = await response.json();
@@ -22,6 +24,8 @@ export default function OrderHistory() {
                 setFilteredData(filtered);
             } catch (error) {
                 console.error('Error fetching order history:', error);
+            } finally {
+                setIsLoading(false); // Set loading to false when fetch completes
             }
         };
 
@@ -65,7 +69,7 @@ export default function OrderHistory() {
 
     return (
         <>
-            <AuthorityHeader />
+            <CustomerSupportHeader />
             <Container fluid>
                 <Row className="d-flex">
                     <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
@@ -75,33 +79,53 @@ export default function OrderHistory() {
                     <Col md={10} style={{ padding: '20px' }}>
                         <h2>Order History</h2>
                         <hr />
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Invoice ID</th>
-                                    <th>Status</th>
-                                    <th>Seller</th>
-                                    <th>Total</th>
-                                    <th>Date Purchase</th>
-                                    <th>Buyer</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentOrders.map((row) => (
-                                    <tr key={row.orderNumber}>
-                                        <td>{row.orderNumber}</td>
-                                        <td>{row.status}</td>
-                                        <td>{row.seller}</td>
-                                        <td>{row.total}</td>
-                                        <td>{row.purchased}</td>
-                                        <td>{row.buyer}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        
+                        {isLoading ? (
+                            <div className="text-center" style={{ marginTop: '100px' }}>
+                                <Spinner animation="border" role="status" variant="primary">
+                                    <span className="visually-hidden">Loading</span>
+                                </Spinner>
+                                <p className="mt-2">Loading...</p>
+                            </div>
+                        ) : (
+                            <>
+                                {filteredData.length === 0 ? (
+                                    <div className="alert alert-info">
+                                        No order history found for this user.
+                                    </div>
+                                ) : (
+                                    <>
+                                        <table className="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Invoice ID</th>
+                                                    <th>Status</th>
+                                                    <th>Seller</th>
+                                                    <th>Total</th>
+                                                    <th>Date Purchase</th>
+                                                    <th>Buyer</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {currentOrders.map((row) => (
+                                                    <tr key={row.orderNumber}>
+                                                        <td>{row.orderNumber}</td>
+                                                        <td>{row.status}</td>
+                                                        <td>{row.seller}</td>
+                                                        <td>{row.total}</td>
+                                                        <td>{row.purchased}</td>
+                                                        <td>{row.buyer}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
 
-                        {/* Pagination */}
-                        {renderPagination()}
+                                        {/* Pagination */}
+                                        {renderPagination()}
+                                    </>
+                                )}
+                            </>
+                        )}
                     </Col>
                 </Row>
             </Container>

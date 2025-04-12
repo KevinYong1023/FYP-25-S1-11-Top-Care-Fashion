@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {AuthContext} from '../../App';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button,Spinner} from 'react-bootstrap';
 import ManagerSidebar from '../../Components/Sidebars/ManagerSidebar';
 import ManagerHeader from '../../Components/Headers/ManagerHeader';
 import { useNavigate } from 'react-router-dom';  
@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 export default function ManagerProfileUpdate() {
     const { email } = useContext(AuthContext); 
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("");
     const [profile, setProfile] = useState({
         username: '',
         name: '',
@@ -22,6 +24,7 @@ export default function ManagerProfileUpdate() {
         const fetchUserDetails = async () => {
             if (email) {
                 try {
+                    setIsLoading(true)
                     const response = await fetch(`/api/user/${email}`);
                     if (response.ok) {
                         const userData = await response.json();
@@ -38,6 +41,8 @@ export default function ManagerProfileUpdate() {
                     }
                 } catch (error) {
                     console.error('Error fetching user details:', error);
+                }finally{
+                    setIsLoading(false)
                 }
             }
         };
@@ -57,7 +62,18 @@ export default function ManagerProfileUpdate() {
     // Handle form submission and update user details in the backend
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Profile user input", profile)
+        const formData = {
+                    username: profile.username,
+                    name: profile.name,
+                    dob: profile.dob,
+                    gender: profile.gender,
+                    phone: profile.phone,
+                }
+                const hasEmptyField = Object.values(formData).some(value => !value?.toString().trim())
+            
+                if(hasEmptyField ){
+                    setErrorMessage("No Empty Input Field: Please Fill Up the Form")
+                }else{
         try {
             // Send PUT request to update the user profile
             const response = await fetch(`/api/user/${email}`, {
@@ -65,13 +81,7 @@ export default function ManagerProfileUpdate() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    username: profile.username,
-                    name: profile.name,
-                    dob: profile.dob,
-                    gender: profile.gender,
-                    phone: profile.phone,
-                }),
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
@@ -87,7 +97,10 @@ export default function ManagerProfileUpdate() {
             }
         } catch (error) {
             console.error('Error updating profile:', error);
+        }finally{
+            setIsLoading(false)
         }
+    }
     };
 
     return (
@@ -100,6 +113,18 @@ export default function ManagerProfileUpdate() {
                 </Col>
                 <Col md={9} className="p-4">
                     <h3>Update Profile</h3>
+                    {isLoading ? (
+                            <div className="text-center" style={{ marginTop: '100px' }}>
+                                <Spinner animation="border" role="status" variant="primary">
+                                    <span className="visually-hidden">Loading</span>
+                                </Spinner>
+                                <p className="mt-2">Loading...</p>
+                            </div>
+                        ) : (     <>              {errorMessage && (
+                                    <div className="alert alert-danger" role="alert">
+                                        {errorMessage}
+                                    </div>
+                                )}
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="username">
                             <Form.Label>Username</Form.Label>
@@ -170,6 +195,7 @@ export default function ManagerProfileUpdate() {
                             Update Profile
                         </Button>
                     </Form>
+                    </>)}
                 </Col>
             </Row>
         </Container>

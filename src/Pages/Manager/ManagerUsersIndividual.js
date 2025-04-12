@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import {AuthContext} from '../../App';
-import { Container, Row, Col, Table, Button, Card, Pagination } from "react-bootstrap";
+import { AuthContext } from '../../App';
+import { Container, Row, Col, Table, Button, Card, Pagination, Spinner } from "react-bootstrap";
 import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader";
 
 export default function ManagerUsersIndividual() {
   const { userEmail } = useContext(AuthContext); 
   const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [productPosts, setProductPosts] = useState([]);
   const [commentsList, setCommentList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,7 @@ export default function ManagerUsersIndividual() {
 
   const fetchUserComments = async (user) => {
     try {
+      setIsLoading(true)
       const response = await fetch(`/api/comments/madeby/${user}`);
       if (!response.ok) throw new Error("Failed to fetch user comments");
       const data = await response.json();
@@ -24,6 +26,8 @@ export default function ManagerUsersIndividual() {
     } catch (err) {
       console.error("Error fetching user comments:", err);
       setCommentList([]);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -31,6 +35,7 @@ export default function ManagerUsersIndividual() {
     // Fetch user data based on the ID or username
     const fetchUserData = async () => {
       try {
+        setIsLoading(true)
         const response = await fetch(`/api/user/${userEmail}`);
         const data = await response.json();
         setUserData(data); // Save the user data
@@ -38,12 +43,15 @@ export default function ManagerUsersIndividual() {
         fetchUserComments(data.name);
       } catch (err) {
         console.error("Error fetching user data:", err);
+      } finally {
+        setIsLoading(false)
       }
     };
 
     // Fetch products associated with this user
     const fetchUserProducts = async (email) => {
       try {
+        setIsLoading(true)
         const response = await fetch(`/api/products/user/${email}`);
         const products = await response.json();
         setProductPosts(products); // Set the product posts in the state
@@ -51,6 +59,8 @@ export default function ManagerUsersIndividual() {
       } catch (err) {
         console.error("Error fetching user products:", err);
         setLoading(false);
+      } finally {
+        setIsLoading(false)
       }
     };
 
@@ -59,6 +69,7 @@ export default function ManagerUsersIndividual() {
 
   const deleteComment = async (commentNo) => {
     try {
+      setIsLoading(true)
       const res = await fetch(`/api/comments/${commentNo}`, {
         method: "DELETE",
       });
@@ -71,6 +82,8 @@ export default function ManagerUsersIndividual() {
       }
     } catch (err) {
       console.error("Error deleting comment:", err);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -144,9 +157,6 @@ export default function ManagerUsersIndividual() {
     );
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -160,66 +170,75 @@ export default function ManagerUsersIndividual() {
 
           {/* Main Content */}
           <Col md={9} lg={10} className="px-md-4">
-            {userData && (
-              <>
-                <h2 className="mt-3">User: {userData.name}</h2>
+            {isLoading ? (
+              <div className="text-center" style={{ marginTop: '100px' }}>
+                <Spinner animation="border" role="status" variant="primary">
+                  <span className="visually-hidden">Loading</span>
+                </Spinner>
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : (
+              userData && (
+                <>
+                  <h2 className="mt-3">User: {userData.name}</h2>
 
-                {/* Product Posting History */}
-                <Card className="p-3 my-4">
-                  <h3>Product Posting History</h3>
-                  <Table striped bordered hover className="mt-3">
-                    <thead className="table-light">
-                      <tr>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Date Posted</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentProducts.map((post) => (
-                        <tr key={post._id}>
-                          <td>{post.title}</td>
-                          <td>{post.price}</td>
-                          <td>{post.description}</td>
-                          <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                  {/* Product Posting History */}
+                  <Card className="p-3 my-4">
+                    <h3>Product Posting History</h3>
+                    <Table striped bordered hover className="mt-3">
+                      <thead className="table-light">
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Price</th>
+                          <th>Description</th>
+                          <th>Date Posted</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                  {renderPaginationProducts()}
-                </Card>
+                      </thead>
+                      <tbody>
+                        {currentProducts.map((post) => (
+                          <tr key={post._id}>
+                            <td>{post.title}</td>
+                            <td>{post.price}</td>
+                            <td>{post.description}</td>
+                            <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    {renderPaginationProducts()}
+                  </Card>
 
-                {/* Comments Made */}
-                <Card className="p-3 my-4">
-                  <h3>Comments Made</h3>
-                  <Table striped bordered hover className="mt-3">
-                    <thead className="table-light">
-                      <tr>
-                        <th>Product Name</th>
-                        <th>Description</th>
-                        <th>Date Posted</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentComments.map((post) => (
-                        <tr key={post.commentNo}>
-                          <td>{post.product}</td>
-                          <td>{post.description}</td>
-                          <td>{new Date(post.created).toLocaleDateString()}</td>
-                          <td>
-                            <Button variant="danger" onClick={() => deleteComment(post.commentNo)}>
-                              Delete Comment
-                            </Button>
-                          </td>
+                  {/* Comments Made */}
+                  <Card className="p-3 my-4">
+                    <h3>Comments Made</h3>
+                    <Table striped bordered hover className="mt-3">
+                      <thead className="table-light">
+                        <tr>
+                          <th>Product Name</th>
+                          <th>Description</th>
+                          <th>Date Posted</th>
+                          <th>Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                  {renderPaginationComments()}
-                </Card>
-              </>
+                      </thead>
+                      <tbody>
+                        {currentComments.map((post) => (
+                          <tr key={post.commentNo}>
+                            <td>{post.product}</td>
+                            <td>{post.description}</td>
+                            <td>{new Date(post.created).toLocaleDateString()}</td>
+                            <td>
+                              <Button variant="danger" onClick={() => deleteComment(post.commentNo)}>
+                                Delete Comment
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                    {renderPaginationComments()}
+                  </Card>
+                </>
+              )
             )}
           </Col>
         </Row>

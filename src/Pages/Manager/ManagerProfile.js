@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {AuthContext} from '../../App';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button,Spinner } from 'react-bootstrap';
 import ManagerHeader from "../../Components/Headers/ManagerHeader"; 
 import ManagerSideBar from "../../Components/Sidebars/ManagerSidebar";
 import { useNavigate } from 'react-router-dom';
@@ -8,18 +8,22 @@ import { useNavigate } from 'react-router-dom';
 const ManagerProfile = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-       const { email } = useContext(AuthContext); 
+    const { email } = useContext(AuthContext); 
+    const [isLoading, setIsLoading] = useState(false)
 
     // Fetch user details based on email
     useEffect(() => {
         const fetchUserDetails = async () => {
             if (email) {
                 try {
+                    setIsLoading(true)
                     const response = await fetch(`/api/user/${email}`);  // Assuming your API follows this route
                     const data = await response.json();
                     setUser(data); 
                 } catch (error) {
                     console.error('Error fetching user details:', error);
+                }finally{
+                    setIsLoading(false)
                 }
             }
         };
@@ -28,11 +32,6 @@ const ManagerProfile = () => {
 
     function updateProfile() {
         navigate('/ManagerProfileUpdate');
-    }
-
-    // Show loading message until user data is loaded
-    if (!user) {
-        return <p>Loading user data...</p>;
     }
 
     return (
@@ -44,15 +43,29 @@ const ManagerProfile = () => {
                         <ManagerSideBar />
                     </Col>
                     <Col md={9} className="p-4">
-                        <Card className={`p-4`}>
-                            <h4>Username: {user.username}</h4>
-                            <h4>Name: {user.name}</h4>
-                            <h4>Email: {user.email}</h4>
-                            <h4>Date of Birth: {user.dob}</h4>
-                            <h4>Gender: {user.gender}</h4>
-                            <h4>Phone: {user.phone}</h4>
-                        </Card>
-                        <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
+                    {isLoading ? (
+  <div className="text-center" style={{ marginTop: '100px' }}>
+    <Spinner animation="border" role="status" variant="primary">
+      <span className="visually-hidden">Loading</span>
+    </Spinner>
+    <p className="mt-2">Loading...</p>
+  </div>
+) : 
+  (!user ? <></> : (
+    <>
+      <Card className="p-4">
+        <h4>Username: {user.username}</h4>
+        <h4>Name: {user.name}</h4>
+        <h4>Email: {user.email}</h4>
+        <h4>Date of Birth: {user.dob}</h4>
+        <h4>Gender: {user.gender}</h4>
+        <h4>Phone: {user.phone}</h4>
+      </Card>
+      <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
+    </>
+  ))
+}
+
                     </Col>
                 </Row>
             </Container>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card,Spinner} from "react-bootstrap";
 import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar"; 
 import ManagerHeader from "../../Components/Headers/ManagerHeader"; 
 
 export default function ManagerDashboard() {
-    // State for dashboard data
+    const [isLoading, setIsLoading] = useState(false)
     const [dashboardData, setDashboardData] = useState({
         totalUsers: 0,
         active: 0,
@@ -22,6 +22,7 @@ export default function ManagerDashboard() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                setIsLoading(true)
                 const response = await fetch("/api/user");
                 const users = await response.json();
                 const filteredUsers = users.filter(user => user.position === "user");
@@ -38,11 +39,14 @@ export default function ManagerDashboard() {
                 }));
             } catch (error) {
                 console.error("Error fetching users:", error);
+            }finally{
+                setIsLoading(false)
             }
         };
 
         const fetchProductInsights = async () => {
             try {
+                setIsLoading(true)
                 const response = await fetch("/api/products");
                 const data = await response.json();
         
@@ -75,10 +79,10 @@ export default function ManagerDashboard() {
                 }));
             } catch (error) {
                 console.error("Error fetching product insights:", error);
+            }finally{
+                setIsLoading(false)
             }
         };
-        
-
         fetchUsers();
         fetchProductInsights();
     }, []); // Empty dependency array means it runs once on component mount
@@ -95,9 +99,18 @@ export default function ManagerDashboard() {
 
                 {/* Main Dashboard Content */}
                 <Col md={9} lg={10} className="px-md-4">
-                    <h2 className="mt-3">Manager Dashboard</h2>
+                {
+                        isLoading ? (
+                            <div className="text-center" style={{ marginTop: '100px' }}>
+                                <Spinner animation="border" role="status" variant="primary">
+                                    <span className="visually-hidden">Loading</span>
+                                </Spinner>
+                                <p className="mt-2">Loading...</p>
+                            </div>
+                        ):(<>
+                    <h2 className="mt-3">Website Insights</h2>
                     <hr/>
-                    <h2>User Insight:</h2>
+                    <h2>Users:</h2>
                     <Row className="g-3">
                         <Col md={6}>
                             <Card className="p-3">
@@ -119,7 +132,7 @@ export default function ManagerDashboard() {
                         </Col>
                     </Row>
                     <hr/>
-                    <h2>Product Insight:</h2>
+                    <h2>Products:</h2>
                     <Row className="g-3">
                         <Col md={6}>
                             <Card className="p-3">
@@ -137,7 +150,7 @@ export default function ManagerDashboard() {
                                 </ul>
                             </Card>
                         </Col>
-                    </Row>
+                    </Row></>)}
                 </Col>
             </Row>
         </Container>
