@@ -120,85 +120,87 @@ export default function Dashboard() {
 
     return (
         <>
-            <CustomerSupportHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-                    <Col style={{ margin: '10px' }}>
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                        <div className="d-flex justify-content-between align-items-center">
-                            <h2>All Available Tickets</h2>
-                            <Button 
-                                as="a" 
-                                href="/assigned-ticket" 
-                                variant="outline-primary" 
-                                size="lg"
+        <CustomerSupportHeader />
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+          {/* Sidebar */}
+          <div style={{ width: '250px', flexShrink: 0 }}>
+            <Sidebar />
+          </div>
+      
+          {/* Main content */}
+          <div style={{ flex: 1, padding: '20px' }}>
+            {!error ? null : (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+            <div className="d-flex justify-content-between align-items-center">
+              <h2>All Available Tickets</h2>
+            </div>
+            <hr/>
+            <Button as="a" class="p-2 bd-highlight" href="/assigned-ticket" variant="primary" size="lg">
+                Your Tickets
+              </Button>
+            <hr />
+            {isLoading ? (
+              <div className="text-center" style={{ marginTop: '100px' }}>
+                <Spinner animation="border" role="status" variant="primary">
+                  <span className="visually-hidden">Loading</span>
+                </Spinner>
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : (
+              <div>
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>User</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentTickets.map((ticket) => (
+                      <tr key={ticket.ticketId}>
+                        <td>{ticket.ticketId}</td>
+                        <td>{ticket.user}</td>
+                        <td>{ticket.status}</td>
+                        <td>{ticket.created}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <Link to={`/ticket-info/${ticket.ticketId}`}>
+                              <Button variant="primary" size="sm">
+                                Review
+                              </Button>
+                            </Link>
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              onClick={() => handleDelete(ticket.ticketId)}
                             >
-                                Your Tickets
+                              Delete
                             </Button>
-                        </div>
-                        <hr />
-                        {isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ) : (
-                        <div>
-                            <table className="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>User</th>
-                                        <th>Status</th>
-                                        <th>Created</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {currentTickets.map((ticket, index) => (
-                                        <tr key={ticket.ticketId}>
-                                            <td>{ticket.ticketId}</td>
-                                            <td>{ticket.user}</td>
-                                            <td>{ticket.status}</td>
-                                            <td>{ticket.created}</td>
-                                            <td>
-                                                <div style={{ display: 'flex', gap: '10px' }}>
-                                                    <Link to={`/ticket-info/${ticket.ticketId}`} rel="noopener noreferrer">
-                                                        <Button variant="primary" size="sm">Review</Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="danger"
-                                                        size="sm"
-                                                        onClick={() => handleDelete(ticket.ticketId)}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                    <Button
-                                                        variant="warning"
-                                                        size="sm"
-                                                        onClick={() => assignTicket(ticket.ticketId)}
-                                                    >
-                                                        Assign to me
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            {renderPagination()}
-                        </div>
-                    )}
-                    </Col>
-                </Row>
-            </Container>
-        </>
+                            <Button
+                              variant="warning"
+                              size="sm"
+                              onClick={() => assignTicket(ticket.ticketId)}
+                            >
+                              Assign to me
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {renderPagination()}
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+      
     );
 }

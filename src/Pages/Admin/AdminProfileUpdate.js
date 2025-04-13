@@ -102,96 +102,105 @@ export default function AdminProfileUpdate() {
     };
 
     return (
-        <>
-            <AdminHeader />
-            <Container fluid>
-                <Row>
-                    <Col xs={12} md={3} className="p-0">
-                        <AdminSidebar />
-                    </Col>
-                    <Col md={9} className="p-4">
-                        
-                        {isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ) : (
-                            <>{errorMessage && (
-                                <div className="alert alert-danger" role="alert">
-                                  {errorMessage}
-                                </div>
-                              )}<h3>Update Profile</h3>
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3" controlId="username">
-                                    <Form.Label>Username</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="username"
-                                        value={profile.username}
-                                        onChange={handleChange}
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="name">
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="name"
-                                        value={profile.name}
-                                        onChange={handleChange}
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="email">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        name="email"
-                                        value={profile.email}
-                                        onChange={handleChange}
-                                        disabled
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="dob">
-                                    <Form.Label>Date of Birth</Form.Label>
-                                    <Form.Control
-                                        type="date"
-                                        name="dob"
-                                        value={profile.dob}
-                                        onChange={handleChange}
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="gender">
-                                    <Form.Label>Gender</Form.Label>
-                                    <Form.Select
-                                        name="gender"
-                                        value={profile.gender}
-                                        onChange={handleChange}
-                                    >
-                                        <option value="Female">Female</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Other">Other</option>
-                                    </Form.Select>
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="phone">
-                                    <Form.Label>Phone Number</Form.Label>
-                                    <Form.Control
-                                        type="tel"
-                                        name="phone"
-                                        value={profile.phone}
-                                        onChange={handleChange}
-                                    />
-                                </Form.Group>
-                                <Button variant="primary" type="submit">
-                                    Update Profile
-                                </Button>
-                            </Form>
-                            </>
-                        )}
-                    </Col>
-                </Row>
-            </Container>
+         <>
+                       <AdminHeader />
+                       <div style={{ display: 'flex', minHeight: '100vh' }}>
+                         {/* Sidebar */}
+                         <div style={{ width: '250px', flexShrink: 0 }}>
+                           <AdminSidebar />
+                         </div>
+                          {/* Main Content */}
+      <div style={{ flex: 1, padding: '20px' }}>
+        {isLoading ? (
+          <div className="text-center" style={{ marginTop: '100px' }}>
+            <Spinner animation="border" role="status" variant="primary">
+              <span className="visually-hidden">Loading</span>
+            </Spinner>
+            <p className="mt-2">Loading...</p>
+          </div>
+        ) : (
+          <>
+            {errorMessage && (
+              <div className="alert alert-danger" role="alert">
+                {errorMessage}
+              </div>
+            )}
+
+            <h3>Update Profile</h3>
+
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="username">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="username"
+                  value={profile.username}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="name">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={profile.name}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  value={profile.email}
+                  onChange={handleChange}
+                  disabled
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="dob">
+                <Form.Label>Date of Birth</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="dob"
+                  value={profile.dob}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="gender">
+                <Form.Label>Gender</Form.Label>
+                <Form.Select
+                  name="gender"
+                  value={profile.gender}
+                  onChange={handleChange}
+                >
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Other">Other</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="phone">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                  type="tel"
+                  name="phone"
+                  value={profile.phone}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Button variant="primary" type="submit" className="w-100">
+                Update Profile
+              </Button>
+            </Form>
+          </>
+        )}
+      </div>
+    </div>
         </>
     );
 }
