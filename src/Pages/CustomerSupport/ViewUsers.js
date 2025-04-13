@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Pagination,Spinner} from 'react-bootstrap';
+import { Table, Button, Pagination,Spinner} from 'react-bootstrap';
 import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
@@ -70,60 +70,67 @@ export default function ViewUsers() {
     return (
         <>
             <CustomerSupportHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    {/* Sidebar */}
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
+            <div style={{ display: 'flex', minHeight: '100vh' }}>
+                {/* Sidebar */}
+                <div style={{ width: '250px', flexShrink: 0 }}>
+                    <Sidebar />
+                </div>
+    
+                {/* Main Content */}
+                <div style={{ flex: 1, padding: '40px' }}>
+                    {error && (
+                        <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    )}
+    
+                    {isLoading ? (
+                        <div className="text-center mt-5">
+                            <Spinner animation="border" role="status" variant="primary" />
+                            <p className="mt-2">Loading...</p>
+                        </div>
+                    ) : (
+                        <>
+                            <h2>User Accounts</h2>
+                            <hr />
+                            <Table bordered hover responsive className="align-middle">
+    <thead className="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th className="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {currentUsers.map(user => (
+            <tr key={user._id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.phone.slice(0, 8)}</td>
+                <td className="text-center">
+                    <Button
+                        variant="outline-primary"
+                        size="sm"
+                        href={`/order-history/${user.name}`}
+                        rel="noopener noreferrer"
+                    >
+                        View Orders
+                    </Button>
+                </td>
+            </tr>
+        ))}
+    </tbody>
+</Table>
 
-                    {/* Main Content */}
-                    <Col md={10} style={{ padding: '20px' }}>
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                    {
-                        isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ):(<>
-                        <h2>User Accounts</h2>
-                        <hr />
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentUsers.map(user => (
-                                    <tr key={user._id}>
-                                        <td>{user.name}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.phone.slice(0, 8)}</td> {/* Limits phone to 8 characters */}
-                                        <td>
-                                            <a href={`/order-history/${user.name}`} rel="noopener noreferrer">
-                                                Order History
-                                            </a>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-
-                        {/* Pagination */}
-                        {renderPagination()}
-                        </>) }
-                    </Col>
-                </Row>
-            </Container>
+    
+                            {/* Pagination */}
+                            {renderPagination()}
+                        </>
+                    )}
+                </div>
+            </div>
         </>
     );
+    
 }

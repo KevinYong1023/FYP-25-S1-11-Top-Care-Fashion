@@ -159,87 +159,92 @@ export default function TicketInfo({ email }) {
 
     return (
         <>
-            <CustomerSupportHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-                    <Col md={10} style={{ padding: '20px' }}>
-                    <Row>
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                        {isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ) : ticket ? (
-                            <>
-                                <hr />
-                                <Col md={6}>
-                                    <p><strong>Name: {ticket.user}</strong></p>
-                                    <p><strong>Description: {ticket.description}</strong></p>
-                                    <p><strong>Assignee: {ticket.assignee}</strong></p>
-                                    <p><strong>Created: {ticket.created}</strong></p>
-
-                                    <Form.Group controlId="formTicketStatus">
-                                        <Form.Label><strong>Ticket Status:</strong></Form.Label>
-                                        <Form.Control
-                                            as="select"
-                                            disabled={ticketStatus === "Open"}
-                                            value={ticketStatus}
-                                            onChange={handleStatusChange}
-                                        >
-                                            {ticketStatus === "Open" ? <option value="Open">Open</option> : null}
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Close">Close</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <hr />
-                                    <div style={{ display: 'flex', gap: '10px' }}>
-                                        <Button onClick={handleDeleteTicket} variant="danger" style={{ borderRadius: '20px', padding: '10px 20px' }}>
-                                            Delete
-                                        </Button>
-                                        {ticketStatus === "Open" ? (
-                                            <Button
-                                                onClick={handleAssignToMeTicket}
-                                                variant="outline-secondary"
-                                                style={{ borderRadius: '20px', padding: '10px 20px' }}
-                                            >
-                                                Assign to me
-                                            </Button>
-                                        ) : (
-                                            <>
-                                                <Button
-                                                    onClick={handleUpdateTicket}
-                                                    variant="outline-secondary"
-                                                    style={{ borderRadius: '20px', padding: '10px 20px' }}
-                                                >
-                                                    Update Ticket
-                                                </Button>
-                                                <Button
-                                                    onClick={handleRemoveTicket}
-                                                    variant="outline-secondary"
-                                                    style={{ borderRadius: '20px', padding: '10px 20px' }}
-                                                >
-                                                    Remove My Name
-                                                </Button>
-                                            </>
-                                        )}
-                                    </div>
-                                </Col>
-                            </>
-                        ) : (
-                            <></>
-                        )}
-                    </Row>
-                    </Col>
-                </Row>
-            </Container>
-        </>
+        <CustomerSupportHeader />
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+          {/* Sidebar */}
+          <div style={{ width: '250px', flexShrink: 0 }}>
+            <Sidebar />
+          </div>
+      
+          {/* Main content */}
+          <div style={{ flex: 1, padding: '20px' }}>
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+      
+            {isLoading ? (
+              <div className="text-center" style={{ marginTop: '100px' }}>
+                <Spinner animation="border" role="status" variant="primary">
+                  <span className="visually-hidden">Loading</span>
+                </Spinner>
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : ticket ? (
+              <>
+                <div style={{ maxWidth: '600px' }}>
+                  <p><strong>Name:</strong> {ticket.user}</p>
+                  <p><strong>Description:</strong> {ticket.description}</p>
+                  <p><strong>Assignee:</strong> {ticket.assignee}</p>
+                  <p><strong>Created:</strong> {ticket.created}</p>
+      
+                  <Form.Group controlId="formTicketStatus" className="mb-3">
+                    <Form.Label><strong>Ticket Status:</strong></Form.Label>
+                    <Form.Control
+                      as="select"
+                      disabled={ticketStatus === "Open"}
+                      value={ticketStatus}
+                      onChange={handleStatusChange}
+                    >
+                      {ticketStatus === "Open" && <option value="Open">Open</option>}
+                      <option value="In Progress">In Progress</option>
+                      <option value="Close">Close</option>
+                    </Form.Control>
+                  </Form.Group>
+                  <br/>
+                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                    <Button
+                      onClick={handleDeleteTicket}
+                      variant="danger"
+                      style={{ borderRadius: '20px', padding: '10px 20px' }}
+                    >
+                      Delete
+                    </Button>
+      
+                    {ticketStatus === "Open" ? (
+                      <Button
+                        onClick={handleAssignToMeTicket}
+                        variant="outline-secondary"
+                        style={{ borderRadius: '20px', padding: '10px 20px' }}
+                      >
+                        Assign to me
+                      </Button>
+                    ) : (
+                      <>
+                        <Button
+                          onClick={handleUpdateTicket}
+                          variant="outline-secondary"
+                          style={{ borderRadius: '20px', padding: '10px 20px' }}
+                        >
+                          Update Ticket
+                        </Button>
+                        <Button
+                          onClick={handleRemoveTicket}
+                          variant="outline-secondary"
+                          style={{ borderRadius: '20px', padding: '10px 20px' }}
+                        >
+                          Remove My Name
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </>
+            ) : null}
+          </div>
+        </div>
+      </>
+      
     );
 }

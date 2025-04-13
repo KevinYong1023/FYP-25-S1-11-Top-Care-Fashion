@@ -37,45 +37,50 @@ const AdminProfile = () => {
     }
 
     return (
-        <div>
-            <AdminHeader />
-            <Container fluid>
-                <Row>
-                    <Col xs={12} md={3} className="p-0">
-                        <AdminSideBar />
-                    </Col>
-                    <Col md={9} className="p-4">
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                    {
-                            isLoading ?  
-                                                 <div className="text-center" style={{ marginTop: '100px' }}>
-                                                                                <Spinner animation="border" role="status" variant="primary">
-                                                                                    <span className="visually-hidden">Loading</span>
-                                                                                </Spinner>
-                                                                                <p className="mt-2">Loading...</p>
-                                                                            </div> :
-                    <>
-                        <Card className={`p-4`}>
-                            {
-                                !user ? <></> 
-                            :
-                            <>
-                            <h4>Username: {user.username}</h4>
-                            <h4>Name: {user.name}</h4>
-                            <h4>Email: {user.email}</h4>
-                            <h4>Date of Birth: {user.dob}</h4>
-                            <h4>Gender: {user.gender}</h4>
-                            <h4>Phone: {user.phone}</h4>
-                            </>
-                        }
-                        </Card>
-                        <Button variant="primary" onClick={updateProfile}>Update Profile</Button></> }
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+        <>
+                        <AdminHeader />
+                        <div style={{ display: 'flex', minHeight: '100vh' }}>
+                          {/* Sidebar */}
+                          <div style={{ flexShrink: 0 }}>
+                            <AdminSideBar />
+                          </div>
+                           {/* Main Content */}
+      <div style={{ flex: 1, padding: '20px' }}>
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {isLoading ? (
+          <div className="text-center" style={{ marginTop: '100px' }}>
+            <Spinner animation="border" role="status" variant="primary">
+              <span className="visually-hidden">Loading</span>
+            </Spinner>
+            <p className="mt-2">Loading...</p>
+          </div>
+        ) : (
+          <>
+            <Card className="p-4">
+              {user && (
+                <>
+                  <h4>Username: {user.username}</h4>
+                  <h4>Name: {user.name}</h4>
+                  <h4>Email: {user.email}</h4>
+                  <h4>Date of Birth: {user.dob}</h4>
+                  <h4>Gender: {user.gender}</h4>
+                  <h4>Phone: {user.phone}</h4>
+                </>
+              )}
+            </Card>
+            <Button variant="primary" onClick={updateProfile} className="mt-3">
+              Update Profile
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
+        </>
     );
 };
 

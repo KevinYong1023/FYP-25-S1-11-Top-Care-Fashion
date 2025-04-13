@@ -7,6 +7,7 @@ import ManagerHeader from "../../Components/Headers/ManagerHeader";
 export default function ManagerUsersIndividual() {
   const { userEmail } = useContext(AuthContext); 
   const [userData, setUserData] = useState(null);
+  const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false);
   const [productPosts, setProductPosts] = useState([]);
   const [commentsList, setCommentList] = useState([]);
@@ -56,11 +57,11 @@ export default function ManagerUsersIndividual() {
         const response = await fetch(`/api/products/user/${email}`);
         const products = await response.json();
         setProductPosts(products); // Set the product posts in the state
-        setLoading(false);
+        setIsLoading(false);
       } catch (err) {
         setError("Server Error: Please Refresh the Page")
         console.error("Error fetching user products:", err);
-        setLoading(false);
+        setIsLoading(false);
       } finally {
         setIsLoading(false)
       }
@@ -164,91 +165,91 @@ export default function ManagerUsersIndividual() {
   return (
     <>
       <ManagerHeader />
-      <Container fluid>
-        <Row>
-          {/* Sidebar */}
-          <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: "100vh" }}>
-            <ManagerSidebar />
-          </Col>
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
+                                      {/* Sidebar */}
+                                      <div style={{ width: '250px', flexShrink: 0 }}>
+                                          <ManagerSidebar />
+                                      </div>
+       {/* Main Content */}
+       <div style={{ flex: '1', padding: '40px' }}>
+        {!error ? <></> : (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
 
-          {/* Main Content */}
-          <Col md={9} lg={10} className="px-md-4">
-          {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-            {isLoading ? (
-              <div className="text-center" style={{ marginTop: '100px' }}>
-                <Spinner animation="border" role="status" variant="primary">
-                  <span className="visually-hidden">Loading</span>
-                </Spinner>
-                <p className="mt-2">Loading...</p>
+        {isLoading ? (
+          <div className="text-center" style={{ marginTop: '100px' }}>
+            <Spinner animation="border" role="status" variant="primary">
+              <span className="visually-hidden">Loading</span>
+            </Spinner>
+            <p className="mt-2">Loading...</p>
+          </div>
+        ) : (
+          userData && (
+            <>
+              <h2 className="mt-3">User: {userData.name}</h2>
+
+              {/* Product Posting History */}
+              <div className="card p-3 my-4">
+                <h3>Product Posting History</h3>
+                <table className="table table-striped table-bordered mt-3">
+                <thead className="table-light">
+                <tr>
+                      <th>Product Name</th>
+                      <th>Price</th>
+                      <th>Description</th>
+                      <th>Date Posted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentProducts.map((post) => (
+                      <tr key={post._id}>
+                        <td>{post.title}</td>
+                        <td>{post.price}</td>
+                        <td>{post.description}</td>
+                        <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {renderPaginationProducts()}
               </div>
-            ) : (
-              userData && (
-                <>
-                  <h2 className="mt-3">User: {userData.name}</h2>
 
-                  {/* Product Posting History */}
-                  <Card className="p-3 my-4">
-                    <h3>Product Posting History</h3>
-                    <Table striped bordered hover className="mt-3">
-                      <thead className="table-light">
-                        <tr>
-                          <th>Product Name</th>
-                          <th>Price</th>
-                          <th>Description</th>
-                          <th>Date Posted</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentProducts.map((post) => (
-                          <tr key={post._id}>
-                            <td>{post.title}</td>
-                            <td>{post.price}</td>
-                            <td>{post.description}</td>
-                            <td>{new Date(post.createdAt).toLocaleDateString()}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                    {renderPaginationProducts()}
-                  </Card>
-
-                  {/* Comments Made */}
-                  <Card className="p-3 my-4">
-                    <h3>Comments Made</h3>
-                    <Table striped bordered hover className="mt-3">
-                      <thead className="table-light">
-                        <tr>
-                          <th>Product Name</th>
-                          <th>Description</th>
-                          <th>Date Posted</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentComments.map((post) => (
-                          <tr key={post.commentNo}>
-                            <td>{post.product}</td>
-                            <td>{post.description}</td>
-                            <td>{new Date(post.created).toLocaleDateString()}</td>
-                            <td>
-                              <Button variant="danger" onClick={() => deleteComment(post.commentNo)}>
-                                Delete Comment
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                    {renderPaginationComments()}
-                  </Card>
-                </>
-              )
-            )}
-          </Col>
-        </Row>
-      </Container>
-    </>
+              {/* Comments Made */}
+              <div className="card p-3 my-4">
+                <h3>Comments Made</h3>
+                <table className="table table-striped table-bordered mt-3">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Product Name</th>
+                      <th>Description</th>
+                      <th>Date Posted</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentComments.map((post) => (
+                      <tr key={post.commentNo}>
+                        <td>{post.product}</td>
+                        <td>{post.description}</td>
+                        <td>{new Date(post.created).toLocaleDateString()}</td>
+                        <td>
+                          <Button variant="danger" onClick={() => deleteComment(post.commentNo)}>
+                            Delete Comment
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {renderPaginationComments()}
+              </div>
+            </>
+          )
+        )}
+      </div>
+    </div>
+  </>
   );
 }

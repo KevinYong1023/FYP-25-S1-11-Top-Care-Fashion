@@ -118,151 +118,147 @@ export default function ManagerUsersDashboard() {
 
     return (
         <>
-            <ManagerHeader />
-            <Container fluid>
-                <Row>
-                    {/* Sidebar */}
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: "100vh" }}>
-                        <ManagerSidebar />
-                    </Col>
+                            <ManagerHeader />
+                            <div style={{ display: 'flex', minHeight: '100vh' }}>
+                                {/* Sidebar */}
+                                <div style={{ width: '250px', flexShrink: 0 }}>
+                                    <ManagerSidebar />
+                                </div>
+                                {/* Main Content */}
+            <div style={{ flex: '1', padding: '40px' }}>
+                {!error ? <></> : (
+                    <div className="alert alert-danger" role="alert">
+                        {error}
+                    </div>
+                )}
+                {isLoading ? (
+                    <div className="text-center" style={{ marginTop: '100px' }}>
+                        <Spinner animation="border" role="status" variant="primary">
+                            <span className="visually-hidden">Loading</span>
+                        </Spinner>
+                        <p className="mt-2">Loading...</p>
+                    </div>
+                ) : (
+                    <>
+                    <h2>User Accounts</h2>
+                        {/* Filter Section */}
+<div className="mb-4">
+    <div 
+        className="shadow-sm p-3 mb-4 rounded" 
+        style={{ backgroundColor: '#fff', border: '1px solid #ddd' }} // Adding border style here
+    >
+        <div className="row align-items-center">
+            <div className="col-12 col-md-4">
+                <Form.Control
+                    type="text"
+                    placeholder="Search by Full Name"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+            </div>
+            <div className="col-12 col-md-4">
+                <Form.Control
+                    as="select"
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                >
+                    <option value="">All Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Suspended">Suspended</option>
+                </Form.Control>
+            </div>
+            <div className="col-12 col-md-4 d-flex">
+                <Button
+                    variant="primary"
+                    className="me-2"
+                    onClick={handleSearch}
+                >
+                    Search
+                </Button>
+                <Button
+                    variant="secondary"
+                    onClick={resetFilters}
+                >
+                    Reset
+                </Button>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    {/* Main Content */}
-                    <Col md={9} lg={10} className="px-md-4">
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                        {isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ) : (
-                            <>
-                                <Row className="mt-3">
-                                    <Col>
-                                        <h2>User Accounts</h2>
-                                    </Col>
-                                </Row>
 
-                                {/* Filter Section */}
-                                <Row className="mb-4">
-                                    <Col>
-                                        <Card className="shadow-sm p-3 mb-4 rounded">
-                                            <Card.Body>
-                                                <Row className="align-items-center">
-                                                    <Col xs={12} md={4}>
-                                                        <Form.Control
-                                                            type="text"
-                                                            placeholder="Search by Full Name"
-                                                            value={searchQuery}
-                                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                                        />
-                                                    </Col>
-                                                    <Col xs={12} md={4}>
-                                                        <Form.Control
-                                                            as="select"
-                                                            value={filterStatus}
-                                                            onChange={(e) => setFilterStatus(e.target.value)}
+                        {/* User Table */}
+                        <table className="table table-striped table-bordered mt-3">
+                            <thead className="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Created At</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentUsers.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="8" className="text-center">No users found</td>
+                                    </tr>
+                                ) : (
+                                    currentUsers.map((user) => (
+                                        <tr key={user.userId}>
+                                            <td>{user.userId}</td>
+                                            <td>{user.username}</td>
+                                            <td>{user.name}</td>
+                                            <td>{user.email}</td>
+                                            <td>{user.phone}</td>
+                                            <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
+                                            <td>{user.status}</td>
+                                            <td>
+                                                {user.status !== "Active" ? (
+                                                    <Button
+                                                        variant="success"
+                                                        size="sm"
+                                                        className="me-2"
+                                                        onClick={() => handleStatus(user.email, "Active")}
+                                                    >
+                                                        Activate
+                                                    </Button>
+                                                ) : (
+                                                    <>
+                                                        <Button
+                                                            variant="danger"
+                                                            size="sm"
+                                                            className="me-2"
+                                                            onClick={() => handleStatus(user.email, "Suspended")}
                                                         >
-                                                            <option value="">All Statuses</option>
-                                                            <option value="Active">Active</option>
-                                                            <option value="Suspended">Suspended</option>
-                                                        </Form.Control>
-                                                    </Col>
-                                                    <Col xs={12} md={4} className="d-flex">
+                                                            Suspend
+                                                        </Button>
                                                         <Button
                                                             variant="primary"
+                                                            size="sm"
                                                             className="me-2"
-                                                            onClick={handleSearch}
+                                                            onClick={() => checkUserProducts(user.email)}
                                                         >
-                                                            Search
+                                                            Review
                                                         </Button>
-                                                        <Button
-                                                            variant="secondary"
-                                                            onClick={resetFilters}
-                                                        >
-                                                            Reset
-                                                        </Button>
-                                                    </Col>
-                                                </Row>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                </Row>
-
-                                {/* User Table */}
-                                <Table striped bordered hover className="mt-3">
-                                    <thead className="table-light">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Username</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Created At</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
+                                                    </>
+                                                )}
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentUsers.length === 0 ? (
-                                            <tr><td colSpan="8" className="text-center">No users found</td></tr>
-                                        ) : (
-                                            currentUsers.map((user) => (
-                                                <tr key={user.userId}>
-                                                    <td>{user.userId}</td>
-                                                    <td>{user.username}</td>
-                                                    <td>{user.name}</td>
-                                                    <td>{user.email}</td>
-                                                    <td>{user.phone}</td>
-                                                    <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
-                                                    <td>{user.status}</td>
-                                                    <td>
-                                                        {user.status !== "Active" ? (
-                                                            <Button
-                                                                variant="success"
-                                                                size="sm"
-                                                                className="me-2"
-                                                                onClick={() => handleStatus(user.email, "Active")}
-                                                            >
-                                                                Activate
-                                                            </Button>
-                                                        ) : (
-                                                            <>
-                                                                <Button
-                                                                    variant="danger"
-                                                                    size="sm"
-                                                                    className="me-2"
-                                                                    onClick={() => handleStatus(user.email, "Suspended")}
-                                                                >
-                                                                    Suspend
-                                                                </Button>
-                                                                <Button
-                                                                    variant="primary"
-                                                                    size="sm"
-                                                                    className="me-2"
-                                                                    onClick={() => checkUserProducts(user.email)}
-                                                                >
-                                                                    Review
-                                                                </Button>
-                                                            </>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        )}
-                                    </tbody>
-                                </Table>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
 
-                                {/* Pagination for Users */}
-                                {renderPagination()}
-                            </>
-                        )}
-                    </Col>
-                </Row>
-            </Container>
+                        {/* Pagination for Users */}
+                        {renderPagination()}
+                    </>
+                )}
+            </div>
+        </div>
         </>
     );
 }

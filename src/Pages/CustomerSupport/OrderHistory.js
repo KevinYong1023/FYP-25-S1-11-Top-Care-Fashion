@@ -72,68 +72,69 @@ export default function OrderHistory() {
     return (
         <>
             <CustomerSupportHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-
-                    <Col md={10} style={{ padding: '20px' }}>
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                        <h2>Order History</h2>
-                        <hr />
-                        
-                        {isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ) : (
-                            <>
-                                {filteredData.length === 0 ? (
-                                    <div className="alert alert-info">
-                                        No order history found for this user.
-                                    </div>
-                                ) : (
-                                    <>
-                                        <table className="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Invoice ID</th>
-                                                    <th>Status</th>
-                                                    <th>Seller</th>
-                                                    <th>Total</th>
-                                                    <th>Date Purchase</th>
-                                                    <th>Buyer</th>
+            <div style={{ display: 'flex', minHeight: '100vh' }}>
+                {/* Sidebar */}
+                <div style={{ width: '250px', flexShrink: 0 }}>
+                    <Sidebar />
+                </div>
+    
+                {/* Main Content */}
+                <div style={{ flex: 1, padding: '40px' }}>
+                    {error && (
+                        <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    )}
+                    <h2>Order History</h2>
+                    <hr />
+    
+                    {isLoading ? (
+                        <div className="text-center mt-5">
+                            <Spinner animation="border" role="status" variant="primary" />
+                            <p className="mt-2">Loading...</p>
+                        </div>
+                    ) : (
+                        <>
+                            {filteredData.length === 0 ? (
+                                <div className="alert alert-info">
+                                    No order history found for this user.
+                                </div>
+                            ) : (
+                                <>
+                                    <table className="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Invoice ID</th>
+                                                <th>Status</th>
+                                                <th>Seller</th>
+                                                <th>Total</th>
+                                                <th>Date Purchase</th>
+                                                <th>Buyer</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {currentOrders.map((row) => (
+                                                <tr key={row.orderNumber}>
+                                                    <td>{row.orderNumber}</td>
+                                                    <td>{row.status}</td>
+                                                    <td>{row.seller}</td>
+                                                    <td>{row.total}</td>
+                                                    <td>{row.purchased}</td>
+                                                    <td>{row.buyer}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {currentOrders.map((row) => (
-                                                    <tr key={row.orderNumber}>
-                                                        <td>{row.orderNumber}</td>
-                                                        <td>{row.status}</td>
-                                                        <td>{row.seller}</td>
-                                                        <td>{row.total}</td>
-                                                        <td>{row.purchased}</td>
-                                                        <td>{row.buyer}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-
-                                        {/* Pagination */}
-                                        {renderPagination()}
-                                    </>
-                                )}
-                            </>
-                        )}
-                    </Col>
-                </Row>
-            </Container>
+                                            ))}
+                                        </tbody>
+                                    </table>
+    
+                                    {/* Pagination */}
+                                    {renderPagination()}
+                                </>
+                            )}
+                        </>
+                    )}
+                </div>
+            </div>
         </>
     );
+    
 }
