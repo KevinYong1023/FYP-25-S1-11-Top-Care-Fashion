@@ -45,7 +45,8 @@
     color: #ffcc00;
   }
   .custom-navbar {  
-    background-color: #343a40; /* Dark background color */  
+    background-color: #ccd5ae !important; /* Dark background color */ 
+    height: fit-content; 
 }  
 
 .custom-navbar .navbar-brand {  
@@ -53,11 +54,11 @@
 }  
 
 .custom-navbar .nav-link {  
-    color: #ffffff; /* White text for links */  
+    color: #000000;  
 }  
 
 .custom-navbar .nav-link:hover {  
-    color: #ffc107; /* Yellow color on hover */  
+    color: #cb997e;
 }  
 
 .custom-navbar .dropdown-item {  
@@ -65,7 +66,7 @@
 }  
 
 .custom-navbar .dropdown-item:hover {  
-    background-color: #ffc107; /* Yellow background on hover */  
+    background-color: #b7b7a4; /* Yellow background on hover */  
     color: #343a40; /* Dark text on hover */  
 }  
 
