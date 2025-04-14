@@ -1,4 +1,4 @@
-// server/routes/payments.js (Edited: No Sender/Buyer Deduction, No Quantity)
+/// server/routes/payments.js (Edited: No Sender/Buyer Deduction, No Quantity)
 
 const express = require('express');
 const router = express.Router();

@@ -9,7 +9,7 @@ const mongoose = require('mongoose'); // Import mongoose
 // Get all order history (Admin-only route, consider adding auth)
 router.get('/order-history', async (req, res) => {
     try {
-        const orders = await Orders.find().populate('seller.productId'); // Populate product details if needed
+        const orders = await Order.find(); 
         res.json(orders);
     } catch (error) {
         console.error('Error fetching order history:', error);
@@ -156,4 +156,7 @@ router.post('/create-order', authenticate, async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
+
+
+
 module.exports = router;
