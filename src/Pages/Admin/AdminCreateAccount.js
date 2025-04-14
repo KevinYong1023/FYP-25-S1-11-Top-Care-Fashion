@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col,Spinner} from "react-bootstrap";
-import AdminSidebar from "../../Components/Sidebars/AdminSidebar";
 import AdminHeader from "../../Components/Headers/AdminHeader";
 import { useNavigate } from "react-router-dom";
 
@@ -105,10 +104,7 @@ return(
     <>
     <AdminHeader />
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Sidebar */}
-      <div style={{ width: '250px', flexShrink: 0 }}>
-        <AdminSidebar />
-      </div>
+    
   
       {/* Main content */}
       <div style={{ flex: 1, padding: '20px' }}>

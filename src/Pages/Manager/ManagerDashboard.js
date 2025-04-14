@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card,Spinner} from "react-bootstrap";
-import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar"; 
 import ManagerHeader from "../../Components/Headers/ManagerHeader"; 
 
 export default function ManagerDashboard() {
@@ -94,10 +93,7 @@ export default function ManagerDashboard() {
         <>
           <ManagerHeader />
                                <div style={{ display: 'flex', minHeight: '100vh' }}>
-                                 {/* Sidebar */}
-                                 <div style={{ width: '250px', flexShrink: 0 }}>
-                                   <ManagerSidebar />
-                                 </div>
+                               
         {/* Main Dashboard Content */}
     <div style={{ flex: 1, padding: '20px' }}>
       {error && (

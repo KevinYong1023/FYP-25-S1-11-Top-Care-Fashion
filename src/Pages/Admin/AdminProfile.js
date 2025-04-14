@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import {AuthContext} from '../../App';
-import { Container, Row, Col, Card, Button,Spinner} from 'react-bootstrap';
+import { Container, Row, Card, Button,Spinner} from 'react-bootstrap';
 import AdminHeader from "../../Components/Headers/AdminHeader";
-import AdminSideBar from "../../Components/Sidebars/AdminSidebar";
 import { useNavigate } from 'react-router-dom';
 
 const AdminProfile = () => {
@@ -40,10 +39,7 @@ const AdminProfile = () => {
         <>
                         <AdminHeader />
                         <div style={{ display: 'flex', minHeight: '100vh' }}>
-                          {/* Sidebar */}
-                          <div style={{ flexShrink: 0 }}>
-                            <AdminSideBar />
-                          </div>
+                          
                            {/* Main Content */}
       <div style={{ flex: 1, padding: '20px' }}>
         {error && (
