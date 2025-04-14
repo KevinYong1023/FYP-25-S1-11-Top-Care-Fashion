@@ -189,6 +189,7 @@ const Payment = () => {
                             sellerName: item.sellerName,
                             productName: item.productName,
                             buyerName: userName,
+                            price:item.price
                         };
                     }),
                     total: totalAmountToSend,
