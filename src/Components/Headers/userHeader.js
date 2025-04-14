@@ -38,14 +38,12 @@ export default function UserHeader() {
           
           </Nav>
 
-          <Nav className="align-items-center"> {/* Added align-items-center for vertical alignment */}
+          <Nav>
             {isLoggedIn ? (
               <>
                 <NavDropdown title="Profile" id="profile-dropdown" style={{fontSize: '20px'}}>
                   <NavDropdown.Item as={Link} to="/user-profile">Profile</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/manage-list">Manage Listings</NavDropdown.Item>
-                  {/* Add Order History Link? */}
-                   <NavDropdown.Item as={Link} to="/order-history">Order History</NavDropdown.Item>
                 </NavDropdown>
                 <Nav.Link as={Link} to="/logout" style={{fontSize: '20px'}}>Logout</Nav.Link>
                 <Nav.Link as={Link} to="/cart" style={{ fontSize: '20px'}}>

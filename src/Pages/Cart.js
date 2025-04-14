@@ -31,6 +31,8 @@ const Cart = () => {
     setAppliedDiscountCode('');
   };
 
+
+  
   // Handler to navigate to the payment/checkout page
   const handleCheckout = () => {
     // Check for sellerId remains critical
