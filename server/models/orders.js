@@ -2,13 +2,12 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
     orderNumber: {
-        type: String, // Changed to String for flexibility
+        type: Number, 
         unique: true,
     },
-    items: [{ // Array of product objects
+    seller: [{ // Array of product objects
         sellerName: { type: String, required: true },
         productName: { type: String, required: true },
-        quantity: { type: Number, required: true },
     }],
     created: {
         type: Date,
@@ -33,11 +32,8 @@ const orderSchema = new mongoose.Schema({
 // Custom auto-increment method for orderNumber (using string format)
 orderSchema.statics.getNextOrderNumber = async function () {
     const lastOrder = await this.findOne().sort({ orderNumber: -1 });
-    if (!lastOrder) {
-        return '1'; // Start from '1' as a string
-    }
-    const nextNumber = parseInt(lastOrder.orderNumber, 10) + 1;
-    return nextNumber.toString();
+    if (!lastOrder) return 1;
+    return lastOrder.orderNumber + 1;
 };
 
 // Pre-save hook to set the orderNumber before saving
