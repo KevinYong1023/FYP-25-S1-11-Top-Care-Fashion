@@ -91,7 +91,8 @@ const ProductPage = () => {
                 title: product.title,
                 price: product.price,
                 imageUrl: product.imageUrl,
-                sellerId: product.userId
+                sellerId: product.userId,
+                seller:product.seller
             };
             console.log("Item object being passed to addToCart:", itemToAdd);
             try {

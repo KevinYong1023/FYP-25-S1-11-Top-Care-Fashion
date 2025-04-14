@@ -34,7 +34,9 @@ const Login = () => {
                     console.log("Login successful, token stored.");
 
                     setEmail(formData.email);
+                    
                     setLogin(true);
+                    
 
                     // Fetch user data from /me route to get the position
                     const meResponse = await fetch('/api/auth/me', {

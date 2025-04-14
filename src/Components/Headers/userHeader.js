@@ -1,96 +1,84 @@
 // src/Components/Headers/userHeader.js
 
-import React, { useEffect, useState, useContext } from "react"; // Added useContext if needed for AuthContext later
-import { Navbar, Nav, NavDropdown, Container, Badge } from "react-bootstrap"; // <-- Added Badge
+import React, { useEffect, useState, useContext } from "react";
+import { Navbar, Nav, NavDropdown, Container, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import '../../css/Header.css'; // Ensure path is correct
-import logo from '../../images/logo.png'; // Ensure path is correct
+import '../../css/Header.css';
+import logo from '../../images/logo.png';
 import { FaShoppingCart } from 'react-icons/fa';
-import { useCart } from '../CartContext'; // <-- Added useCart import (Adjust path if needed)
-// import { AuthContext } from "../App"; // Keep if you use AuthContext for login status
+import { useCart } from '../CartContext';
 
-export default function UserHeader({ loginStatus }) { // loginStatus prop might be replaced by context later
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Local state based on prop
+export default function UserHeader({ loginStatus }) {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { cart } = useCart();
 
-  // --- Get Cart State ---
-  const { cart } = useCart(); // Get cart array from context
+    // Calculate item count without quantity
+    const itemCount = cart.length;
 
-  // --- Calculate Item Count ---
-  // Sums up the 'quantity' of each item, defaulting to 1 if quantity is missing
-  const itemCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+    useEffect(() => {
+        setIsLoggedIn(loginStatus);
+    }, [loginStatus]);
 
-  // Update local login state when prop changes
-  useEffect(() => {
-    setIsLoggedIn(loginStatus);
-  }, [loginStatus]);
+    return (
+        <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
+            <Container>
+                <>
+                    <Navbar.Brand as={Link} to="/home" className="logo">
+                        <img src={logo} alt="logo" height={"50px"} width={"50px"} />
+                    </Navbar.Brand>
 
-  // Function to determine login status (maybe better handled by context)
-  // const { isLoggedIn } = useContext(AuthContext); // Alternative using context
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
 
-  return (
-    <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
-      <Container>
-      <>
-        <Navbar.Brand as={Link} to="/home" className="logo">
-          <img src={logo} alt="logo" height={"50px"} width={"50px"} />
-        </Navbar.Brand>
+                        <Nav className="me-auto">
+                            <NavDropdown title="Shop" id="shop-dropdown">
+                                <NavDropdown.Item as={Link} to="/shoppage">Shop All</NavDropdown.Item>
+                            </NavDropdown>
+                            <Nav.Link as={Link} to="/upload-product">Sell</Nav.Link>
+                            <Nav.Link as={Link} to="/mixmatch">Mix & Match</Nav.Link>
+                        </Nav>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="align-items-center">
+                            {isLoggedIn ? (
+                                <>
+                                    <Nav.Link as={Link} to="/cart" className="position-relative me-2">
+                                        <FaShoppingCart style={{ fontSize: '1.4rem' }} />
+                                        {itemCount > 0 && (
+                                            <Badge
+                                                pill
+                                                bg="danger"
+                                                className="cart-item-count-badge"
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '-5px',
+                                                    right: '-10px',
+                                                    fontSize: '0.7em',
+                                                }}
+                                            >
+                                                {itemCount > 99 ? '99+' : itemCount}
+                                            </Badge>
+                                        )}
+                                    </Nav.Link>
 
-          <Nav className="me-auto">
-            <NavDropdown title="Shop" id="shop-dropdown">
-              <NavDropdown.Item as={Link} to="/shoppage">Shop All</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link as={Link} to="/upload-product">Sell</Nav.Link>
-            <Nav.Link as={Link} to="/mixmatch">Mix & Match</Nav.Link>
-          </Nav>
+                                    <NavDropdown title="Profile" id="profile-dropdown">
+                                        <NavDropdown.Item as={Link} to="/user-profile">Profile</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/manage-list">Manage Listings</NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/order-history">Order History</NavDropdown.Item>
+                                    </NavDropdown>
+                                    <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
 
-          <Nav className="align-items-center"> {/* Added align-items-center for vertical alignment */}
-            {isLoggedIn ? (
-              <>
-                {/* --- MODIFIED Cart Link --- */}
-                <Nav.Link as={Link} to="/cart" className="position-relative me-2"> {/* Added position-relative & margin */}
-                  <FaShoppingCart style={{ fontSize: '1.4rem' }} />
-                  {itemCount > 0 && ( // Conditionally render Badge
-                    <Badge
-                      pill
-                      bg="danger"
-                      className="cart-item-count-badge"
-                      style={{
-                        position: 'absolute',
-                        top: '-5px',      // Adjust vertical position
-                        right: '-10px',   // Adjust horizontal position
-                        fontSize: '0.7em',
-                        // Add more styles as needed
-                      }}
-                    >
-                      {itemCount > 99 ? '99+' : itemCount} {/* Show count, cap at 99+ */}
-                    </Badge>
-                  )}
-                </Nav.Link>
-                {/* --- END MODIFICATION --- */}
+                                </>
+                            ) : (
+                                <>
+                                    <Nav.Link as={Link} to="/login">Login</Nav.Link>
+                                    <Nav.Link as={Link} to="/register">Register</Nav.Link>
+                                </>
+                            )}
+                        </Nav>
 
-                <NavDropdown title="Profile" id="profile-dropdown">
-                  <NavDropdown.Item as={Link} to="/user-profile">Profile</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/manage-list">Manage Listings</NavDropdown.Item>
-                  {/* Add Order History Link? */}
-                   <NavDropdown.Item as={Link} to="/order-history">Order History</NavDropdown.Item>
-                </NavDropdown>
-                <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
-
-              </>
-            ) : (
-              <>
-                <Nav.Link as={Link} to="/login">Login</Nav.Link>
-                <Nav.Link as={Link} to="/register">Register</Nav.Link>
-              </>
-            )}
-          </Nav>
-
-        </Navbar.Collapse>
-      </>
-      </Container>
-    </Navbar>
-  );
+                    </Navbar.Collapse>
+                </>
+            </Container>
+        </Navbar>
+    );
 }

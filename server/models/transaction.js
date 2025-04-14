@@ -1,4 +1,4 @@
-// models/Transaction.js
+/*// models/Transaction.js
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -85,3 +85,4 @@ const Transaction = mongoose.model(
 );
 
 module.exports = Transaction;
+*/
