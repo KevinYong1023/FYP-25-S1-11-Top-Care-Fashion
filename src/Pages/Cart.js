@@ -31,6 +31,8 @@ const Cart = () => {
     setAppliedDiscountCode('');
   };
 
+
+  
   // Handler to navigate to the payment/checkout page
   const handleCheckout = () => {
     // Check for sellerId remains critical
@@ -46,16 +48,18 @@ const Cart = () => {
 
     // Prepare data to pass to the payment/checkout page
     const checkoutData = {
-      // Map cart items, explicitly set quantity to 1
+      // Map cart items, 
       cartItems: cart.map(item => ({
         productId: item.id || item.productId,
         sellerId: item.sellerId,
         price: item.price,
-        quantity: 1 // <<< Set quantity to 1 here
+        sellerName: item.seller,
+        productName:item.title,
       })),
-      totalAmount: total // Pass the final calculated total
+      totalAmount: total, // Pass the final calculated total
+      
     };
-
+    console.log("Cart Checkout Data:", checkoutData); // Check cart data
     // Navigate to payment page and pass checkoutData via location state
     navigate('/payment', { state: checkoutData });
   };
