@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Counter = require('./counter'); // Import the counter model
 
 const orderSchema = new mongoose.Schema({
     orderNumber: {
@@ -8,6 +9,16 @@ const orderSchema = new mongoose.Schema({
     seller: [{ // Array of product objects
         sellerName: { type: String, required: true },
         productName: { type: String, required: true },
+        price: {
+            type: Number,
+            required: true
+          },
+        status: {
+            type: String,
+            required: true,
+            default: 'Processing',
+            enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], // added enum for validation.
+        }
     }],
     created: {
         type: Date,
@@ -21,7 +32,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'Processing',
-        enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], // added enum for validation.
+        enum: ['Processing', 'Completed'], // added enum for validation.
     },
     buyerName: { // Changed to buyerName for clarity
         type: String,
@@ -29,17 +40,20 @@ const orderSchema = new mongoose.Schema({
     },
 }, { timestamps: false });
 
-// Custom auto-increment method for orderNumber (using string format)
-orderSchema.statics.getNextOrderNumber = async function () {
-    const lastOrder = await this.findOne().sort({ orderNumber: -1 });
-    if (!lastOrder) return 1;
-    return lastOrder.orderNumber + 1;
-};
-
 // Pre-save hook to set the orderNumber before saving
 orderSchema.pre('save', async function (next) {
-    if (!this.orderNumber) {
-        this.orderNumber = await this.constructor.getNextOrderNumber();
+    if (this.isNew && !this.orderNumber) {
+        try {
+            const counter = await Counter.findOneAndUpdate(
+                { name: 'order' },
+                { $inc: { value: 1 } },
+                { new: true, upsert: true }
+            );
+            this.orderNumber = counter.value;
+        } catch (error) {
+            console.error('Error auto-incrementing:', error);
+            next(error);
+        }
     }
     next();
 });

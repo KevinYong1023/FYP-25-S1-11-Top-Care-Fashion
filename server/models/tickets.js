@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const Counter = require('./counter'); // Make sure path is correct
 
 // Define the ticket schema
 const ticketSchema = new mongoose.Schema({
     ticketId: {
         type: Number,
-        unique: true,  // Ensure the ticketNumber is unique
+        unique: true,  // Ensure the ticketId is unique
     },
     orderId: {
         type: Number,
@@ -33,21 +34,27 @@ const ticketSchema = new mongoose.Schema({
     }
 });
 
-// Pre-save hook to set auto-increment ticketId
-ticketSchema.pre('save', async function(next) {
-    if (this.isNew) {
+// Pre-save hook to set auto-increment ticketId using Counter
+ticketSchema.pre('save', async function (next) {
+    if (this.isNew && !this.ticketId) {
         try {
-            const lastTicket = await Ticket.findOne().sort({ ticketId: -1 });
-            this.ticketId = lastTicket ? lastTicket.ticketId + 1 : 1; // Start from 1 if no tickets exist
+            const counter = await Counter.findOneAndUpdate(
+                { name: 'ticket' },
+                { $inc: { value: 1 } },
+                { new: true, upsert: true }
+            );
+            this.ticketId = counter.value;
+            next();
         } catch (error) {
             console.error('Error auto-incrementing ticketId:', error);
+            next(error);
         }
+    } else {
+        next();
     }
-    next();
 });
 
 // Create the Ticket model
 const Ticket = mongoose.model('Ticket', ticketSchema);
 
-// Export the model
 module.exports = Ticket;
