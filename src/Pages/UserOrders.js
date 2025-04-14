@@ -1,67 +1,75 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Form} from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 import UserHeader from '../Components/Headers/userHeader';
 import { useNavigate } from 'react-router-dom';
 
-export default function UserOrders({email}){
+export default function UserOrders({ email }) {
     const [buyList, setBuyList] = useState([]);
     const [sellList, setSellList] = useState([]);
-    const [name, setName] = useState("")
-    const [updatedStatus, setUpdatedStatus] = useState("")
+    const [name, setName] = useState("");
+    const [updatedStatus, setUpdatedStatus] = useState({});
 
     const navigate = useNavigate();
-     // Fetch user details based on email
-         useEffect(() => {
-             const fetchUserDetails = async () => {
-                 if (email) {
-                     try {
-                         const response = await fetch(`/api/user/${email}`); 
-                         const data = await response.json();
-                         setName(data.name);
-                     } catch (error) {
-                         console.error('Error fetching user details:', error);
-                     }
-                 }
-             };
-             fetchUserDetails();
-         }, [email]);
 
-             useEffect(() => {
-                if(name){
-                     const fetchOrderDetails = async () => {
-                     try {
-                         const response = await fetch(`/api/order-history`);
-                         const data = await response.json();
-                    const sellOrders = data.filter(order => order.seller === name);
-                    setSellList(sellOrders);
-                    // Filter buyList (orders where the user is the buyer)
-                    const buyOrders = data.filter(order => order.buyer === name);
-                    setBuyList(buyOrders);
-                     } catch (error) {
-                         console.error('Error fetching order history:', error);
-                     }
-                 };
-         
-                 fetchOrderDetails();
+    // Fetch user details based on email
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            if (email) {
+                try {
+                    const response = await fetch(`/api/user/${email}`);
+                    const data = await response.json();
+                    setName(data.name);
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
                 }
-             }, [name]);
+            }
+        };
+        fetchUserDetails();
+    }, [email]);
 
-     // Handle status change in dropdown
-     const handleStatusChange = (orderNumber, newStatus) => {
-        setUpdatedStatus((prev) => ({
+    // Fetch order details based on the user's name
+    useEffect(() => {
+        if (name) {
+            const fetchOrderDetails = async () => {
+                try {
+                    const response = await fetch(`/api/order-history`);
+                    const data = await response.json();
+
+                    // Filter sell orders where the user's name is in the seller list
+                    const sellOrders = data.filter(order =>
+                        order.seller.some(s => s.sellerName === name)
+                    );
+                    setSellList(sellOrders);
+
+                    // Filter buy orders where the user is the buyer
+                    const buyOrders = data.filter(order => order.buyerName === name);
+                    setBuyList(buyOrders);
+                } catch (error) {
+                    console.error('Error fetching order history:', error);
+                }
+            };
+
+            fetchOrderDetails();
+        }
+    }, [name]);
+
+    // Handle status change in dropdown
+    const handleStatusChange = (orderNumber, newStatus) => {
+        setUpdatedStatus(prev => ({
             ...prev,
             [orderNumber]: newStatus,
         }));
     };
 
-    const saveStatus = async ({orderId}) => {
+    const saveStatus = async (orderId) => {
+        const newStatus = updatedStatus[orderId] || 'Processing'; // Default to 'Processing' if no status is selected
         try {
             const response = await fetch(`/api/update-order-status/${orderId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ updatedStatus }),
+                body: JSON.stringify({ updatedStatus: newStatus }),
             });
 
             const data = await response.json();
@@ -74,11 +82,11 @@ export default function UserOrders({email}){
         }
     };
 
-    function createTicket(orderId){
+    function createTicket(orderId) {
         navigate(`/create-ticket/${orderId}`);
     }
 
-return (
+    return (
         <>
               <UserHeader loginStatus={true} />
               <Container fluid>
