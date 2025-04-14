@@ -17,10 +17,9 @@ router.get('/order-history', async (req, res) => {
     }
 });
 
-// Update order status by orderNumber (Admin-only route, consider adding auth)
 router.put('/update-order-status/:orderNumber', async (req, res) => {
     const { orderNumber } = req.params;
-    const { status } = req.body;
+    const { sellerName, status } = req.body;
 
     const validStatuses = ['Processing', 'Shipped', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
@@ -28,15 +27,29 @@ router.put('/update-order-status/:orderNumber', async (req, res) => {
     }
 
     try {
-        const order = await Orders.findOneAndUpdate(
-            { orderNumber },
-            { status },
-            { new: true }
-        );
+        const order = await Order.findOne({ orderNumber });
 
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
+
+        // Update the specific seller's status
+        const sellerIndex = order.seller.findIndex(s => s.sellerName === sellerName);
+        if (sellerIndex === -1) {
+            return res.status(404).json({ message: 'Seller not found in this order' });
+        }
+
+        order.seller[sellerIndex].status = status;
+
+        // Check if ALL sellers have status "Delivered"
+        const allDelivered = order.seller.every(s => s.status === 'Delivered');
+
+        // If all seller items are delivered, set main order status to "Completed"
+        if (allDelivered) {
+            order.status = 'Completed';
+        }
+
+        await order.save();
 
         res.status(200).json({ message: 'Order status updated successfully', order });
     } catch (error) {
@@ -44,6 +57,8 @@ router.put('/update-order-status/:orderNumber', async (req, res) => {
         res.status(500).json({ error: 'Error updating order status' });
     }
 });
+
+
 
 // routes/orders.js
 router.post('/create-order', authenticate, async (req, res) => {
@@ -132,12 +147,14 @@ router.post('/create-order', authenticate, async (req, res) => {
                 return res.status(400).json({ message: 'Each seller item must contain sellerName and productName.' });
             }
         }
-
+        const sellerData = seller.map(item => item);
+        console.log(sellerData);
         // Create new order
         const newOrder = new Order({
             seller: seller.map(item => ({
                 sellerName: item.sellerName,
                 productName: item.productName,
+                price: item.price
             })),
             buyerName: buyerName,
             total: totalPrice,

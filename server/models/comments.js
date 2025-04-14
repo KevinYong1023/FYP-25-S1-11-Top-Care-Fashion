@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
+const Counter = require('./counter'); // Make sure the path is correct
 
-// Define the comments schema
 const commentSchema = new mongoose.Schema({
     commentNo: {
         type: Number,
-        unique: true,  // Ensure the commentNo is unique
+        unique: true,
     },
-    description: { // User selling the product: Product A: User1, Product B: User2
+    description: {
         type: String,
         required: true
     },
@@ -20,25 +20,29 @@ const commentSchema = new mongoose.Schema({
     },
     created: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     }
 });
 
-// Pre-save hook to set auto-increment commentNo
-commentSchema.pre('save', async function(next) {
-    if (this.isNew) {
+// Auto-increment commentNo using the Counter model
+commentSchema.pre('save', async function (next) {
+    if (this.isNew && !this.commentNo) {
         try {
-            const lastComment = await Comments.findOne().sort({ commentNo: -1 });
-            this.commentNo = lastComment ? lastComment.commentNo + 1 : 1; // Start from 1 if no comments exist
+            const counter = await Counter.findOneAndUpdate(
+                { name: 'comment' },
+                { $inc: { value: 1 } },
+                { new: true, upsert: true }
+            );
+            this.commentNo = counter.value;
+            next();
         } catch (error) {
             console.error('Error auto-incrementing commentNo:', error);
+            next(error);
         }
+    } else {
+        next();
     }
-    next();
 });
 
-// Create the Comments model
 const Comments = mongoose.model('Comments', commentSchema);
-
-// Export the model
 module.exports = Comments;
