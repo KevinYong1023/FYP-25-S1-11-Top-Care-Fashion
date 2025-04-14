@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
 import { Container, Row, Col, Table, Button, Card, Pagination, Spinner } from "react-bootstrap";
-import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import ManagerHeader from "../../Components/Headers/ManagerHeader";
 
 export default function ManagerUsersIndividual() {
@@ -166,10 +165,7 @@ export default function ManagerUsersIndividual() {
     <>
       <ManagerHeader />
       <div style={{ display: 'flex', minHeight: '100vh' }}>
-                                      {/* Sidebar */}
-                                      <div style={{ width: '250px', flexShrink: 0 }}>
-                                          <ManagerSidebar />
-                                      </div>
+
        {/* Main Content */}
        <div style={{ flex: '1', padding: '40px' }}>
         {!error ? <></> : (
