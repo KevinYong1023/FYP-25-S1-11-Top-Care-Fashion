@@ -31,6 +31,7 @@ const UploadProduct = ({ email }) => {
     description: "",
     price: "",
     category: "",
+    occasion:"",
     image: null,
     imageUrl: ""
   });
@@ -179,7 +180,7 @@ const UploadProduct = ({ email }) => {
     setError("");
     setSuccess(false);
     console.log(form);
-    if (!form.title || !form.price || !form.imageUrl || !form.category) {
+    if (!form.title || !form.price || !form.imageUrl || !form.category || !form.occasion) {
       setError("Please complete all fields including image upload.");
       return;
     }
@@ -189,6 +190,7 @@ const UploadProduct = ({ email }) => {
       description: form.description,
       price: parseFloat(form.price),
       category: form.category,
+      occasion: form.occasion,
       imageUrl: form.imageUrl,
       seller: name,
       email,
@@ -275,9 +277,8 @@ const UploadProduct = ({ email }) => {
                       placeholder="Product description"
                     />
                   </Form.Group>
-
                   <Row>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group className="mb-3">
                         <Form.Label>Price</Form.Label>
                         <Form.Control
@@ -290,7 +291,7 @@ const UploadProduct = ({ email }) => {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group className="mb-3">
                         <Form.Label>Category</Form.Label>
                         <Form.Control
@@ -300,6 +301,24 @@ const UploadProduct = ({ email }) => {
                           placeholder="Detected automatically"
                         />
                       </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Occasion</Form.Label>
+                        <Form.Select
+                          value={form.occasion}
+                          onChange={(e) =>
+                            setForm({ ...form, occasion: e.target.value })
+                          }
+                          required
+                        >
+                          <option value="">Select occasion</option>
+                          <option value="Casual">Casual</option>
+                          <option value="Smart">Smart</option>
+                          <option value="Formal">Formal</option>
+                          <option value="Sport">Sport</option>
+                        </Form.Select>
+                    </Form.Group>
                     </Col>
                   </Row>
 

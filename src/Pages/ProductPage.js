@@ -1,5 +1,5 @@
 import React, { useEffect, useState,useContext} from "react";
-import { Container, Row, Col, Card, Button, Alert, OverlayTrigger, Tooltip, Form, ListGroup } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Alert, OverlayTrigger, Tooltip, Form, ListGroup,Spinner } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../Components/CartContext";
 import UserHeader from "../Components/Headers/userHeader";
@@ -15,17 +15,22 @@ const ProductPage = ({ email }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { login } = useContext(AuthContext ); 
+  const [isLoading, setIsLoading] = useState(false); 
 
   // Fetch user information
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (email) {
         try {
+          setIsLoading(true)
           const response = await fetch(`/api/user/${email}`);  // Assuming your API follows this route
           const data = await response.json();
           setUser(data.name);
         } catch (error) {
           console.error('Error fetching user details:', error);
+          setError("Unable to load user details.");
+        }finally{
+          setIsLoading(false)
         }
       }
     };
@@ -36,6 +41,7 @@ const ProductPage = ({ email }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        setIsLoading(true)
         const res = await fetch(`/api/products/${id}`);
         if (!res.ok) throw new Error("Failed to fetch product");
         const data = await res.json();
@@ -43,6 +49,8 @@ const ProductPage = ({ email }) => {
       } catch (err) {
         console.error("Error fetching product:", err);
         setError("Unable to load product details.");
+      }finally{
+        setIsLoading(false)
       }
     };
     fetchProduct();
@@ -51,12 +59,15 @@ const ProductPage = ({ email }) => {
   const fetchComments = async (product) => {
     if (product) {
       try {
+        setIsLoading(true)
         const res = await fetch(`/api/comments/latest/${product}`);
         const data = await res.json();
         setProductComments(data);
       } catch (err) {
         console.error("Error fetching comments:", err);
         setError("Unable to load comments.");
+      }finally{
+        setIsLoading(false)
       }
     }
   };
@@ -88,6 +99,7 @@ const ProductPage = ({ email }) => {
     };
     if (comment.trim()) {
       try {
+        setIsLoading(true)
         const res = await fetch(`/api/comments/${product.title}`, {
           method: 'POST',
           headers: {
@@ -100,8 +112,13 @@ const ProductPage = ({ email }) => {
           setComment(""); // Reset comment field
         }
       } catch (err) {
+        setError("Error submitting comment:", err);
         console.error("Error submitting comment:", err);
+      }finally{
+        setIsLoading(false)
       }
+    }else{
+      setError("Please Don't Submit Empty Comment.");
     }
   };
 
@@ -110,7 +127,8 @@ const ProductPage = ({ email }) => {
       <UserHeader loginStatus={true} />
       <Container className="mt-4">
         {error && <Alert variant="danger">{error}</Alert>}
-        {product ? (
+
+        { !isLoading && product ? (
           <Row>
             {/* Left: Image */}
             <Col md={6} className="text-center">
@@ -129,6 +147,7 @@ const ProductPage = ({ email }) => {
                 <h2>{product.title}</h2>
                 <p><strong>Price:</strong> ${product.price}</p>
                 <p><strong>Category:</strong> {product.category}</p>
+                <p><strong>Occasion:</strong> {product.occasion}</p>
                 <p><strong>Description:</strong><br />{product.description}</p>
                 <p><strong>Seller:</strong><br/>{product.seller}</p>
                 {/* Add to Cart Button */}
@@ -175,7 +194,8 @@ const ProductPage = ({ email }) => {
           ) : (
             <p>No comments yet. Be the first to leave a comment!</p>
           )}
-
+          { user !== "" && (
+            <>
           {/* Comment Form */}
           <Form onSubmit={handleSubmitComment} className="mt-4">
             <Form.Group controlId="formBasicComment">
@@ -185,15 +205,17 @@ const ProductPage = ({ email }) => {
                 rows={4}
                 placeholder="Write your comment..."
                 value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                required
+                onChange={(e) => setComment(e.target.value)}                
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-2">Submit Comment</Button>
-          </Form>
+            <Button variant="primary" type="submit"  className="mt-2">Submit Comment</Button>
+          </Form></>)}
         </div>
         </Row>) : (
-          <p>Loading product...</p>
+          <div className="text-center mt-5">
+            <Spinner animation="border" role="status" variant="primary" />
+            <p className="mt-2">Loading...</p>
+          </div>
         )}
       </Container> 
     </>
