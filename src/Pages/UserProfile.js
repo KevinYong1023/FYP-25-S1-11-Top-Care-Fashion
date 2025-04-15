@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile = ({ email, setName, setAddress }) => {  
     const [user, setUser] = useState(null);  
     const navigate = useNavigate();
+    const [revenue, setRevenue] = useState(0); // 🆕 New state for revenue
 
     // Fetch user details based on email
     useEffect(() => {
@@ -27,6 +28,22 @@ const UserProfile = ({ email, setName, setAddress }) => {
         };
         fetchUserDetails();
     }, [email]);
+
+   /* // 🆕 Fetch revenue using user._id
+    useEffect(() => {
+        const fetchRevenue = async () => {
+            if (user?._id) {
+                try {
+                    const response = await fetch(`/api/revenue/${user._id}`);
+                    const data = await response.json();
+                    setRevenue(data.revenue || 0);
+                } catch (error) {
+                    console.error("Error fetching revenue:", error);
+                }
+            }
+        };
+        fetchRevenue();
+    }, [user?._id]); */
 
     function updateProfile(){
         navigate('/update-account');  
@@ -55,6 +72,11 @@ const UserProfile = ({ email, setName, setAddress }) => {
                             <h4>Date of Birth: {user.dob}</h4>
                             <h4>Gender: {user.gender}</h4>
                             <h4>Phone: {user.phone}</h4>
+                        </Card>
+                        
+                        <Card className="p-4 mt-3">
+                            <h2>Revenue Earned</h2>
+                            <h3><strong>${user.revenue?.toFixed(2) || "0.00"}</strong></h3>
                         </Card>
                         <Card className="p-4">
                             <h2>Shipping Details</h2>

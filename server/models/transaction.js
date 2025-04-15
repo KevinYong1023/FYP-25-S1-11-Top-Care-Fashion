@@ -5,10 +5,6 @@ const Schema = mongoose.Schema;
 
 const transactionSchema = new Schema(
     {
-        orderNumber: {
-            type: String, // Changed to String for flexibility
-            unique: true,
-        },
         senderId: {
             type: Number, // Change to Number
             required: true,

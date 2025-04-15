@@ -217,7 +217,8 @@ router.get('/user/:email', async (req, res) => {
             gender: user.gender,
             phone: user.phone,
             position: user.position,
-            address: user.address
+            address: user.address,
+            revenue: user.revenue
         });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching user details' });
@@ -279,6 +280,7 @@ router.get('/users/:userId/name', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 
 
