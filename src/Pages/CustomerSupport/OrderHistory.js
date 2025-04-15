@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Pagination, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';  // To get the URL params
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function OrderHistory() {
@@ -76,10 +75,7 @@ export default function OrderHistory() {
         <>
             <CustomerSupportHeader />
             <div style={{ display: 'flex', minHeight: '100vh' }}>
-                {/* Sidebar */}
-                <div style={{ width: '250px', flexShrink: 0 }}>
-                    <Sidebar />
-                </div>
+         
     
                 {/* Main Content */}
                 <div style={{ flex: 1, padding: '40px' }}>

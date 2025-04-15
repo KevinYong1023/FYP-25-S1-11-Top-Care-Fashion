@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {AuthContext} from '../../App';
 import { Container, Row, Col, Form, Button,Spinner } from 'react-bootstrap';
-import CustomerSupportSidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 import { useNavigate } from 'react-router-dom';  
 
@@ -109,10 +108,7 @@ export default function CustomerSupportProfileUpdate() {
         <>
             <CustomerSupportHeader />
             <div style={{ display: 'flex', minHeight: '100vh' }}>
-                {/* Sidebar */}
-                <div style={{ width: '250px', flexShrink: 0 }}>
-                    <CustomerSupportSidebar />
-                </div>
+               
     
                 {/* Main Content */}
                 <div style={{ flex: 1, padding: '40px' }}>

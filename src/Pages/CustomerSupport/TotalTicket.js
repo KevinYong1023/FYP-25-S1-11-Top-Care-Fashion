@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
 import { Container, Row, Col, Button, Pagination,Spinner } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { Link } from 'react-router-dom';
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
@@ -125,10 +124,7 @@ export default function TotalTicket() {
     <>
     <CustomerSupportHeader />
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Sidebar */}
-      <div style={{ width: '250px', flexShrink: 0 }}>
-        <Sidebar />
-      </div>
+      
   
       {/* Main content */}
       <div style={{ flex: 1, padding: '20px' }}>

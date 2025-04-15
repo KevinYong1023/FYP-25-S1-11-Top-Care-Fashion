@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
 import { Container, Row, Col, Button, Form, Table, Card, Pagination, Spinner } from 'react-bootstrap';
-import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import AdminHeader from '../../Components/Headers/AdminHeader';
 
 export default function ViewAccounts() {
@@ -160,11 +159,7 @@ export default function ViewAccounts() {
            <>
                 <AdminHeader />
                 <div style={{ display: 'flex', minHeight: '100vh' }}>
-                  {/* Sidebar */}
-                  <div style={{ width: '250px', flexShrink: 0 }}>
-                    <AdminSidebar />
-                  </div>
-      
+                 
             {/* Main Content */}
             <div style={{ flex: 1, padding: '20px' }}>
               {error && (

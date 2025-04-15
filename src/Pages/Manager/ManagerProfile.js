@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import {AuthContext} from '../../App';
 import { Card, Button,Spinner } from 'react-bootstrap';
 import ManagerHeader from "../../Components/Headers/ManagerHeader"; 
-import ManagerSidebar from "../../Components/Sidebars/ManagerSidebar";
 import { useNavigate } from 'react-router-dom';
 
 const ManagerProfile = () => {
@@ -40,10 +39,7 @@ const ManagerProfile = () => {
            <>
                   <ManagerHeader />
                                        <div style={{ display: 'flex', minHeight: '100vh' }}>
-                                         {/* Sidebar */}
-                                         <div style={{ width: '250px', flexShrink: 0 }}>
-                                           <ManagerSidebar />
-                                         </div>
+                                        
                    {/* Main Content */}
       <div style={{ flex: 1, padding: '20px' }}>
         {error && (

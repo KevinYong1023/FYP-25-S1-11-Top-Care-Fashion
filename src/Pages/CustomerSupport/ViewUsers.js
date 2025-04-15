@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Pagination,Spinner} from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function ViewUsers() {
@@ -71,10 +70,7 @@ export default function ViewUsers() {
         <>
             <CustomerSupportHeader />
             <div style={{ display: 'flex', minHeight: '100vh' }}>
-                {/* Sidebar */}
-                <div style={{ width: '250px', flexShrink: 0 }}>
-                    <Sidebar />
-                </div>
+        
     
                 {/* Main Content */}
                 <div style={{ flex: 1, padding: '40px' }}>

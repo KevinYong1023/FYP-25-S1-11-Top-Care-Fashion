@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form, Spinner} from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { useParams, useNavigate } from "react-router-dom";
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
@@ -161,10 +160,7 @@ export default function TicketInfo({ email }) {
         <>
         <CustomerSupportHeader />
         <div style={{ display: 'flex', minHeight: '100vh' }}>
-          {/* Sidebar */}
-          <div style={{ width: '250px', flexShrink: 0 }}>
-            <Sidebar />
-          </div>
+          
       
           {/* Main content */}
           <div style={{ flex: 1, padding: '20px' }}>

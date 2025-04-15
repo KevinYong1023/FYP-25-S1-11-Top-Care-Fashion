@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {AuthContext} from '../../App';
 import { Container, Row, Col, Form, Button,Spinner} from 'react-bootstrap';
-import ManagerSidebar from '../../Components/Sidebars/ManagerSidebar';
 import ManagerHeader from '../../Components/Headers/ManagerHeader';
 import { useNavigate } from 'react-router-dom';  
 
@@ -109,10 +108,7 @@ export default function ManagerProfileUpdate() {
          <>
                     <ManagerHeader />
                     <div style={{ display: 'flex', minHeight: '100vh' }}>
-                        {/* Sidebar */}
-                        <div style={{ width: '250px', flexShrink: 0 }}>
-                            <ManagerSidebar />
-                        </div>
+                        
             
                         {/* Main Content */}
                         <div style={{ flex: 1, padding: '40px' }}>
