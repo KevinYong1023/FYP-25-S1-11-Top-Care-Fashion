@@ -15,7 +15,8 @@ export default function AdminHeader({ loginStatus }) {
 
     return (
         <>
-            <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
+                      <Navbar expand="lg" className="custom-navbar">
+            
                 <Container>
                     <Navbar.Brand href="/view-all-accounts" style={{ color: 'black', marginLeft: '10px' }}>
                         <img src={logo} alt="logo" height={"80px"} width={"80px"} />

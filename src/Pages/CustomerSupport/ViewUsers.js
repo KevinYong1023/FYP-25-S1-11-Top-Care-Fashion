@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Pagination,Spinner} from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
+import { Table, Button, Pagination,Spinner} from 'react-bootstrap';
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function ViewUsers() {
@@ -17,7 +16,8 @@ export default function ViewUsers() {
                 setIsLoading(true)
                 const response = await fetch('/api/user'); // Fetch users from backend route
                 const data = await response.json();
-                setUsers(data); // Set the fetched users to the state
+                const filteredUsers = data.filter(user => user.position === 'user' && user.status === "Active");
+                setUsers(filteredUsers); // Set the fetched users to the state
             } catch (error) {
                 setError("Server Error: Please Refresh the Page")
                 console.error('Error fetching users:', error);
@@ -29,14 +29,11 @@ export default function ViewUsers() {
         fetchUsers();
     }, []);
 
-    // Filter users with the position 'user'
-    const filteredUsers = users.filter(user => user.position === 'user');
-
     // Pagination Logic
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(users.length / usersPerPage);
 
     const renderPagination = () => {
         let items = [];
@@ -69,61 +66,85 @@ export default function ViewUsers() {
 
     return (
         <>
-            <CustomerSupportHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    {/* Sidebar */}
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-
-                    {/* Main Content */}
-                    <Col md={10} style={{ padding: '20px' }}>
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                    {
-                        isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ):(<>
-                        <h2>User Accounts</h2>
-                        <hr />
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentUsers.map(user => (
-                                    <tr key={user._id}>
-                                        <td>{user.name}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.phone.slice(0, 8)}</td> {/* Limits phone to 8 characters */}
-                                        <td>
-                                            <a href={`/order-history/${user.name}`} rel="noopener noreferrer">
-                                                Order History
-                                            </a>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-
-                        {/* Pagination */}
-                        {renderPagination()}
-                        </>) }
-                    </Col>
-                </Row>
-            </Container>
+          <CustomerSupportHeader />
+          <div style={{ display: 'flex', minHeight: '100vh' }}>
+            {/* Main Content */}
+            <div style={{ flex: 1, padding: '40px', backgroundColor: '#f9f9f9' }}>
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+      
+              {isLoading ? (
+                <div className="text-center mt-5">
+                  <Spinner animation="border" role="status" variant="primary" />
+                  <p className="mt-2">Loading...</p>
+                </div>
+              ) : (
+                <>
+                  <h2 style={{ color: '#6b705c' }}>User Accounts</h2>
+                  <hr />
+                  <Table
+                    
+                    className="table table-hover table-striped"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
+                    }}
+                  >
+  <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
+  <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Created At</th>
+                        <th>Status</th>
+                        <th className="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     
+                      {currentUsers.map((user) => (
+                        <tr key={user._id}>
+                          <td>{user.name}</td>
+                          <td>{user.username}</td>
+                          <td>{user.email}</td>
+                          <td>{user.phone.slice(0, 8)}</td>
+                          <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
+                          <td>{user.status}</td>
+                          <td >
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              href={`/order-history/${user.name}`}
+                              rel="noopener noreferrer"
+                              style={{
+                                fontSize: '16px',
+                                borderRadius: '5px',
+                                padding: '6px 12px',
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                              }}
+                            >
+                              View Orders
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+      
+                  {/* Pagination */}
+                  {renderPagination()}
+                </>
+              )}
+            </div>
+          </div>
         </>
-    );
+      );
+      
+    
 }

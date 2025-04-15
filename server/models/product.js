@@ -17,7 +17,7 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['Top', 'Bottom', 'Footwear', 'Other'],
+    enum: ['Top', 'Bottom', 'Footwear'],
     required: true
   },
   imageUrl: {
@@ -31,6 +31,10 @@ const productSchema = new mongoose.Schema({
   email: {  // user email
     type: String,
     required: true
+  },
+  userId: {
+    type: Number,
+    required: false 
   },
   createdAt: {
     type: Date,

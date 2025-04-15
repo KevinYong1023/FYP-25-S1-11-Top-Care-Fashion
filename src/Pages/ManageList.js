@@ -1,32 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, Image, Container, Alert, Pagination } from "react-bootstrap";
+import { Table, Button, Form, Image, Spinner, Alert, Pagination } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 
 const ManageList = ({ email }) => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
+  const [error,setError] = useState("")
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(10); // Fixed to show 10 products per page
+  const [productsPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState(false); 
 
-  // Fetch products on load
+  const getUserProduct = async () => {
+    if (email) {
+      try {
+        setIsLoading(true); // Set loading to true when fetch starts
+        const response = await fetch(`/api/products/user/${email}`);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        setError("Please Refresh the page and try again");
+        console.error("Failed to fetch listings:", error);
+      } finally {
+        setIsLoading(false); // Always set loading to false at the end
+      }
+    }
+  };
+  
   useEffect(() => {
     if (email) {
-      fetch(`/api/products/user/${email}`)
-        .then((res) => res.json())
-        .then((data) => setProducts(data))
-        .catch((err) => console.error("Failed to fetch listings:", err));
+      getUserProduct()
     }
   }, [email]);
 
-  // Handle input change for editable fields
   const handleChange = (index, field, value) => {
+    setMessage("");
+    setError("");
     const updated = [...products];
     updated[index][field] = value;
     setProducts(updated);
   };
 
-  // Update product in DB
   const handleUpdate = async (product) => {
+    const updateCheck = product.price && product.title && product.description
+    if(updateCheck){
     try {
       const res = await fetch(`/api/products/${product._id}`, {
         method: "PUT",
@@ -36,16 +52,19 @@ const ManageList = ({ email }) => {
 
       if (res.ok) {
         setMessage("Product updated successfully.");
+        getUserProduct();
       } else {
-        setMessage("Error updating product.");
+        setError("Error updating product.");
       }
     } catch (err) {
       console.error(err);
-      setMessage("Server error during update.");
+      setError("Server error during update.");
     }
-  };
+  }else{
+    setError("Empty Field: Please FIll Up the Details.")
+  }
+};
 
-  // Delete product
   const handleDelete = async (id) => {
     try {
       const res = await fetch(`/api/products/${id}`, {
@@ -64,136 +83,138 @@ const ManageList = ({ email }) => {
     }
   };
 
-  // Get current products for the current page
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products.length / productsPerPage);
 
-  // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Total number of pages
-  const totalPages = Math.ceil(products.length / productsPerPage);
-
   return (
     <>
       <UserHeader loginStatus={true} />
-      <Container className="mt-4">
+      <div className="mt-4 px-3">
         <h2>Manage Listings</h2>
+  
         {message && <Alert variant="info">{message}</Alert>}
-
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Image URL</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Price ($)</th>
-              <th>Category</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentProducts.map((product, index) => (
-              <tr key={product._id}>
-                <td>
-                  <Image
-                    src={product.imageUrl}
-                    alt="Product"
-                    width="80"
-                    height="80"
-                    rounded
-                    onError={(e) => (e.target.src = "https://via.placeholder.com/80")}
-                  />
-                </td>
-                <td>
-                  <Form.Control
-                    type="text"
-                    value={product.imageUrl}
-                    onChange={(e) => handleChange(index, "imageUrl", e.target.value)}
-                  />
-                </td>
-                <td>
-                  <Form.Control
-                    type="text"
-                    value={product.title}
-                    onChange={(e) => handleChange(index, "title", e.target.value)}
-                  />
-                </td>
-                <td>
-                  <Form.Control
-                    as="textarea"
-                    rows={2}
-                    value={product.description}
-                    onChange={(e) => handleChange(index, "description", e.target.value)}
-                  />
-                </td>
-                <td>
-                  <Form.Control
-                    type="number"
-                    value={product.price}
-                    onChange={(e) => handleChange(index, "price", e.target.value)}
-                  />
-                </td>
-                <td>
-                  <Form.Select
-                    value={product.category}
-                    onChange={(e) => handleChange(index, "category", e.target.value)}
-                  >
-                    <option value="Top">Top</option>
-                    <option value="Bottom">Bottom</option>
-                    <option value="Footwear">Footwear</option>
-                    <option value="Other">Other</option>
-                  </Form.Select>
-                </td>
-                <td>
-                  <Button
-                    variant="success"
-                    size="sm"
-                    onClick={() => handleUpdate(product)}
-                    className="me-2"
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-
-        {/* Pagination */}
-        <Pagination className="justify-content-center mt-4">
-          <Pagination.Prev
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          />
-          {[...Array(totalPages)].map((_, index) => (
-            <Pagination.Item
-              key={index + 1}
-              active={index + 1 === currentPage}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          />
-        </Pagination>
-      </Container>
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+  
+        {isLoading ? (
+          <div className="text-center mt-5">
+            <Spinner animation="border" role="status" variant="primary" />
+            <p className="mt-2">Loading...</p>
+          </div>
+        ) : (
+          <>
+            <Table striped bordered hover responsive>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Price ($)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentProducts.map((product, index) => (
+                  <tr key={product._id}>
+                    <td width={'200px'}>
+                      <Image
+                        src={product.imageUrl}
+                        alt="Product"
+                        width="300"
+                        height="300"
+                        rounded
+                        onError={(e) =>
+                          (e.target.src = "https://via.placeholder.com/80")
+                        }
+                      />
+                    </td>
+                    <td  width={'200px'}>{product.category}</td>
+                    <td>
+                      <Form.Control
+                        type="text"
+                        value={product.title}
+                        onChange={(e) =>
+                          handleChange(index, "title", e.target.value)
+                        }
+                      />
+                    </td>
+                    <td>
+                      <Form.Control
+                        as="textarea"
+                        rows={2}
+                        value={product.description}
+                        onChange={(e) =>
+                          handleChange(index, "description", e.target.value)
+                        }
+                      />
+                    </td>
+                    <td>
+                      <Form.Control
+                        type="number"
+                        value={product.price}
+                        onChange={(e) =>
+                          handleChange(index, "price", e.target.value)
+                        }
+                      />
+                    </td>
+                   
+                    <td>
+                      <Button
+                        variant="success"
+                        size="sm"
+                        onClick={() => handleUpdate(product)}
+                        className="me-2"
+                      >
+                        Update
+                      </Button>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => handleDelete(product._id)}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+  
+            <Pagination className="justify-content-center mt-4">
+              <Pagination.Prev
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[...Array(totalPages)].map((_, index) => (
+                <Pagination.Item
+                  key={index + 1}
+                  active={index + 1 === currentPage}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              />
+            </Pagination>
+          </>
+        )}
+      </div>
     </>
   );
+  
 };
 
 export default ManageList;

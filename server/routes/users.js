@@ -18,6 +18,10 @@ router.post('/login', async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ message: 'Wrong Password' });
         }
+        // Check user status is active or not
+        if (user.status !== 'Active') {
+            return res.status(400).json({ message: 'Inactive Account.' });
+        }
 
         // If login is successful, return user data (without the password)
         res.json({
@@ -26,8 +30,7 @@ router.post('/login', async (req, res) => {
                 id: user.userId, // Use 'userId' instead of '_id'
                 email: user.email,
                 role: user.position, // Use 'position' instead of 'role'
-                name: user.name,
-                profile_pic: user.profile_pic
+                name: user.name
             }
         });
     } catch (error) {
@@ -125,12 +128,30 @@ router.get('/user', async (req, res) => {
     }
 });
 
-// Search users by name
+// Search users by name, status, and position (Case 1)
 router.get('/user/search', async (req, res) => {
-    const { name } = req.query;
+    const { name, status, position } = req.query;
 
     try {
-        const users = await User.find({ name: { $regex: name, $options: 'i' } }); // Case-insensitive search
+        const query = {};
+
+        // If 'name' is provided, use regex for name search
+        if (name) {
+            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+        }
+
+        // If 'status' is provided, add it to the query filter
+        if (status) {
+            query.status = status;
+        }
+
+        // If 'position' is provided, add it to the query filter
+        if (position) {
+            query.position = position;
+        }
+
+        // Fetch users based on the dynamically constructed query
+        const users = await User.find(query);
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: 'Error searching users' });
@@ -170,6 +191,7 @@ router.get('/user/:email', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         res.json({
+            userId: user.userId,
             username: user.username,
             name: user.name,
             email: user.email,
@@ -177,7 +199,10 @@ router.get('/user/:email', async (req, res) => {
             gender: user.gender,
             phone: user.phone,
             position: user.position,
-            address: user.address
+            joined: user.joined,
+            status: user.status,
+            address: user.address,
+            revenue: user.revenue
         });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching user details' });

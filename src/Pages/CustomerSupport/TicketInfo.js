@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form, Spinner} from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
 import { useParams, useNavigate } from "react-router-dom";
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
@@ -158,88 +157,121 @@ export default function TicketInfo({ email }) {
     }
 
     return (
-        <>
-            <CustomerSupportHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-                    <Col md={10} style={{ padding: '20px' }}>
-                    <Row>
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                        {isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ) : ticket ? (
-                            <>
-                                <hr />
-                                <Col md={6}>
-                                    <p><strong>Name: {ticket.user}</strong></p>
-                                    <p><strong>Description: {ticket.description}</strong></p>
-                                    <p><strong>Assignee: {ticket.assignee}</strong></p>
-                                    <p><strong>Created: {ticket.created}</strong></p>
-
-                                    <Form.Group controlId="formTicketStatus">
-                                        <Form.Label><strong>Ticket Status:</strong></Form.Label>
-                                        <Form.Control
-                                            as="select"
-                                            disabled={ticketStatus === "Open"}
-                                            value={ticketStatus}
-                                            onChange={handleStatusChange}
-                                        >
-                                            {ticketStatus === "Open" ? <option value="Open">Open</option> : null}
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Close">Close</option>
-                                        </Form.Control>
-                                    </Form.Group>
-                                    <hr />
-                                    <div style={{ display: 'flex', gap: '10px' }}>
-                                        <Button onClick={handleDeleteTicket} variant="danger" style={{ borderRadius: '20px', padding: '10px 20px' }}>
-                                            Delete
-                                        </Button>
-                                        {ticketStatus === "Open" ? (
-                                            <Button
-                                                onClick={handleAssignToMeTicket}
-                                                variant="outline-secondary"
-                                                style={{ borderRadius: '20px', padding: '10px 20px' }}
-                                            >
-                                                Assign to me
-                                            </Button>
-                                        ) : (
-                                            <>
-                                                <Button
-                                                    onClick={handleUpdateTicket}
-                                                    variant="outline-secondary"
-                                                    style={{ borderRadius: '20px', padding: '10px 20px' }}
-                                                >
-                                                    Update Ticket
-                                                </Button>
-                                                <Button
-                                                    onClick={handleRemoveTicket}
-                                                    variant="outline-secondary"
-                                                    style={{ borderRadius: '20px', padding: '10px 20px' }}
-                                                >
-                                                    Remove My Name
-                                                </Button>
-                                            </>
-                                        )}
-                                    </div>
-                                </Col>
-                            </>
-                        ) : (
-                            <></>
-                        )}
-                    </Row>
-                    </Col>
-                </Row>
-            </Container>
-        </>
+      <>
+        <CustomerSupportHeader />
+        <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f9f9f9' }}>
+          {/* Main content */}
+          <div style={{ flex: 1, padding: '40px' }}>
+            {error && (
+              <div className="alert alert-danger" role="alert" style={{ borderRadius: '8px' }}>
+                {error}
+              </div>
+            )}
+    
+            {isLoading ? (
+              <div className="text-center mt-5">
+                <Spinner animation="border" role="status" variant="primary" />
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : ticket ? (
+              <div
+                style={{
+                  maxWidth: '700px',
+                  backgroundColor: '#ffffff',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  padding: '30px',
+                  margin: '0 auto',
+                }}
+              >
+                <h3 className="mb-4" style={{ color: '#6b705c' }}>Ticket Details</h3>
+    
+                <p><strong>Name:</strong> {ticket.user}</p>
+                <p><strong>Description:</strong> {ticket.description}</p>
+                <p><strong>Assignee:</strong> {ticket.assignee}</p>
+                <p><strong>Created:</strong> {ticket.created}</p>
+    
+                <Form.Group controlId="formTicketStatus" className="mb-3">
+                  <Form.Label><strong>Ticket Status:</strong></Form.Label>
+                  <Form.Control
+                    as="select"
+                    disabled={ticketStatus === "Open"}
+                    value={ticketStatus}
+                    onChange={handleStatusChange}
+                    style={{
+                      fontSize: '16px',
+                      padding: '10px',
+                      borderRadius: '8px',
+                      borderColor: '#a5a58d',
+                      backgroundColor: '#f0efeb',
+                    }}
+                  >
+                    {ticketStatus === "Open" && <option value="Open">Open</option>}
+                    <option value="In Progress">In Progress</option>
+                    <option value="Close">Close</option>
+                  </Form.Control>
+                </Form.Group>
+    
+                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+                  <Button
+                    onClick={handleDeleteTicket}
+                    variant="danger"
+                    style={{
+                      borderRadius: '20px',
+                      padding: '10px 20px',
+                      fontSize: '16px',
+                      boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                    }}
+                  >
+                    Delete
+                  </Button>
+    
+                  {ticketStatus === "Open" ? (
+                    <Button
+                      onClick={handleAssignToMeTicket}
+                      variant="outline-secondary"
+                      style={{
+                        borderRadius: '20px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                      }}
+                    >
+                      Assign to me
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={handleUpdateTicket}
+                        variant="outline-secondary"
+                        style={{
+                          borderRadius: '20px',
+                          padding: '10px 20px',
+                          fontSize: '16px',
+                          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                        }}
+                      >
+                        Update Ticket
+                      </Button>
+                      <Button
+                        onClick={handleRemoveTicket}
+                        variant="outline-secondary"
+                        style={{
+                          borderRadius: '20px',
+                          padding: '10px 20px',
+                          fontSize: '16px',
+                          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
+                        }}
+                      >
+                        Remove My Name
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </>
     );
-}
+  }

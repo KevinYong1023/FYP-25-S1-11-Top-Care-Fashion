@@ -4,7 +4,7 @@ const Product = require('../models/product');
 
 // Upload Product
 router.post('/products', async (req, res) => {
-    const { title, description, price, category, imageUrl, seller,email } = req.body;
+    const { title, description, price, category, imageUrl, seller, email, userId } = req.body;
   
     try {
       const newProduct = new Product({
@@ -14,7 +14,8 @@ router.post('/products', async (req, res) => {
         category,
         imageUrl,
         seller,
-        email
+        email,
+        userId
       });
   
       await newProduct.save();
