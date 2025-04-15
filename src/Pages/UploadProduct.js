@@ -4,6 +4,7 @@ import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as tf from "@tensorflow/tfjs";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserHeader from "../Components/Headers/userHeader";
+import { useNavigate } from 'react-router-dom';  
 
 const categoryMap = {
   'shirt': 'Top',
@@ -24,6 +25,7 @@ const categoryMap = {
 };
 
 const UploadProduct = ({ email }) => {
+    const navigate = useNavigate();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -209,6 +211,7 @@ const UploadProduct = ({ email }) => {
         setForm({ title: "", description: "", price: "", image: null, imageUrl: "", category: "" });
         setPreviewUrl("");
         setImageInfo({ width: 0, height: 0, sizeKB: 0 });
+        navigate('/shoppage');
       } else {
         setError("Upload failed, please try again.");
       }

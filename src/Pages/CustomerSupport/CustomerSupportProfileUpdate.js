@@ -8,7 +8,7 @@ export default function CustomerSupportProfileUpdate() {
     const navigate = useNavigate();
     const { email } = useContext(AuthContext);  
     const [errorMessage, setErrorMessage] = useState("");
-    const [isLoading, setIsLoading] = useState(true); 
+    const [isLoading, setIsLoading] = useState(false); 
     const [profile, setProfile] = useState({
         username: '',
         name: '',
