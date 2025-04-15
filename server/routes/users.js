@@ -128,12 +128,30 @@ router.get('/user', async (req, res) => {
     }
 });
 
-// Search users by name
+// Search users by name, status, and position (Case 1)
 router.get('/user/search', async (req, res) => {
-    const { name } = req.query;
+    const { name, status, position } = req.query;
 
     try {
-        const users = await User.find({ name: { $regex: name, $options: 'i' } }); // Case-insensitive search
+        const query = {};
+
+        // If 'name' is provided, use regex for name search
+        if (name) {
+            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+        }
+
+        // If 'status' is provided, add it to the query filter
+        if (status) {
+            query.status = status;
+        }
+
+        // If 'position' is provided, add it to the query filter
+        if (position) {
+            query.position = position;
+        }
+
+        // Fetch users based on the dynamically constructed query
+        const users = await User.find(query);
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: 'Error searching users' });

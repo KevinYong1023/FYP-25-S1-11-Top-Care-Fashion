@@ -16,7 +16,8 @@ export default function ViewUsers() {
                 setIsLoading(true)
                 const response = await fetch('/api/user'); // Fetch users from backend route
                 const data = await response.json();
-                setUsers(data); // Set the fetched users to the state
+                const filteredUsers = data.filter(user => user.position === 'user' && user.status === "Active");
+                setUsers(filteredUsers); // Set the fetched users to the state
             } catch (error) {
                 setError("Server Error: Please Refresh the Page")
                 console.error('Error fetching users:', error);
@@ -28,14 +29,11 @@ export default function ViewUsers() {
         fetchUsers();
     }, []);
 
-    // Filter users with the position 'user'
-    const filteredUsers = users.filter(user => user.position === 'user');
-
     // Pagination Logic
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(users.length / usersPerPage);
 
     const renderPagination = () => {
         let items = [];
@@ -109,6 +107,7 @@ export default function ViewUsers() {
                       </tr>
                     </thead>
                     <tbody>
+                     
                       {currentUsers.map((user) => (
                         <tr key={user._id}>
                           <td>{user.name}</td>
