@@ -68,69 +68,84 @@ export default function ViewUsers() {
 
     return (
         <>
-            <CustomerSupportHeader />
-            <div style={{ display: 'flex', minHeight: '100vh' }}>
-        
-    
-                {/* Main Content */}
-                <div style={{ flex: 1, padding: '40px' }}>
-                    {error && (
-                        <div className="alert alert-danger" role="alert">
-                            {error}
-                        </div>
-                    )}
-    
-                    {isLoading ? (
-                        <div className="text-center mt-5">
-                            <Spinner animation="border" role="status" variant="primary" />
-                            <p className="mt-2">Loading...</p>
-                        </div>
-                    ) : (
-                        <>
-                            <h2>User Accounts</h2>
-                            <hr />
-                            <Table bordered hover responsive className="align-middle">
-    <thead className="table-light">
-        <tr>
-        <th>Name</th><th>Username</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Created At</th>
-                                    <th>Status</th>
-            <th className="text-center">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {currentUsers.map(user => (
-            <tr key={user._id}>
-                <td>{user.name}</td> <td>{user.username}</td>
-                                            <td>{user.email}</td>
-                                            <td>{user.phone.slice(0, 8)}</td>
-                                            <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
-                                            <td>{user.status}</td>
-                    <td className="text-center">
-                    <Button
-                        variant="outline-primary"
-                        size="sm"
-                        href={`/order-history/${user.name}`}
-                        rel="noopener noreferrer"
-                    >
-                        View Orders
-                    </Button>
-                </td>
-            </tr>
-        ))}
-    </tbody>
-</Table>
-
-    
-                            {/* Pagination */}
-                            {renderPagination()}
-                        </>
-                    )}
+          <CustomerSupportHeader />
+          <div style={{ display: 'flex', minHeight: '100vh' }}>
+            {/* Main Content */}
+            <div style={{ flex: 1, padding: '40px', backgroundColor: '#f9f9f9' }}>
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
                 </div>
+              )}
+      
+              {isLoading ? (
+                <div className="text-center mt-5">
+                  <Spinner animation="border" role="status" variant="primary" />
+                  <p className="mt-2">Loading...</p>
+                </div>
+              ) : (
+                <>
+                  <h2 style={{ color: '#6b705c' }}>User Accounts</h2>
+                  <hr />
+                  <Table
+                    
+                    className="table table-hover table-striped"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
+                    }}
+                  >
+  <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
+  <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Created At</th>
+                        <th>Status</th>
+                        <th className="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentUsers.map((user) => (
+                        <tr key={user._id}>
+                          <td>{user.name}</td>
+                          <td>{user.username}</td>
+                          <td>{user.email}</td>
+                          <td>{user.phone.slice(0, 8)}</td>
+                          <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
+                          <td>{user.status}</td>
+                          <td >
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              href={`/order-history/${user.name}`}
+                              rel="noopener noreferrer"
+                              style={{
+                                fontSize: '16px',
+                                borderRadius: '5px',
+                                padding: '6px 12px',
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                              }}
+                            >
+                              View Orders
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+      
+                  {/* Pagination */}
+                  {renderPagination()}
+                </>
+              )}
             </div>
+          </div>
         </>
-    );
+      );
+      
     
 }

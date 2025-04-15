@@ -123,7 +123,7 @@ export default function Dashboard() {
         <div style={{ display: 'flex', minHeight: '100vh' }}>
          
           {/* Main content */}
-          <div style={{ flex: 1, padding: '20px' }}>
+          <div style={{ flex: 1, padding: '20px',backgroundColor: "#f0efeb"  }}>
             {!error ? null : (
               <div className="alert alert-danger" role="alert">
                 {error}
@@ -146,56 +146,68 @@ export default function Dashboard() {
               </div>
             ) : (
               <div>
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Ticket No.</th>
-                      <th>User</th>
-                      <th>Status</th>
-                      <th>Created</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentTickets.map((ticket) => (
-                      <tr key={ticket.ticketId}>
-                        <td>{ticket.ticketId}</td>
-                        <td>{ticket.user}</td>
-                        <td>{ticket.status}</td>
-                        <td>{ticket.created}</td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '10px' }}>
-                            <Link to={`/ticket-info/${ticket.ticketId}`}>
-                              <Button variant="primary" size="sm">
-                                Review
-                              </Button>
-                            </Link>
-                            <Button
-                              variant="danger"
-                              size="sm"
-                              onClick={() => handleDelete(ticket.ticketId)}
-                            >
-                              Delete
-                            </Button>
-                            <Button
-                              variant="warning"
-                              size="sm"
-                              onClick={() => assignTicket(ticket.ticketId)}
-                            >
-                              Assign to me
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+               <table
+  className="table table-hover table-striped"
+  style={{
+    backgroundColor: '#ffffff',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
+  }}
+>
+  <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
+    <tr>
+      <th>Ticket No.</th>
+      <th>User</th>
+      <th>Status</th>
+      <th>Created</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {currentTickets.map((ticket) => (
+      <tr key={ticket.ticketId}>
+        <td>{ticket.ticketId}</td>
+        <td>{ticket.user}</td>
+        <td>{ticket.status}</td>
+        <td>{ticket.created}</td>
+        <td>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Link to={`/ticket-info/${ticket.ticketId}`}>
+              <Button variant="success"  size="lg"
+              style={{ fontSize: '16px' }}>
+                Review
+              </Button>
+            </Link>
+            <Button
+              variant="danger"
+              size="lg"
+              style={{ fontSize: '16px' }}
+              onClick={() => handleDelete(ticket.ticketId)}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="warning"
+              size="lg"
+              style={{ fontSize: '16px' }}
+              onClick={() => assignTicket(ticket.ticketId)}
+            >
+              Assign to me
+            </Button>
+          </div>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+                
                 {renderPagination()}
               </div>
             )}
           </div>
         </div>
       </>
-      
     );
 }

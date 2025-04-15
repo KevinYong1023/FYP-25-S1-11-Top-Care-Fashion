@@ -36,48 +36,84 @@ const AdminProfile = () => {
     }
 
     return (
-        <>
-                        <AdminHeader />
-                        <div style={{ display: 'flex', minHeight: '100vh' }}>
-                          
-                           {/* Main Content */}
-      <div style={{ flex: 1, padding: '20px' }}>
-        {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
+      <>
+        <AdminHeader />
+        <div style={{ display: 'flex', minHeight: '100vh', fontSize: '20px' }}>
+          
+          {/* Main Content */}
+          <div
+            style={{
+              flex: 1,
+              padding: '40px',
+              backgroundColor: '#f0efeb',
+              fontSize: '20px',
+            }}
+          >
+            {isLoading ? (
+              <div className="text-center mt-5">
+                <Spinner animation="border" role="status" variant="primary" />
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : (
+              <>
+                {error && (
+                  <div className="alert alert-danger" role="alert">
+                    {error}
+                  </div>
+                )}
+    
+                {/* Profile Card */}
+                <Card
+                  className="p-4 shadow-sm"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  }}
+                >
+                  <h2 className="mb-4" style={{ color: '#6b705c', fontStyle: 'bold' }}>
+                  Your Profile
+                  </h2>
+    
+                  {user ? (
+                    <>
+                      <p><strong>Username:</strong> {user.username}</p>
+                      <p><strong>Name:</strong> {user.name}</p>
+                      <p><strong>Email:</strong> {user.email}</p>
+                      <p><strong>Date of Birth:</strong> {user.dob}</p>
+                      <p><strong>Gender:</strong> {user.gender}</p>
+                      <p><strong>Phone:</strong> {user.phone}</p>
+                    </>
+                  ) : (
+                    <p>No user data found.</p>
+                  )}
+                </Card>
+    
+                {/* Update Profile Button */}
+                <div className="mt-4 d-flex justify-content-start">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={updateProfile}
+                    style={{
+                      backgroundColor: '#6b705c',
+                      borderColor: '#6b705c',
+                      fontSize: '20px',
+                      padding: '10px 20px',
+                      borderRadius: '5px',
+                      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    }}
+                  >
+                    Update Profile
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
-        )}
-
-        {isLoading ? (
-          <div className="text-center" style={{ marginTop: '100px' }}>
-            <Spinner animation="border" role="status" variant="primary">
-              <span className="visually-hidden">Loading</span>
-            </Spinner>
-            <p className="mt-2">Loading...</p>
-          </div>
-        ) : (
-          <>
-            <Card className="p-4">
-              {user && (
-                <>
-                  <h4>Username: {user.username}</h4>
-                  <h4>Name: {user.name}</h4>
-                  <h4>Email: {user.email}</h4>
-                  <h4>Date of Birth: {user.dob}</h4>
-                  <h4>Gender: {user.gender}</h4>
-                  <h4>Phone: {user.phone}</h4>
-                </>
-              )}
-            </Card>
-            <Button variant="primary" onClick={updateProfile} className="mt-3">
-              Update Profile
-            </Button>
-          </>
-        )}
-      </div>
-    </div>
-        </>
+        </div>
+      </>
     );
+    
 };
 
 export default AdminProfile;

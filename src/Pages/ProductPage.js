@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext} from "react";
 import { Container, Row, Col, Card, Button, Alert, OverlayTrigger, Tooltip, Form, ListGroup } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../Components/CartContext";
 import UserHeader from "../Components/Headers/userHeader";
+import {AuthContext} from '../App';
 
 const ProductPage = ({ email }) => {
   const { id } = useParams(); // Get product ID from route
@@ -13,6 +14,7 @@ const ProductPage = ({ email }) => {
   const [productComments, setProductComments] = useState([]);
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { login } = useContext(AuthContext ); 
 
   // Fetch user information
   useEffect(() => {
@@ -141,11 +143,12 @@ const ProductPage = ({ email }) => {
                     )
                   }
                 >
+              
                   <span className="d-inline-block">
                     <Button
                       variant="primary"
                       onClick={handleAddToCart}
-                      disabled={email === product.email}
+                      disabled={email === product.email || !login}
                       style={email === product.email ? { pointerEvents: "none" } : {}}
                     >
                       Add to Cart
