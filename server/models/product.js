@@ -20,6 +20,11 @@ const productSchema = new mongoose.Schema({
     enum: ['Top', 'Bottom', 'Footwear'],
     required: true
   },
+  occasion: {
+    type: String,
+    enum: ['Casual', 'Smart', 'Formal', 'Sport'],
+    required: true
+  },
   imageUrl: {
     type: String,
     required: true
