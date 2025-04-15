@@ -6,9 +6,8 @@ const ManageList = ({ email }) => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(10); // Fixed to show 10 products per page
+  const [productsPerPage] = useState(10);
 
-  // Fetch products on load
   useEffect(() => {
     if (email) {
       fetch(`/api/products/user/${email}`)
@@ -18,14 +17,12 @@ const ManageList = ({ email }) => {
     }
   }, [email]);
 
-  // Handle input change for editable fields
   const handleChange = (index, field, value) => {
     const updated = [...products];
     updated[index][field] = value;
     setProducts(updated);
   };
 
-  // Update product in DB
   const handleUpdate = async (product) => {
     try {
       const res = await fetch(`/api/products/${product._id}`, {
@@ -45,7 +42,6 @@ const ManageList = ({ email }) => {
     }
   };
 
-  // Delete product
   const handleDelete = async (id) => {
     try {
       const res = await fetch(`/api/products/${id}`, {
@@ -64,18 +60,14 @@ const ManageList = ({ email }) => {
     }
   };
 
-  // Get current products for the current page
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products.length / productsPerPage);
 
-  // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  // Total number of pages
-  const totalPages = Math.ceil(products.length / productsPerPage);
 
   return (
     <>
@@ -113,7 +105,8 @@ const ManageList = ({ email }) => {
                   <Form.Control
                     type="text"
                     value={product.imageUrl}
-                    onChange={(e) => handleChange(index, "imageUrl", e.target.value)}
+                    readOnly
+                    style={{ backgroundColor: "#e9ecef", pointerEvents: "none" }}
                   />
                 </td>
                 <td>
@@ -139,15 +132,12 @@ const ManageList = ({ email }) => {
                   />
                 </td>
                 <td>
-                  <Form.Select
+                  <Form.Control
+                    type="text"
                     value={product.category}
-                    onChange={(e) => handleChange(index, "category", e.target.value)}
-                  >
-                    <option value="Top">Top</option>
-                    <option value="Bottom">Bottom</option>
-                    <option value="Footwear">Footwear</option>
-                    <option value="Other">Other</option>
-                  </Form.Select>
+                    readOnly
+                    style={{ backgroundColor: "#e9ecef", pointerEvents: "none" }}
+                  />
                 </td>
                 <td>
                   <Button
@@ -171,7 +161,6 @@ const ManageList = ({ email }) => {
           </tbody>
         </Table>
 
-        {/* Pagination */}
         <Pagination className="justify-content-center mt-4">
           <Pagination.Prev
             onClick={() => handlePageChange(currentPage - 1)}

@@ -173,6 +173,7 @@ router.get('/user/:email', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         res.json({
+            userId: user.userId,
             username: user.username,
             name: user.name,
             email: user.email,
@@ -180,7 +181,10 @@ router.get('/user/:email', async (req, res) => {
             gender: user.gender,
             phone: user.phone,
             position: user.position,
-            address: user.address
+            joined: user.joined,
+            status: user.status,
+            address: user.address,
+            revenue: user.revenue
         });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching user details' });

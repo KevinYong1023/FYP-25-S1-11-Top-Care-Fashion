@@ -36,6 +36,7 @@ const UploadProduct = ({ email }) => {
   const [previewUrl, setPreviewUrl] = useState("");
   const [imageInfo, setImageInfo] = useState({ width: 0, height: 0, sizeKB: 0 });
   const [name, setName] = useState("");
+  const [userId, setUserId] = useState(null);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [model, setModel] = useState(null);
@@ -47,6 +48,7 @@ const UploadProduct = ({ email }) => {
           const response = await fetch(`/api/user/${email}`);
           const data = await response.json();
           setName(data.name);
+          setUserId(data.userId);
         } catch (error) {
           console.error("Error fetching user details:", error);
         }
@@ -187,7 +189,8 @@ const UploadProduct = ({ email }) => {
       category: form.category,
       imageUrl: form.imageUrl,
       seller: name,
-      email
+      email,
+      userId
     };
 
     try {
