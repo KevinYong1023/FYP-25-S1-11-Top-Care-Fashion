@@ -164,18 +164,22 @@ const ShopPage = () => {
                         }
                       />
                       <Card.Body>
-                        <Card.Title style={{ fontWeight: 'bold'}}>{product.title}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: '20px'}}>
-                          ${product.price}
-                        </Card.Subtitle>
-                        <Card.Text>Category: {product.category}</Card.Text>
-                        <Button
+
+                          <Card.Title style={{ fontWeight: 'bold'}}>{product.title}</Card.Title>
+                          <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: '20px'}}>
+                            ${product.price}
+                          </Card.Subtitle>
+                          <Card.Text>Category: {product.category}</Card.Text>
+                          
+                            <Card.Text><strong>Seller: {product.seller}</strong></Card.Text>
+                            <Button
                           style={{ backgroundColor: "#6a4c37", borderColor: "#6a4c37", color: "white" }}
                           onClick={() => goToProduct(product._id)}
                         >
-                          View Product
-                        </Button>
-                      </Card.Body>
+                            View Product
+                          </Button>
+                        </Card.Body>
+
                     </Card>
                   </Col>
                 ))
