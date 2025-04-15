@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
-import { Container, Row, Col, Button, Pagination } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
+import { Container, Row, Col, Button, Pagination,Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
+import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 
 export default function TotalTicket() {
     const [ticketList, setTicketList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const ticketsPerPage = 10; // Number of tickets per page
     const { name } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(false); // Add loading state
+    const [error, setError] = useState("")
 
     useEffect(() => {
         const fetchAssignedTickets = async () => {
             if (name) {
                 try {
+                    setIsLoading(true)
                     const response = await fetch(`/api/tickets`);
                     if (response.ok) {
                         const data = await response.json();
@@ -25,7 +27,10 @@ export default function TotalTicket() {
                         console.error('Failed to fetch tickets');
                     }
                 } catch (error) {
+                    setError("Server Error: Please Refresh the Page")
                     console.error('Error fetching tickets:', error);
+                }finally{
+                    setIsLoading(false)
                 }
             }
         };
@@ -81,6 +86,7 @@ export default function TotalTicket() {
                 alert('Failed to delete the ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Refresh the Page")
             console.error('Error deleting the ticket:', error);
         }
     }
@@ -109,68 +115,86 @@ export default function TotalTicket() {
                 alert('Failed to remove assignment');
             }
         } catch (error) {
+            setError("Server Error: Please Refresh the Page")
             console.error('Error updating the ticket:', error);
         }
     }
 
-    return (
-        <>
-            <AuthorityHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-                    <Col>
-                        <h2>Your Tickets</h2>
-                        <hr />
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>User</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentTickets.map((row, index) => (
-                                    <tr key={row.ticketId}> {/* Use ticketId instead of _id */}
-                                        <td>{row.ticketId}</td>
-                                        <td>{row.user}</td>
-                                        <td>{row.status}</td>
-                                        <td>
-                                            <div className="d-flex gap-2">
-                                                <Link to={`/ticket-info/${row.ticketId}`} rel="noopener noreferrer"> {/* Update to use ticketId in URL */}
-                                                    <Button variant="primary" size="sm">Review</Button>
-                                                </Link>
-
-                                                <Button
-                                                    variant="danger"
-                                                    size="sm"
-                                                    onClick={() => handleDelete(row.ticketId)} 
-                                                >
-                                                    Delete
-                                                </Button>
-
-                                                <Button
-                                                    variant="secondary"
-                                                    size="sm"
-                                                    onClick={() => removeAssign(row.ticketId)}
-                                                >
-                                                    Remove
-                                                </Button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {/* Pagination */}
-                        {renderPagination()}
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    );
+    return(
+    <>
+    <CustomerSupportHeader />
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      
+  
+      {/* Main content */}
+      <div style={{ flex: 1, padding: '20px' }}>
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+  
+        {isLoading ? (
+          <div className="text-center" style={{ marginTop: '100px' }}>
+            <Spinner animation="border" role="status" variant="primary">
+              <span className="visually-hidden">Loading</span>
+            </Spinner>
+            <p className="mt-2">Loading...</p>
+          </div>
+        ) : (
+          <>
+            <h2>Your Tickets</h2>
+            <hr />
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Ticket No.</th>
+                  <th>User</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentTickets.map((ticket) => (
+                  <tr key={ticket.ticketId}>
+                    <td>{ticket.ticketId}</td>
+                    <td>{ticket.user}</td>
+                    <td>{ticket.status}</td>
+                    <td>{ticket.created}</td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                        <Link to={`/ticket-info/${ticket.ticketId}`} rel="noopener noreferrer">
+                          <Button variant="primary" size="sm">
+                            Review
+                          </Button>
+                        </Link>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDelete(ticket.ticketId)}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => removeAssign(ticket.ticketId)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {renderPagination()}
+          </>
+        )}
+      </div>
+    </div>
+  </>
+    )
+  
 }

@@ -27,7 +27,7 @@ app.use(cors());
 
 // MongoDB connection string from .env or default to localhost
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/fyp';
-console.log(mongoURI)
+
 // Connect to MongoDB using Mongoose with improved error handling
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB Atlas'))

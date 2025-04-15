@@ -6,15 +6,28 @@ import { AuthContext } from "../App";  // Import context from App.js
 
 export default function Logout() {  // Accept setIsLoggedIn as a prop
     const navigate = useNavigate();
-    const { setLogin, setRole, setEmail } = useContext(AuthContext);  // Use context to set email, login, and role
+    const { setLogin, setRole, setEmail,setName,setAddress,setUserEmail } = useContext(AuthContext);  // Use context to set email, login, and role
     
-
-    const handleLogout = () => {
-        navigate("/login");  // Redirect to login page
+    function resetStates(){
+        localStorage.clear(); // this already clears everything
         setLogin(false);
         setRole("");
         setEmail("");
+        setName("");       
+        setAddress("");     
+        setUserEmail("");  
+    }
+
+    const handleLogout = () => {
+        resetStates() 
+        navigate("/login");
     };
+
+    const handleBackToHome = () => {
+        resetStates() 
+        navigate("/home");
+    };
+    
 
     return (
         <>
@@ -25,6 +38,8 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
                         <h1>You have successfully logged out.</h1>
                         <br/>
                         <Button variant="primary" onClick={handleLogout}>Login</Button> {/* Logout and redirect to login */}
+                        <Button variant="primary" onClick={handleBackToHome}>Back To Home</Button> {/* Logout and redirect to login */}
+
                     </Col>
                 </Row>
             </Container>

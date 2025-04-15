@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Button, Pagination, Form } from 'react-bootstrap';
-import Sidebar from '../../Components/Sidebars/CustomerSupportSidebar';
+import { Container, Row, Col, Button, Pagination, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import AuthorityHeader from '../../Components/Headers/CustomerSupportHeader';
+import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 import { AuthContext } from '../../App';
 
 export default function Dashboard() {
@@ -10,16 +9,22 @@ export default function Dashboard() {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const { name } = useContext(AuthContext); // Get the current user's name
     const ticketsPerPage = 10; // Number of tickets per page
+    const [isLoading,setIsLoading] = useState(false)
+    const [error, setError] = useState("")
 
     // Fetch tickets from the backend API
     useEffect(() => {
         const fetchTickets = async () => {
             try {
+                setIsLoading(true)
                 const response = await fetch('/api/tickets');
                 const data = await response.json();
                 setTicketList(data);
             } catch (error) {
+                setError("Server Error: Please Refresh the Page")
                 console.error('Error fetching tickets:', error);
+            }finally {
+                setIsLoading(false); // Set loading to false when fetch completes
             }
         };
         fetchTickets();
@@ -63,6 +68,7 @@ export default function Dashboard() {
 
     async function handleDelete(id) {
         try {
+            setIsLoading(true)
             const response = await fetch(`/api/tickets/${id}`, {
                 method: 'DELETE',
             });
@@ -73,17 +79,20 @@ export default function Dashboard() {
                 alert('Failed to delete the ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error deleting the ticket:', error);
+        }finally{
+            setIsLoading(false)
         }
     }
 
     async function assignTicket(ticketId) {
         try {
+            setIsLoading(true)
             const requestBody = {
                 assignee: name,
                 status: "In Progress",
             };
-
             const response = await fetch(`/api/tickets/${ticketId}`, {
                 method: 'PUT',
                 headers: {
@@ -101,75 +110,92 @@ export default function Dashboard() {
                 alert('Failed to assign the ticket');
             }
         } catch (error) {
+            setError("Server Error: Please Try Again")
             console.error('Error assigning the ticket:', error);
+        }finally{
+            setIsLoading(false)
         }
     }
 
     return (
         <>
-            <AuthorityHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    <Col xs={11} md={2} id="sidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <Sidebar />
-                    </Col>
-                    <Col style={{ margin: '10px' }}>
-                        <h1>Welcome {name ? name : "User"}</h1>
-                        <p>Following are the tickets</p>
-                        <hr />
-                        <h2>All Available Tickets</h2>
-                        <a href="/assigned-ticket">Your Tickets</a>
-                        <hr />
-                        <div>
-                            <table className="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>User</th>
-                                        <th>Status</th>
-                                        <th>Created</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {currentTickets.map((ticket, index) => (
-                                        <tr key={ticket.ticketId}>
-                                            <td>{ticket.ticketId}</td>
-                                            <td>{ticket.user}</td>
-                                            <td>{ticket.status}</td>
-                                            <td>{ticket.created}</td>
-                                            <td>
-                                                <div style={{ display: 'flex', gap: '10px' }}>
-                                                    <Link to={`/ticket-info/${ticket.ticketId}`} rel="noopener noreferrer">
-                                                        <Button variant="primary" size="sm">Review</Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="danger"
-                                                        size="sm"
-                                                        onClick={() => handleDelete(ticket.ticketId)}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                    <Button
-                                                        variant="warning"
-                                                        size="sm"
-                                                        onClick={() => assignTicket(ticket.ticketId)}
-                                                    >
-                                                        Assign to me
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {/* Pagination */}
-                        {renderPagination()}
-                    </Col>
-                </Row>
-            </Container>
-        </>
+        <CustomerSupportHeader />
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+         
+          {/* Main content */}
+          <div style={{ flex: 1, padding: '20px' }}>
+            {!error ? null : (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+            <div className="d-flex justify-content-between align-items-center">
+              <h2>All Available Tickets</h2>
+            </div>
+            <hr/>
+            <Button as="a" class="p-2 bd-highlight" href="/assigned-ticket" variant="primary" size="lg">
+                Your Tickets
+              </Button>
+            <hr />
+            {isLoading ? (
+              <div className="text-center" style={{ marginTop: '100px' }}>
+                <Spinner animation="border" role="status" variant="primary">
+                  <span className="visually-hidden">Loading</span>
+                </Spinner>
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : (
+              <div>
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Ticket No.</th>
+                      <th>User</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentTickets.map((ticket) => (
+                      <tr key={ticket.ticketId}>
+                        <td>{ticket.ticketId}</td>
+                        <td>{ticket.user}</td>
+                        <td>{ticket.status}</td>
+                        <td>{ticket.created}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <Link to={`/ticket-info/${ticket.ticketId}`}>
+                              <Button variant="primary" size="sm">
+                                Review
+                              </Button>
+                            </Link>
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              onClick={() => handleDelete(ticket.ticketId)}
+                            >
+                              Delete
+                            </Button>
+                            <Button
+                              variant="warning"
+                              size="sm"
+                              onClick={() => assignTicket(ticket.ticketId)}
+                            >
+                              Assign to me
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {renderPagination()}
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+      
     );
 }

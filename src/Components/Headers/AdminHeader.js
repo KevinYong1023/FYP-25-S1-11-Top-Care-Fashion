@@ -24,7 +24,7 @@ export default function AdminHeader({ loginStatus }) {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto">
                         <Nav.Link href="/view-all-accounts" style={{ color: 'white', marginBottom: '10px' }}>
-                                <House style={{ marginRight: '10px' }} /> Manage Accounts
+                                <House style={{ marginRight: '10px' }} /> Dashboard
                             </Nav.Link>
                             <Nav.Link href="/admin-profile" style={{ color: 'white', marginBottom: '10px' }}>
                                 <Person style={{ marginRight: '10px' }} /> Profile
