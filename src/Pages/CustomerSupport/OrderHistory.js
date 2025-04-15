@@ -19,9 +19,12 @@ export default function OrderHistory() {
             try {
                 const response = await fetch(`/api/order-history`);
                 const data = await response.json();
+                console.log(data)
+                console.log(name)
                 const filtered = data.filter(order =>
-                    order.buyer === name || order.seller === name
+                    order.buyerName === name || order.seller.some(s => s.sellerName === name)
                 );
+                console.log(filtered)
                 setFilteredData(filtered);
             } catch (error) {
                 setError("Server Error:Please Refresh the Page")
@@ -104,9 +107,11 @@ export default function OrderHistory() {
                                     <table className="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Invoice ID</th>
+                                                <th>Order ID</th>
                                                 <th>Status</th>
                                                 <th>Seller</th>
+                                                <th>Products</th>
+                                                <th>Each Products Price</th>
                                                 <th>Total</th>
                                                 <th>Date Purchase</th>
                                                 <th>Buyer</th>
@@ -117,10 +122,12 @@ export default function OrderHistory() {
                                                 <tr key={row.orderNumber}>
                                                     <td>{row.orderNumber}</td>
                                                     <td>{row.status}</td>
-                                                    <td>{row.seller}</td>
-                                                    <td>{row.total}</td>
-                                                    <td>{row.purchased}</td>
-                                                    <td>{row.buyer}</td>
+                                                    <td>{row.seller.map(s => s.sellerName).join(', ')}</td>
+                                                    <td>{row.seller.map(s => s.productName).join(', ')}</td>
+                                                    <td>${row.seller.map(s => s.price).join(' , $')}</td>
+                                                    <td>${row.total}</td>
+                                                    <td>{new Date(row.created).toLocaleDateString('en-GB')}</td>
+                                                    <td>{row.buyerName}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

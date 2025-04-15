@@ -96,19 +96,23 @@ export default function ViewUsers() {
                             <Table bordered hover responsive className="align-middle">
     <thead className="table-light">
         <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
+        <th>Name</th><th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Created At</th>
+                                    <th>Status</th>
             <th className="text-center">Action</th>
         </tr>
     </thead>
     <tbody>
         {currentUsers.map(user => (
             <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.phone.slice(0, 8)}</td>
-                <td className="text-center">
+                <td>{user.name}</td> <td>{user.username}</td>
+                                            <td>{user.email}</td>
+                                            <td>{user.phone.slice(0, 8)}</td>
+                                            <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
+                                            <td>{user.status}</td>
+                    <td className="text-center">
                     <Button
                         variant="outline-primary"
                         size="sm"

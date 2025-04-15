@@ -191,9 +191,8 @@ export default function ManagerUsersDashboard() {
                         <table className="table table-striped table-bordered mt-3">
                             <thead className="table-light">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Name</th>
+                                    
+                                    <th>Name</th><th>Username</th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Created At</th>
@@ -209,11 +208,10 @@ export default function ManagerUsersDashboard() {
                                 ) : (
                                     currentUsers.map((user) => (
                                         <tr key={user.userId}>
-                                            <td>{user.userId}</td>
-                                            <td>{user.username}</td>
-                                            <td>{user.name}</td>
+                                           
+                                            <td>{user.name}</td> <td>{user.username}</td>
                                             <td>{user.email}</td>
-                                            <td>{user.phone}</td>
+                                            <td>{user.phone.slice(0, 8)}</td>
                                             <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
                                             <td>{user.status}</td>
                                             <td>
