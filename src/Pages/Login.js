@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,10 @@ const Login = () => {
   const [success, setSuccess] = useState(null);
   const { setEmail, setRole, setLogin,setName,setAddress } = useContext(AuthContext); // Destructure setters from AuthContext
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    localStorage.clear(); // this already clears everything
+  },[])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import UserHeader from '../Components/Headers/userHeader';
@@ -8,6 +8,9 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
     const navigate = useNavigate();
     const { setLogin, setRole, setEmail,setName,setAddress,setUserEmail } = useContext(AuthContext);  // Use context to set email, login, and role
     
+    useEffect(()=>{
+        setLogin(false);
+    },[])
     function resetStates(){
         localStorage.clear(); // this already clears everything
         setLogin(false);
