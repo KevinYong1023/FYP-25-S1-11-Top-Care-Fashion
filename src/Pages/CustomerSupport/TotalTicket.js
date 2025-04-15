@@ -148,7 +148,7 @@ export default function TotalTicket() {
             <table className="table table-bordered">
               <thead>
                 <tr>
-                  <th>No.</th>
+                  <th>Ticket No.</th>
                   <th>User</th>
                   <th>Status</th>
                   <th>Created</th>

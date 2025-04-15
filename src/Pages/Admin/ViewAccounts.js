@@ -258,11 +258,11 @@ export default function ViewAccounts() {
                   <Table striped bordered hover>
                     <thead>
                       <tr>
-                        <th>Account ID</th>
-                        <th>Name</th>
+                      <th>Name</th><th>Username</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Position</th>
+                        <th>Created At</th>
                         <th>Status</th>
                         <th>Actions</th>
                       </tr>
@@ -270,11 +270,11 @@ export default function ViewAccounts() {
                     <tbody>
                       {currentUsers.map((user) => (
                         <tr key={user.userId}>
-                          <td>{user.userId}</td>
-                          <td>{user.name}</td>
+                          <td>{user.name}</td> <td>{user.username}</td>
                           <td>{user.email}</td>
                           <td>{user.phone.slice(0, 8)}</td>
                           <td>{user.position}</td>
+                          <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
                           <td>{user.status}</td>
                           <td>
                             {user.status === 'Active' ? (

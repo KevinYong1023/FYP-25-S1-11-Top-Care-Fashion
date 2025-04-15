@@ -18,6 +18,10 @@ router.post('/login', async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ message: 'Wrong Password' });
         }
+        // Check user status is active or not
+        if (user.status !== 'Active') {
+            return res.status(400).json({ message: 'Inactive Account.' });
+        }
 
         // If login is successful, return user data (without the password)
         res.json({
@@ -26,8 +30,7 @@ router.post('/login', async (req, res) => {
                 id: user.userId, // Use 'userId' instead of '_id'
                 email: user.email,
                 role: user.position, // Use 'position' instead of 'role'
-                name: user.name,
-                profile_pic: user.profile_pic
+                name: user.name
             }
         });
     } catch (error) {
