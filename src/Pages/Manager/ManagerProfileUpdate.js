@@ -105,103 +105,121 @@ export default function ManagerProfileUpdate() {
     };
 
     return (
-         <>
-                    <ManagerHeader />
-                    <div style={{ display: 'flex', minHeight: '100vh' }}>
-                        
-            
-                        {/* Main Content */}
-                        <div style={{ flex: 1, padding: '40px' }}>
-                            {isLoading ? (
-                                <div className="text-center mt-5">
-                                    <Spinner animation="border" role="status" variant="primary" />
-                                    <p className="mt-2">Loading...</p>
-                                </div>
-                            ) : (
-                                <>
-                                    <h3 className="mb-4">Update Profile</h3>
-                                    <hr />
-                                    {errorMessage && (
-                                        <div className="alert alert-danger" role="alert">
-                                            {errorMessage}
-                                        </div>
-                                    )}
-            
-                                    <Form onSubmit={handleSubmit}>
-                                        <Form.Group className="mb-3" controlId="username">
-                                            <Form.Label>Username</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="username"
-                                                value={profile.username}
-                                                onChange={handleChange}
-                                            />
-                                        </Form.Group>
-            
-                                        <Form.Group className="mb-3" controlId="name">
-                                            <Form.Label>Name</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="name"
-                                                value={profile.name}
-                                                onChange={handleChange}
-                                            />
-                                        </Form.Group>
-            
-                                        <Form.Group className="mb-3" controlId="email">
-                                            <Form.Label>Email</Form.Label>
-                                            <Form.Control
-                                                type="email"
-                                                name="email"
-                                                value={profile.email}
-                                                disabled
-                                                className="bg-light"
-                                            />
-                                        </Form.Group>
-            
-                                        <Form.Group className="mb-3" controlId="dob">
-                                            <Form.Label>Date of Birth</Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                name="dob"
-                                                value={profile.dob}
-                                                onChange={handleChange}
-                                            />
-                                        </Form.Group>
-            
-                                        <Form.Group className="mb-3" controlId="gender">
-                                            <Form.Label>Gender</Form.Label>
-                                            <Form.Select
-                                                name="gender"
-                                                value={profile.gender}
-                                                onChange={handleChange}
-                                            >
-                                                <option value="Female">Female</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Other">Other</option>
-                                            </Form.Select>
-                                        </Form.Group>
-            
-                                        <Form.Group className="mb-3" controlId="phone">
-                                            <Form.Label>Phone Number</Form.Label>
-                                            <Form.Control
-                                                type="tel"
-                                                name="phone"
-                                                value={profile.phone}
-                                                onChange={handleChange}
-                                            />
-                                        </Form.Group>
-            
-                                        <div className="text-center mt-4">
-                                            <Button variant="primary" type="submit" className="w-100">
-                                                Update Profile
-                                            </Button>
-                                        </div>
-                                    </Form>
-                                </>
-                            )}
-                        </div>
+        <>
+          <ManagerHeader />
+          <div style={{ display: 'flex', minHeight: '100vh' }}>
+            {/* Main Content */}
+            <div style={{ flex: 1, padding: '40px', backgroundColor: '#f0efeb' }}>
+              {isLoading ? (
+                <div className="text-center mt-5">
+                  <Spinner animation="border" role="status" variant="primary" />
+                  <p className="mt-2">Loading...</p>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    padding: '20px',
+                  }}
+                >
+                  <h3 className="mb-4">Update Profile</h3>
+                  <hr />
+                  {errorMessage && (
+                    <div className="alert alert-danger" role="alert">
+                      {errorMessage}
                     </div>
-                </>
-    );
+                  )}
+      
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3" controlId="username">
+                      <Form.Label>Username</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="username"
+                        value={profile.username}
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+      
+                    <Form.Group className="mb-3" controlId="name">
+                      <Form.Label>Name</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="name"
+                        value={profile.name}
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+      
+                    <Form.Group className="mb-3" controlId="email">
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        value={profile.email}
+                        disabled
+                        className="bg-light"
+                      />
+                    </Form.Group>
+      
+                    <Form.Group className="mb-3" controlId="dob">
+                      <Form.Label>Date of Birth</Form.Label>
+                      <Form.Control
+                        type="date"
+                        name="dob"
+                        value={profile.dob}
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+      
+                    <Form.Group className="mb-3" controlId="gender">
+                      <Form.Label>Gender</Form.Label>
+                      <Form.Select
+                        name="gender"
+                        value={profile.gender}
+                        onChange={handleChange}
+                      >
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                      </Form.Select>
+                    </Form.Group>
+      
+                    <Form.Group className="mb-3" controlId="phone">
+                      <Form.Label>Phone Number</Form.Label>
+                      <Form.Control
+                        type="tel"
+                        name="phone"
+                        value={profile.phone}
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+      
+                    <div className="text-center mt-4">
+                      <Button
+                        type="submit"
+                        className="w-100"
+                        style={{
+                          backgroundColor: '#6b705c',
+                          borderColor: '#6b705c',
+                          fontSize: '20px',
+                          padding: '10px 20px',
+                          borderRadius: '5px',
+                          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                        }}
+                      >
+                        Update Profile
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      );
+      
+      
 }

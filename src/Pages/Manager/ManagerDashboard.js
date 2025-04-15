@@ -90,79 +90,119 @@ export default function ManagerDashboard() {
     }, []); // Empty dependency array means it runs once on component mount
 
     return (
-        <>
-          <ManagerHeader />
-                               <div style={{ display: 'flex', minHeight: '100vh' }}>
-                               
-        {/* Main Dashboard Content */}
-    <div style={{ flex: 1, padding: '20px' }}>
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
-
-      {isLoading ? (
-        <div className="text-center" style={{ marginTop: '100px' }}>
-          <Spinner animation="border" role="status" variant="primary">
-            <span className="visually-hidden">Loading</span>
-          </Spinner>
-          <p className="mt-2">Loading...</p>
-        </div>
-      ) : (
-        <>
-          <h2 className="mt-3">Website Insights</h2>
-          <hr />
-
-          {/* Users Section */}
-          <h2>Users:</h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ flex: '1 1 300px' }}>
-              <Card className="p-3">
-                <h5>Total Users</h5>
-                <p>{dashboardData.totalUsers}</p>
-              </Card>
-            </div>
-            <div style={{ flex: '1 1 300px' }}>
-              <Card className="p-3">
-                <h5>Active Now</h5>
-                <p>{dashboardData.active}</p>
-              </Card>
-            </div>
-            <div style={{ flex: '1 1 300px' }}>
-              <Card className="p-3">
-                <h5>Suspended Now</h5>
-                <p>{dashboardData.suspense}</p>
-              </Card>
-            </div>
+      <>
+        <ManagerHeader />
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+          {/* Main Dashboard Content */}
+          <div style={{ flex: 1, padding: '40px', backgroundColor: '#f0efeb' }}>
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+    
+            {isLoading ? (
+              <div className="text-center mt-5">
+                <Spinner animation="border" role="status" variant="primary" />
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : (
+              <div
+                style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  padding: '30px',
+                }}
+              >
+                <h2 className="mb-3">Website Insights</h2>
+                <hr />
+    
+                {/* Users Section */}
+                <h3 className="mt-4">Users:</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ flex: '1 1 300px' }}>
+                    <Card
+                      style={{
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        padding: '20px',
+                        backgroundColor: '#ffffff',
+                      }}
+                    >
+                      <h5>Total Users</h5>
+                      <p>{dashboardData.totalUsers}</p>
+                    </Card>
+                  </div>
+                  <div style={{ flex: '1 1 300px' }}>
+                    <Card
+                      style={{
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        padding: '20px',
+                        backgroundColor: '#ffffff',
+                      }}
+                    >
+                      <h5>Active Now</h5>
+                      <p>{dashboardData.active}</p>
+                    </Card>
+                  </div>
+                  <div style={{ flex: '1 1 300px' }}>
+                    <Card
+                      style={{
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        padding: '20px',
+                        backgroundColor: '#ffffff',
+                      }}
+                    >
+                      <h5>Suspended Now</h5>
+                      <p>{dashboardData.suspense}</p>
+                    </Card>
+                  </div>
+                </div>
+    
+                <hr />
+    
+                {/* Products Section */}
+                <h3 className="mt-4">Products:</h3>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div style={{ flex: '1 1 300px' }}>
+                    <Card
+                      style={{
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        padding: '20px',
+                        backgroundColor: '#ffffff',
+                      }}
+                    >
+                      <h5>Total Products</h5>
+                      <p>{dashboardData.totalProducts}</p>
+                    </Card>
+                  </div>
+                  <div style={{ flex: '1 1 300px' }}>
+                    <Card
+                      style={{
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        padding: '20px',
+                        backgroundColor: '#ffffff',
+                      }}
+                    >
+                      <h5>By Categories</h5>
+                      <ul className="mb-0">
+                        <li>Footwear: {dashboardData.categoryCounts.Footwear}</li>
+                        <li>Top: {dashboardData.categoryCounts.Top}</li>
+                        <li>Bottom: {dashboardData.categoryCounts.Bottom}</li>
+                      </ul>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-
-          <hr />
-
-          {/* Products Section */}
-          <h2>Products:</h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ flex: '1 1 300px' }}>
-              <Card className="p-3">
-                <h5>Total Products</h5>
-                <p>{dashboardData.totalProducts}</p>
-              </Card>
-            </div>
-            <div style={{ flex: '1 1 300px' }}>
-              <Card className="p-3">
-                <h5>By Categories</h5>
-                <ul className="mb-0">
-                  <li>Footwear: {dashboardData.categoryCounts.Footwear}</li>
-                  <li>Top: {dashboardData.categoryCounts.Top}</li>
-                  <li>Bottom: {dashboardData.categoryCounts.Bottom}</li>
-                </ul>
-              </Card>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  </div>
-        </>
+        </div>
+      </>
     );
+     
 }

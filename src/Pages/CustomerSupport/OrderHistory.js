@@ -100,7 +100,13 @@ export default function OrderHistory() {
                                 </div>
                             ) : (
                                 <>
-                                    <table className="table table-bordered">
+                                    <table  className="table table-hover table-striped"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
+                    }}>
                                         <thead>
                                             <tr>
                                                 <th>Order ID</th>

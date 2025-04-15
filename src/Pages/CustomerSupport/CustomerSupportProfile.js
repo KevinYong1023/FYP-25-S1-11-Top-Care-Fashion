@@ -37,50 +37,81 @@ const CustomerSupportProfile = () => {
 
     return (
         <>
-        <CustomerSupportHeader />
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
-           
-
+          <CustomerSupportHeader />
+          <div style={{ display: 'flex', minHeight: '100vh', fontSize: '20px' }}>
             {/* Main Content */}
-            <div style={{ flex: 1, padding: '40px' }}>
-                {isLoading ? (
-                    <div className="text-center mt-5">
-                        <Spinner animation="border" role="status" variant="primary" />
-                        <p className="mt-2">Loading...</p>
+            <div
+              style={{
+                flex: 1,
+                padding: '40px',
+                backgroundColor: '#f0efeb',
+                fontSize: '20px', // Set a larger base font size
+              }}
+            >
+              {isLoading ? (
+                <div className="text-center mt-5">
+                  <Spinner animation="border" role="status" variant="primary" />
+                  <p className="mt-2">Loading...</p>
+                </div>
+              ) : (
+                <>
+                  {error && (
+                    <div className="alert alert-danger" role="alert">
+                      {error}
                     </div>
-                ) : (
-                    <>
-                        {error && (
-                            <div className="alert alert-danger" role="alert">
-                                {error}
-                            </div>
-                        )}
-                        <Card className="p-4 shadow-sm">
-                            <h3 className="mb-4">Your Profile</h3>
-                            {user ? (
-                                <>
-                                    <p><strong>Username:</strong> {user.username}</p>
-                                    <p><strong>Name:</strong> {user.name}</p>
-                                    <p><strong>Email:</strong> {user.email}</p>
-                                    <p><strong>Date of Birth:</strong> {user.dob}</p>
-                                    <p><strong>Gender:</strong> {user.gender}</p>
-                                    <p><strong>Phone:</strong> {user.phone}</p>
-                                </>
-                            ) : (
-                                <p>No user data found.</p>
-                            )}
-                        </Card>
-                        <div className="mt-3">
-                            <Button variant="primary" onClick={updateProfile}>
-                                Update Profile
-                            </Button>
-                        </div>
-                    </>
-                )}
+                  )}
+      
+                  {/* Profile Card */}
+                  <Card
+                    className="p-4 shadow-sm"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    }}
+                  >
+                    <h2 className="mb-4" style={{ color: '#6b705c',fontWeight:"bold"}}>Your Profile</h2>
+      
+                    {user ? (
+                      <>
+                        <p style={{ fontSize: '20px' }}><strong>Username:</strong> {user.username}</p>
+                        <p style={{ fontSize: '20px' }}><strong>Name:</strong> {user.name}</p>
+                        <p style={{ fontSize: '20px' }}><strong>Email:</strong> {user.email}</p>
+                        <p style={{ fontSize: '20px' }}><strong>Date of Birth:</strong> {user.dob}</p>
+                        <p style={{ fontSize: '20px' }}><strong>Gender:</strong> {user.gender}</p>
+                        <p style={{ fontSize: '20px' }}><strong>Phone:</strong> {user.phone}</p>
+                      </>
+                    ) : (
+                      <p>No user data found.</p>
+                    )}
+                  </Card>
+      
+                  {/* Update Profile Button */}
+                  <div className="mt-4 d-flex justify-content-start">
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      onClick={updateProfile}
+                      style={{
+                        backgroundColor: '#6b705c',
+                        borderColor: '#6b705c',
+                        fontSize: '20px', // Adjusted button font size
+                        padding: '10px 20px',
+                        borderRadius: '5px',
+                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                      }}
+                    >
+                      Update Profile
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
-        </div>
-    </>
-    );
+          </div>
+        </>
+      );
+      
+      
 };
 
 export default CustomerSupportProfile;

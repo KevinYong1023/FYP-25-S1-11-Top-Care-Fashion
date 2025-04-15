@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
+import {AuthContext} from '../../App';
 import { Link } from "react-router-dom";
 import '../../css/Header.css';
 import logo from '../../images/logo.png';
 import { FaShoppingCart } from 'react-icons/fa';
 
-export default function UserHeader({ loginStatus }) {
+export default function UserHeader() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const { login } = useContext(AuthContext ); 
   useEffect(() => {
-    setIsLoggedIn(loginStatus);
-  }, [loginStatus]);
-
+    setIsLoggedIn(login);
+  }, [login]);
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
       <Container>
@@ -26,9 +27,14 @@ export default function UserHeader({ loginStatus }) {
             <NavDropdown title="Shop" id="shop-dropdown">
               <NavDropdown.Item as={Link} to="/shoppage">Shop All</NavDropdown.Item>
             </NavDropdown>
-
-            <Nav.Link as={Link} to="/upload-product">Sell</Nav.Link>
-            <Nav.Link as={Link} to="/mixmatch">Mix & Match</Nav.Link>
+          {
+            isLoggedIn &&(
+              <>
+                <Nav.Link as={Link} to="/upload-product">Sell</Nav.Link>
+            <Nav.Link as={Link} to="/mixmatch">Mix & Match</Nav.Link></>
+            )
+          }
+          
           </Nav>
 
           <Nav>

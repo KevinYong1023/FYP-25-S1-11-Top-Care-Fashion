@@ -120,81 +120,90 @@ export default function TotalTicket() {
         }
     }
 
-    return(
-    <>
-    <CustomerSupportHeader />
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      
-  
-      {/* Main content */}
-      <div style={{ flex: 1, padding: '20px' }}>
-        {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
+    return (
+      <>
+        <CustomerSupportHeader />
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
+          {/* Main content */}
+          <div style={{ flex: 1, padding: '20px', backgroundColor: '#f0efeb' }}>
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+    
+            {isLoading ? (
+              <div className="text-center" style={{ marginTop: '100px' }}>
+                <Spinner animation="border" role="status" variant="primary">
+                  <span className="visually-hidden">Loading</span>
+                </Spinner>
+                <p className="mt-2">Loading...</p>
+              </div>
+            ) : (
+              <>
+                <h2>Your Tickets</h2>
+                <hr />
+                <table
+                  className="table table-hover table-striped"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
+                  }}
+                >
+                  <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
+                    <tr>
+                      <th>Ticket No.</th>
+                      <th>User</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentTickets.map((ticket) => (
+                      <tr key={ticket.ticketId}>
+                        <td>{ticket.ticketId}</td>
+                        <td>{ticket.user}</td>
+                        <td>{ticket.status}</td>
+                        <td>{ticket.created}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            <Link to={`/ticket-info/${ticket.ticketId}`} rel="noopener noreferrer">
+                              <Button variant="success" size="lg" style={{ fontSize: '16px' }}>
+                                Review
+                              </Button>
+                            </Link>
+                            <Button
+                              variant="danger"
+                              size="lg"
+                              style={{ fontSize: '16px' }}
+                              onClick={() => handleDelete(ticket.ticketId)}
+                            >
+                              Delete
+                            </Button>
+                            <Button
+                               variant="warning"
+                              size="lg"
+                              style={{ fontSize: '16px' }}
+                              onClick={() => removeAssign(ticket.ticketId)}
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {renderPagination()}
+              </>
+            )}
           </div>
-        )}
-  
-        {isLoading ? (
-          <div className="text-center" style={{ marginTop: '100px' }}>
-            <Spinner animation="border" role="status" variant="primary">
-              <span className="visually-hidden">Loading</span>
-            </Spinner>
-            <p className="mt-2">Loading...</p>
-          </div>
-        ) : (
-          <>
-            <h2>Your Tickets</h2>
-            <hr />
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Ticket No.</th>
-                  <th>User</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentTickets.map((ticket) => (
-                  <tr key={ticket.ticketId}>
-                    <td>{ticket.ticketId}</td>
-                    <td>{ticket.user}</td>
-                    <td>{ticket.status}</td>
-                    <td>{ticket.created}</td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <Link to={`/ticket-info/${ticket.ticketId}`} rel="noopener noreferrer">
-                          <Button variant="primary" size="sm">
-                            Review
-                          </Button>
-                        </Link>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => handleDelete(ticket.ticketId)}
-                        >
-                          Delete
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => removeAssign(ticket.ticketId)}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {renderPagination()}
-          </>
-        )}
-      </div>
-    </div>
-  </>
-    )
+        </div>
+      </>
+    );
+    
   
 }

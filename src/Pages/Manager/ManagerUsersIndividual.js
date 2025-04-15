@@ -165,87 +165,118 @@ export default function ManagerUsersIndividual() {
     <>
       <ManagerHeader />
       <div style={{ display: 'flex', minHeight: '100vh' }}>
+        {/* Main Content */}
+        <div style={{ flex: '1', padding: '40px', backgroundColor: '#f9f9f9' }}>
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+  
+          {isLoading ? (
+            <div className="text-center mt-5">
+              <Spinner animation="border" role="status" variant="primary" />
+              <p className="mt-2">Loading...</p>
+            </div>
+          ) : (
+            userData && (
+              <>
+              <h2 style={{ color: '#6b705c', fontWeight:"bold"}}> User: {userData.name}</h2>
 
-       {/* Main Content */}
-       <div style={{ flex: '1', padding: '40px' }}>
-        {!error ? <></> : (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
-
-        {isLoading ? (
-          <div className="text-center" style={{ marginTop: '100px' }}>
-            <Spinner animation="border" role="status" variant="primary">
-              <span className="visually-hidden">Loading</span>
-            </Spinner>
-            <p className="mt-2">Loading...</p>
-          </div>
-        ) : (
-          userData && (
-            <>
-              <h2 className="mt-3">User: {userData.name}</h2>
-
-              {/* Product Posting History */}
-              <div className="card p-3 my-4">
-                <h3>Product Posting History</h3>
-                <table className="table table-striped table-bordered mt-3">
-                <thead className="table-light">
-                <tr>
-                      <th>Product Name</th>
-                      <th>Price</th>
-                      <th>Description</th>
-                      <th>Date Posted</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentProducts.map((post) => (
-                      <tr key={post._id}>
-                        <td>{post.title}</td>
-                        <td>{post.price}</td>
-                        <td>{post.description}</td>
-                        <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                <hr />
+  
+                {/* Product Posting History */}
+                <div
+                  className="p-4 mb-4"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
+                  }}
+                >
+                  <h4 style={{ color: '#4a4e69' }}>Product Posting History</h4>
+                  <Table
+                    className="table table-hover table-striped mt-3"
+                    style={{
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
+                      <tr>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Date Posted</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {renderPaginationProducts()}
-              </div>
-
-              {/* Comments Made */}
-              <div className="card p-3 my-4">
-                <h3>Comments Made</h3>
-                <table className="table table-striped table-bordered mt-3">
-                  <thead className="table-light">
-                    <tr>
-                      <th>Product Name</th>
-                      <th>Description</th>
-                      <th>Date Posted</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentComments.map((post) => (
-                      <tr key={post.commentNo}>
-                        <td>{post.product}</td>
-                        <td>{post.description}</td>
-                        <td>{new Date(post.created).toLocaleDateString()}</td>
-                        <td>
-                          <Button variant="danger" onClick={() => deleteComment(post.commentNo)}>
-                            Delete Comment
-                          </Button>
-                        </td>
+                    </thead>
+                    <tbody>
+                      {currentProducts.map((post) => (
+                        <tr key={post._id}>
+                          <td>{post.title}</td>
+                          <td>{post.price}</td>
+                          <td>{post.description}</td>
+                          <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                  {renderPaginationProducts()}
+                </div>
+  
+                {/* Comments Made */}
+                <div
+                  className="p-4"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
+                  }}
+                >
+                  <h4 style={{ color: '#4a4e69' }}>Comments Made</h4>
+                  <Table
+                    className="table table-hover table-striped mt-3"
+                    style={{
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
+                      <tr>
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Date Posted</th>
+                        <th className="text-center">Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {renderPaginationComments()}
-              </div>
-            </>
-          )
-        )}
+                    </thead>
+                    <tbody>
+                      {currentComments.map((post) => (
+                        <tr key={post.commentNo}>
+                          <td>{post.product}</td>
+                          <td>{post.description}</td>
+                          <td>{new Date(post.created).toLocaleDateString()}</td>
+                          <td className="text-center">
+                            <Button
+                              variant="danger"
+                              size="lg"
+              style={{ fontSize: '16px' }}
+                              onClick={() => deleteComment(post.commentNo)}
+                            >
+                              Delete Comment
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                  {renderPaginationComments()}
+                </div>
+              </>
+            )
+          )}
+        </div>
       </div>
-    </div>
-  </>
+    </>
   );
+  
 }

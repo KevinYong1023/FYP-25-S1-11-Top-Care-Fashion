@@ -3,6 +3,7 @@ import {AuthContext} from '../../App';
 import { Container, Row, Col, Form, Button,Spinner } from 'react-bootstrap';
 import CustomerSupportHeader from '../../Components/Headers/CustomerSupportHeader';
 import { useNavigate } from 'react-router-dom';  
+import { X } from "react-bootstrap-icons";
 
 export default function CustomerSupportProfileUpdate() {
     const navigate = useNavigate();
@@ -111,14 +112,19 @@ export default function CustomerSupportProfileUpdate() {
                
     
                 {/* Main Content */}
-                <div style={{ flex: 1, padding: '40px' }}>
+                <div style={{ flex: 1, padding: '40px' , backgroundColor: '#f0efeb', }}>
                     {isLoading ? (
                         <div className="text-center mt-5">
                             <Spinner animation="border" role="status" variant="primary" />
                             <p className="mt-2">Loading...</p>
                         </div>
                     ) : (
-                        <>
+                        <div style={{
+                            backgroundColor: '#ffffff',
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                            padding:"20px"
+                          }}>
                             <h3 className="mb-4">Update Profile</h3>
                             <hr />
                             {errorMessage && (
@@ -127,7 +133,7 @@ export default function CustomerSupportProfileUpdate() {
                                 </div>
                             )}
     
-                            <Form onSubmit={handleSubmit}>
+                            <Form  onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="username">
                                     <Form.Label>Username</Form.Label>
                                     <Form.Control
@@ -193,12 +199,19 @@ export default function CustomerSupportProfileUpdate() {
                                 </Form.Group>
     
                                 <div className="text-center mt-4">
-                                    <Button variant="primary" type="submit" className="w-100">
+                                    <Button  style={{
+                        backgroundColor: '#6b705c',
+                        borderColor: '#6b705c',
+                        fontSize: '20px', // Adjusted button font size
+                        padding: '10px 20px',
+                        borderRadius: '5px',
+                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                      }} type="submit" className="w-100">
                                         Update Profile
                                     </Button>
                                 </div>
                             </Form>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>

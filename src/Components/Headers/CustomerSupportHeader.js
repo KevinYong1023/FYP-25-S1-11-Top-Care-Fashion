@@ -7,7 +7,7 @@ import { House, Person, Eye, BoxArrowRight } from 'react-bootstrap-icons';
 export default function CustomerSupportHeader(){
     return(
         <>
-          <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
+          <Navbar expand="lg" className="custom-navbar">
             <Container>
                 <Navbar.Brand href="/dashboard" style={{ color: 'black', marginLeft: '20px' }}>
                     <img src={logo} alt="logo" height={"50px"} width={"50px"} />

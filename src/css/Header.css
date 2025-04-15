@@ -45,7 +45,8 @@
     color: #ffcc00;
   }
   .custom-navbar {  
-    background-color: #343a40; /* Dark background color */  
+    font-size:large;
+    background-color: #6b705c !important; 
 }  
 
 .custom-navbar .navbar-brand {  

@@ -14,7 +14,8 @@ export default function ManagerHeader({loginStatus}){
 
     return (
         <>
-            <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
+                      <Navbar expand="lg" className="custom-navbar">
+            
                 <Container>
                     <Navbar.Brand href="/ManagerDashboard" style={{ color: 'black', marginLeft: '10px' }}>
                         <img src={logo} alt="logo" height={"50px"} width={"50px"} />
