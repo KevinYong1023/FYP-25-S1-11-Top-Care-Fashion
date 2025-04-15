@@ -1,0 +1,12 @@
+.loading-container {
+    margin-top: 100px;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.card .form-label {
+    font-weight: bold;
+}

@@ -1,41 +1,39 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
 import { Container, Row, Col, Button, Form, Table, Card, Pagination, Spinner } from 'react-bootstrap';
-import AdminSidebar from '../../Components/Sidebars/AdminSidebar';
 import AdminHeader from '../../Components/Headers/AdminHeader';
+import '../../css/ViewAccounts.css';
 
 export default function ViewAccounts() {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterPosition, setFilterPosition] = useState('');
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
     const [filterStatus, setFilterStatus] = useState('');
-    const [currentPage, setCurrentPage] = useState(1); // Track the current page
-    const usersPerPage = 10; // Number of users per page
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
     const { email } = useContext(AuthContext);
 
     useEffect(() => {
-        fetchUsers(); // Fetch all users on load
+        fetchUsers();
     }, [email]);
 
-    // Fetch all users
     const fetchUsers = async () => {
         try {
             setIsLoading(true);
             const response = await fetch('/api/user');
             const data = await response.json();
-            const filteredData = data.filter(user => user.email !== email); // Avoid showing the current admin
+            const filteredData = data.filter(user => user.email !== email);
             setUsers(filteredData);
         } catch (error) {
-            setError("Server Error, Please Refresh the Page")
+            setError("Server Error, Please Refresh the Page");
             console.error('Error fetching users:', error);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Pagination Logic
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -70,7 +68,6 @@ export default function ViewAccounts() {
         );
     };
 
-    // Search users by name
     const handleSearch = async () => {
         try {
             setIsLoading(true);
@@ -85,57 +82,35 @@ export default function ViewAccounts() {
         }
     };
 
-    // Reset search
     const handleReset = () => {
         setSearchQuery('');
         setFilterPosition('');
         setFilterStatus('');
-        fetchUsers(); // Fetch all users again
+        fetchUsers();
     };
 
-    // Filter users by position and status
-    const handleFilter = async () => {
-        const query = new URLSearchParams();
-        if (filterPosition) query.append('position', filterPosition);
-        if (filterStatus) query.append('status', filterStatus);
-
-        try {
-            setIsLoading(true);
-            const response = await fetch(`/api/user/filter?${query.toString()}`);
-            const data = await response.json();
-            setUsers(data);
-        } catch (error) {
-            setError("Server Error: Please Try Again");
-            console.error('Error filtering users:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    // Suspend user function
     const handleStatus = async (email, status) => {
         try {
             setIsLoading(true);
             const response = await fetch(`/api/user/${email}/status`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: status }),
+                body: JSON.stringify({ status }),
             });
 
             if (response.ok) {
                 await fetchUsers();
             } else {
-                console.error("Error suspending user");
+                console.error("Error updating status");
             }
         } catch (error) {
             setError("Server Error: Please Try Again");
-            console.error("Error suspending user:", error);
+            console.error("Error updating status:", error);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Delete user function
     const handleDelete = async (email) => {
         try {
             setIsLoading(true);
@@ -159,147 +134,127 @@ export default function ViewAccounts() {
     return (
         <div>
             <AdminHeader />
-            <Container fluid>
-                <Row className="d-flex">
-                    {/* Sidebar */}
-                    <Col xs={12} md={2} id="AdminSidebar" className="p-0" style={{ minHeight: '100vh' }}>
-                        <AdminSidebar />
-                    </Col>
+            <Container fluid className="p-4">
+                {error && <div className="alert alert-danger">{error}</div>}
 
-                    {/* Main Content */}
-                    <Col md={10} style={{ padding: '20px' }}>
-                    {!error?<></>: <div className="alert alert-danger" role="alert">
-                                  {error}
-                                </div>}
-                        {isLoading ? (
-                            <div className="text-center" style={{ marginTop: '100px' }}>
-                                <Spinner animation="border" role="status" variant="primary">
-                                    <span className="visually-hidden">Loading</span>
-                                </Spinner>
-                                <p className="mt-2">Loading...</p>
-                            </div>
-                        ) : (
-                            <>
-                                <h2>User Accounts</h2>
+                {isLoading ? (
+                    <div className="text-center loading-container">
+                        <Spinner animation="border" role="status" variant="primary">
+                            <span className="visually-hidden">Loading</span>
+                        </Spinner>
+                        <p className="mt-2">Loading...</p>
+                    </div>
+                ) : (
+                    <>
+                        <h2>User Accounts</h2>
 
-                                {/* Filter and Search Form */}
-                                <Card className="mb-4 shadow-sm">
-                                    <Card.Body>
-                                        <Form>
-                                            <Row className="mb-3">
-                                                {/* Search by Name */}
-                                                <Col md={3}>
-                                                    <Form.Label>Search by Name:</Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        placeholder="Enter name"
-                                                        value={searchQuery}
-                                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                                    />
-                                                </Col>
+                        <Card className="mb-4 shadow-sm">
+                            <Card.Body>
+                                <Form>
+                                    <Row className="mb-3">
+                                        <Col md={3}>
+                                            <Form.Label>Search by Name:</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter name"
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                            />
+                                        </Col>
 
-                                                {/* Filter by Position */}
-                                                <Col md={3}>
-                                                    <Form.Label>Filter by Position:</Form.Label>
-                                                    <Form.Control
-                                                        as="select"
-                                                        value={filterPosition}
-                                                        onChange={(e) => setFilterPosition(e.target.value)}
-                                                    >
-                                                        <option value="">All</option>
-                                                        <option value="admin">Admin</option>
-                                                        <option value="user">User</option>
-                                                        <option value="customer support">Customer Support</option>
-                                                        <option value="manager">Manager</option>
-                                                    </Form.Control>
-                                                </Col>
+                                        <Col md={3}>
+                                            <Form.Label>Filter by Position:</Form.Label>
+                                            <Form.Select
+                                                value={filterPosition}
+                                                onChange={(e) => setFilterPosition(e.target.value)}
+                                            >
+                                                <option value="">All</option>
+                                                <option value="admin">Admin</option>
+                                                <option value="user">User</option>
+                                                <option value="customer support">Customer Support</option>
+                                                <option value="manager">Manager</option>
+                                            </Form.Select>
+                                        </Col>
 
-                                                {/* Filter by Status */}
-                                                <Col md={3}>
-                                                    <Form.Label>Filter by Status:</Form.Label>
-                                                    <Form.Control
-                                                        as="select"
-                                                        value={filterStatus}
-                                                        onChange={(e) => setFilterStatus(e.target.value)}
-                                                    >
-                                                        <option value="">All</option>
-                                                        <option value="Active">Active</option>
-                                                        <option value="Suspended">Suspended</option>
-                                                    </Form.Control>
-                                                </Col>
+                                        <Col md={3}>
+                                            <Form.Label>Filter by Status:</Form.Label>
+                                            <Form.Select
+                                                value={filterStatus}
+                                                onChange={(e) => setFilterStatus(e.target.value)}
+                                            >
+                                                <option value="">All</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Suspended">Suspended</option>
+                                            </Form.Select>
+                                        </Col>
 
-                                                {/* Search Button */}
-                                                <Col md={3} className="d-flex align-items-end">
-                                                    <Button variant="primary" onClick={handleSearch} className="me-2">
-                                                        Search
-                                                    </Button><br/>
-                                                    <Button variant="secondary" onClick={handleReset} className="me-2">
-                                                        Reset
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        </Form>
-                                    </Card.Body>
-                                </Card>
+                                        <Col md={3} className="d-flex align-items-end">
+                                            <Button variant="primary" onClick={handleSearch} className="me-2">
+                                                Search
+                                            </Button>
+                                            <Button variant="secondary" onClick={handleReset} className="me-2">
+                                                Reset
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </Card.Body>
+                        </Card>
 
-                                {/* Users Table */}
-                                <Table striped bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th>Account ID</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Position</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentUsers.map((user) => (
-                                            <tr key={user.userId}>
-                                                <td>{user.userId}</td>
-                                                <td>{user.name}</td>
-                                                <td>{user.email}</td>
-                                                <td>{user.phone.slice(0, 8)}</td>
-                                                <td>{user.position}</td>
-                                                <td>{user.status}</td>
-                                                <td>
-                                                    {user.status === 'Active' ? (
-                                                        <Button
-                                                            variant="warning"
-                                                            onClick={() => handleStatus(user.email, "Suspended")}
-                                                            className="me-2"
-                                                        >
-                                                            Suspend
-                                                        </Button>
-                                                    ) : (
-                                                        <Button
-                                                            variant="success"
-                                                            onClick={() => handleStatus(user.email, "Active")}
-                                                            className="me-2"
-                                                        >
-                                                            Activate
-                                                        </Button>
-                                                    )}
-                                                    <Button
-                                                        variant="danger"
-                                                        onClick={() => handleDelete(user.email)}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>Account ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Position</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentUsers.map((user) => (
+                                    <tr key={user.userId}>
+                                        <td>{user.userId}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.phone?.slice(0, 8)}</td>
+                                        <td>{user.position}</td>
+                                        <td>{user.status}</td>
+                                        <td>
+                                            {user.status === 'Active' ? (
+                                                <Button
+                                                    variant="warning"
+                                                    onClick={() => handleStatus(user.email, "Suspended")}
+                                                    className="me-2"
+                                                >
+                                                    Suspend
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant="success"
+                                                    onClick={() => handleStatus(user.email, "Active")}
+                                                    className="me-2"
+                                                >
+                                                    Activate
+                                                </Button>
+                                            )}
+                                            <Button
+                                                variant="danger"
+                                                onClick={() => handleDelete(user.email)}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
 
-                                {/* Pagination */}
-                                {renderPagination()}
-                            </>
-                        )}
-                    </Col>
-                </Row>
+                        {renderPagination()}
+                    </>
+                )}
             </Container>
         </div>
     );

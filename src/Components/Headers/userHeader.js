@@ -23,30 +23,30 @@ export default function UserHeader({ loginStatus }) {
         <Navbar.Collapse id="basic-navbar-nav">
 
           <Nav className="me-auto">
-            <NavDropdown title="Shop" id="shop-dropdown">
+            <NavDropdown title="Shop" id="shop-dropdown" style={{fontSize: '20px'}}>
               <NavDropdown.Item as={Link} to="/shoppage">Shop All</NavDropdown.Item>
             </NavDropdown>
 
-            <Nav.Link as={Link} to="/upload-product">Sell</Nav.Link>
-            <Nav.Link as={Link} to="/mixmatch">Mix & Match</Nav.Link>
+            <Nav.Link as={Link} to="/upload-product" style={{fontSize: '20px'}}>Sell</Nav.Link>
+            <Nav.Link as={Link} to="/mixmatch" style={{fontSize: '20px'}}>Mix & Match</Nav.Link>
           </Nav>
 
           <Nav>
             {isLoggedIn ? (
               <>
-                <NavDropdown title="Profile" id="profile-dropdown">
+                <NavDropdown title="Profile" id="profile-dropdown" style={{fontSize: '20px'}}>
                   <NavDropdown.Item as={Link} to="/user-profile">Profile</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/manage-list">Manage Listings</NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
-                <Nav.Link as={Link} to="/cart">
+                <Nav.Link as={Link} to="/logout" style={{fontSize: '20px'}}>Logout</Nav.Link>
+                <Nav.Link as={Link} to="/cart" style={{ fontSize: '20px'}}>
                   <FaShoppingCart />
                 </Nav.Link>
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login">Login</Nav.Link>
-                <Nav.Link as={Link} to="/register">Register</Nav.Link>
+                <Nav.Link as={Link} to="/login" style={{fontSize: '20px'}}>Login</Nav.Link>
+                <Nav.Link as={Link} to="/register" style={{fontSize: '20px'}}>Register</Nav.Link>
               </>
             )}
           </Nav>
