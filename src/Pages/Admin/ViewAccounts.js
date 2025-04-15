@@ -275,46 +275,55 @@ export default function ViewAccounts() {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentUsers.map((user) => (
-                      <tr key={user.userId}>
-                        <td>{user.name}</td>
-                        <td>{user.username}</td>
-                        <td>{user.email}</td>
-                        <td>{user.phone.slice(0, 8)}</td>
-                        <td>{user.position}</td>
-                        <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
-                        <td>{user.status}</td>
-                        <td>
-                          {user.status === 'Active' ? (
-                            <Button
-                              variant="warning"
-                              onClick={() => handleStatus(user.email, 'Suspended')}
-                              className="me-2"
-                              style={{ fontSize: '16px' }}
-                            >
-                              Suspend
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="success"
-                              onClick={() => handleStatus(user.email, 'Active')}
-                              className="me-2"
-                              style={{ fontSize: '16px' }}
-                            >
-                              Activate
-                            </Button>
-                          )}
-                          <Button
-                            variant="danger"
-                            onClick={() => handleDelete(user.email)}
-                            style={{ fontSize: '16px' }}
-                          >
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+  {currentUsers.length === 0 ? (
+    <tr>
+      <td colSpan="8" className="text-center">
+        No users found
+      </td>
+    </tr>
+  ) : (
+    currentUsers.map((user) => ( // Removed the extra curly braces here
+      <tr key={user.userId}>
+        <td>{user.name}</td>
+        <td>{user.username}</td>
+        <td>{user.email}</td>
+        <td>{user.phone.slice(0, 8)}</td>
+        <td>{user.position}</td>
+        <td>{new Date(user.joined).toLocaleDateString('en-GB')}</td>
+        <td>{user.status}</td>
+        <td>
+          {user.status === 'Active' ? (
+            <Button
+              variant="warning"
+              onClick={() => handleStatus(user.email, 'Suspended')}
+              className="me-2"
+              style={{ fontSize: '16px' }}
+            >
+              Suspend
+            </Button>
+          ) : (
+            <Button
+              variant="success"
+              onClick={() => handleStatus(user.email, 'Active')}
+              className="me-2"
+              style={{ fontSize: '16px' }}
+            >
+              Activate
+            </Button>
+          )}
+          <Button
+            variant="danger"
+            onClick={() => handleDelete(user.email)}
+            style={{ fontSize: '16px' }}
+          >
+            Delete
+          </Button>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
                 </Table>
     
                 {/* Pagination */}
