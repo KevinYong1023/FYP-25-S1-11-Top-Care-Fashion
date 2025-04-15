@@ -158,6 +158,7 @@ const ProductPage = () => {
                         <Col md={6}>
                             <Card className="p-4 product-details-card">
                                 <h2>{product.title}</h2>
+                                <p><strong>Seller: {product.seller}</strong></p>
                                 <p className="product-price"><strong>Price:</strong> ${product.price ? product.price.toFixed(2) : 'N/A'}</p>
                                 <p><strong>Category:</strong> {product.category || 'N/A'}</p>
                                 <p><strong>Description:</strong><br />{product.description || 'No description available.'}</p>
