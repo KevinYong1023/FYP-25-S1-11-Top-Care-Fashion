@@ -2,39 +2,38 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
 import { Container, Row, Col, Button, Form, Table, Card, Pagination, Spinner } from 'react-bootstrap';
 import AdminHeader from '../../Components/Headers/AdminHeader';
+import '../../css/ViewAccounts.css';
 
 export default function ViewAccounts() {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterPosition, setFilterPosition] = useState('');
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
     const [filterStatus, setFilterStatus] = useState('');
-    const [currentPage, setCurrentPage] = useState(1); // Track the current page
-    const usersPerPage = 10; // Number of users per page
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
     const { email } = useContext(AuthContext);
 
     useEffect(() => {
-        fetchUsers(); // Fetch all users on load
+        fetchUsers();
     }, [email]);
 
-    // Fetch all users
     const fetchUsers = async () => {
         try {
             setIsLoading(true);
             const response = await fetch('/api/user');
             const data = await response.json();
-            const filteredData = data.filter(user => user.email !== email); // Avoid showing the current admin
+            const filteredData = data.filter(user => user.email !== email);
             setUsers(filteredData);
         } catch (error) {
-            setError("Server Error, Please Refresh the Page")
+            setError("Server Error, Please Refresh the Page");
             console.error('Error fetching users:', error);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Pagination Logic
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -69,7 +68,6 @@ export default function ViewAccounts() {
         );
     };
 
-    // Search users by name
     const handleSearch = async () => {
         try {
             setIsLoading(true);
@@ -84,57 +82,35 @@ export default function ViewAccounts() {
         }
     };
 
-    // Reset search
     const handleReset = () => {
         setSearchQuery('');
         setFilterPosition('');
         setFilterStatus('');
-        fetchUsers(); // Fetch all users again
+        fetchUsers();
     };
 
-    // Filter users by position and status
-    const handleFilter = async () => {
-        const query = new URLSearchParams();
-        if (filterPosition) query.append('position', filterPosition);
-        if (filterStatus) query.append('status', filterStatus);
-
-        try {
-            setIsLoading(true);
-            const response = await fetch(`/api/user/filter?${query.toString()}`);
-            const data = await response.json();
-            setUsers(data);
-        } catch (error) {
-            setError("Server Error: Please Try Again");
-            console.error('Error filtering users:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    // Suspend user function
     const handleStatus = async (email, status) => {
         try {
             setIsLoading(true);
             const response = await fetch(`/api/user/${email}/status`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: status }),
+                body: JSON.stringify({ status }),
             });
 
             if (response.ok) {
                 await fetchUsers();
             } else {
-                console.error("Error suspending user");
+                console.error("Error updating status");
             }
         } catch (error) {
             setError("Server Error: Please Try Again");
-            console.error("Error suspending user:", error);
+            console.error("Error updating status:", error);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Delete user function
     const handleDelete = async (email) => {
         try {
             setIsLoading(true);
@@ -156,6 +132,7 @@ export default function ViewAccounts() {
     };
 
     return (
+
       <>
         <AdminHeader />
         <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -331,6 +308,7 @@ export default function ViewAccounts() {
               </div>
             )}
           </div>
+
         </div>
       </>
     );

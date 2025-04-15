@@ -3,21 +3,19 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import UserHeader from '../Components/Headers/userHeader';
 import { useNavigate } from 'react-router-dom';
 
-
-const UserProfile = ({ email, setName, setAddress }) => {  
-    const [user, setUser] = useState(null);  
+const UserProfile = ({ email, setName, setAddress }) => {
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
-    // Fetch user details based on email
     useEffect(() => {
         const fetchUserDetails = async () => {
             console.log("Email:", email);
             if (email) {
                 try {
-                    const response = await fetch(`/api/user/${email}`); 
+                    const response = await fetch(`/api/user/${email}`);
                     const data = await response.json();
                     console.log("Data:", data);
-                    setUser(data); 
+                    setUser(data);
                     setName(data.name);
                     setAddress(data.address);
                 } catch (error) {
@@ -28,15 +26,14 @@ const UserProfile = ({ email, setName, setAddress }) => {
         fetchUserDetails();
     }, [email]);
 
-    function updateProfile(){
-        navigate('/update-account');  
+    function updateProfile() {
+        navigate('/update-account');
     }
 
-    function checkOrders(){
+    function checkOrders() {
         navigate('/your-orders');
     }
 
-    // If user data is not loaded, show a loading message
     if (!user) {
         return <p>Loading user data...</p>;
     }
@@ -45,27 +42,40 @@ const UserProfile = ({ email, setName, setAddress }) => {
         <div>
             <UserHeader loginStatus={true} />
             <Container fluid>
-                <Row>
-                    <Col md={9} className="p-4">
-                        <Card className={`p-4`}>
-                            <h2>Profile Details</h2>
-                            <h4>Username: {user.username}</h4>
-                            <h4>Name: {user.name}</h4>
-                            <h4>Email: {user.email}</h4>
-                            <h4>Date of Birth: {user.dob}</h4>
-                            <h4>Gender: {user.gender}</h4>
-                            <h4>Phone: {user.phone}</h4>
-                        </Card>
-                        <Card className="p-4">
-                            <h2>Shipping Details</h2>
-                            <h4>Name: {user.name}</h4>
-                            <h4>Phone: {user.phone}</h4>
-                            <h4>Email: {user.email}</h4>
-                            <h4>Address: {user.address}</h4>
-                        </Card>
-                        <Button variant="primary" onClick={updateProfile}>Update Profile</Button>
-                       
-                        <Button variant="secondary" onClick={checkOrders}>Check Your Orders</Button>
+                <Row className="justify-content-center">
+                    <Col md={8} className="p-4">
+                        <Row>
+                            <Col md={6}>
+                                <Card className="p-4 mb-4 border-0 shadow">
+                                    <h2 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Profile Details</h2>
+                                    <h4 style={ {fontFamily: 'Math' }}>Username: {user.username}</h4>
+                                    <h4 style={ { fontFamily: 'Math' }}>Name: {user.name}</h4>
+                                    <h4 style={ { fontFamily: 'Math' }}>Email: {user.email}</h4>
+                                    <h4 style={ { fontFamily: 'Math' }}>Date of Birth: {user.dob}</h4>
+                                    <h4 style={ { fontFamily: 'Math' }}>Gender: {user.gender}</h4>
+                                    <h4 style={ { fontFamily: 'Math' }}>Phone: {user.phone}</h4>
+                                </Card>
+                            </Col>
+                            <Col md={6}>
+                                <Card className="p-4 mb-4 border-0 shadow">
+                                    <h2 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Shipping Details</h2>
+                                    <h4 style={ {fontFamily: 'Math' }}>Name: {user.name}</h4>
+                                    <h4 style={ {fontFamily: 'Math' }}>Phone: {user.phone}</h4>
+                                    <h4 style={ {fontFamily: 'Math' }}>Email: {user.email}</h4>
+                                    <h4 style={ {fontFamily: 'Math' }}>Address: {user.address}</h4>
+                                </Card>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="text-center">
+                                <Button variant="primary" onClick={updateProfile} className="me-2">
+                                    Update Profile
+                                </Button>
+                                <Button variant="secondary" onClick={checkOrders}>
+                                    Check Your Orders
+                                </Button>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             </Container>

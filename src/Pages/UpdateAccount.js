@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function UpdateAccount({ email }) {
     const navigate = useNavigate();
+    const [error, setError] = useState()
     const [profile, setProfile] = useState({
         username: '',
         name: '',
@@ -33,6 +34,7 @@ export default function UpdateAccount({ email }) {
                             address: userData.address
                         });
                     } else {
+
                         console.error('Failed to fetch user details');
                     }
                 } catch (error) {
