@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile = ({ email, setName, setAddress }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    const [revenue, setRevenue] = useState(0); // 🆕 New state for revenue
+    const [revenue, setRevenue] = useState(0); // 
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -56,6 +56,12 @@ const UserProfile = ({ email, setName, setAddress }) => {
                                     <h4 style={ { fontFamily: 'Math' }}>Gender: {user.gender}</h4>
                                     <h4 style={ { fontFamily: 'Math' }}>Phone: {user.phone}</h4>
                                 </Card>
+                            </Col>
+                            <Col>
+                            <Card className="p-4 mb-4 border-0 shadow">
+                            <h2 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Revenue Earned</h2>
+                            <div className="revenue-amount">${user.revenue?.toFixed(2) || "0.00"}</div>
+                            </Card>
                             </Col>
                             <Col md={6}>
                                 <Card className="p-4 mb-4 border-0 shadow">
