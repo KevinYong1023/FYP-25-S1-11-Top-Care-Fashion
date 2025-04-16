@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    localStorage.clear(); // this already clears everything
+    //localStorage.clear(); // this already clears everything
   },[])
 
   const handleChange = (e) => {
