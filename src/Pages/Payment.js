@@ -15,14 +15,15 @@ const Payment = () => {
 
     const { cartItems = [], totalAmount = 0 } = location.state || {};
 
-    const [cardNumber, setCardNumber] = useState('1234123412341234');
-    const [expirationDate, setExpirationDate] = useState('12/26');
-    const [cvv, setCvv] = useState('123');
-    const [nameOnCard, setNameOnCard] = useState('JJ');
+    const [cardNumber, setCardNumber] = useState('');
+    const [expirationDate, setExpirationDate] = useState('');
+    const [cvv, setCvv] = useState('');
+    const [nameOnCard, setNameOnCard] = useState('');
 
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false); 
     const [loggedInUserName, setLoggedInUserName] = useState('');
 
     useEffect(() => {
@@ -130,6 +131,13 @@ const Payment = () => {
 
             await createOrder(cartItems, totalAmount, token, loggedInUserName);
 
+            //  Disable button and show "Redirecting to home..."
+                setIsRedirecting(true);
+
+                setTimeout(() => {
+                    navigate('/home');
+                }, 3000);
+
         } catch (error) {
             console.error('Checkout Error:', error);
             setMessage(`Error: ${error.message}`);
@@ -215,7 +223,7 @@ const Payment = () => {
         }
     };
 
-    const canSubmit = cartItems.length > 0 && totalAmount > 0 && !isLoading;
+    const canSubmit = cartItems.length > 0 && totalAmount > 0 && !isLoading && !isRedirecting;
 
     return (
         <>
@@ -242,7 +250,8 @@ const Payment = () => {
 
                     <Col md={5}>
                         <h2>Payment by Credit Card</h2>
-                        {!canSubmit && cartItems.length > 0 && !isLoading && <Alert variant="warning">Enter card details to proceed.</Alert>}
+                        {!canSubmit && cartItems.length > 0 && !isLoading && !isRedirecting && 
+                        (<Alert variant="warning">Enter card details to proceed.</Alert>  )}
 
                         <Form onSubmit={handleSubmit} className="payment-form-area">
                             <fieldset className="fake-card-details mb-3" disabled={isLoading || !canSubmit}>
@@ -277,9 +286,18 @@ const Payment = () => {
                                 </Alert>
                             )}
                             {
-                                 <Button variant="primary" type="submit" disabled={isLoading || !canSubmit} className="mt-3 w-100">
-                                    {isLoading ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : `Confirm & Pay $${totalAmount.toFixed(2)}`}
-                                </Button>
+                                 <Button
+                                 variant="primary"
+                                 type="submit"
+                                 disabled={isLoading || isRedirecting} // ✅ this disables the button properly
+                                 className="mt-3 w-100"
+                             >
+                                 {isRedirecting
+                                     ? "Redirecting to home..."
+                                     : isLoading
+                                         ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                                         : `Confirm & Pay $${totalAmount.toFixed(2)}`}
+                             </Button>
                             }
                         </Form>
                     </Col>
