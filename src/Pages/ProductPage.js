@@ -4,7 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../Components/CartContext";
 import { AuthContext } from "../App";
 import UserHeader from "../Components/Headers/userHeader";
-import {AuthContext} from '../App';
 
 const isLoggedIn = () => !!localStorage.getItem('authToken');
 

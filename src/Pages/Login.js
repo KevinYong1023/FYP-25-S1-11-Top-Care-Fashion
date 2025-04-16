@@ -19,68 +19,39 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            const data = await response.json();
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-            if (response.ok) {
-                if (data.token) {
-                    localStorage.setItem('authToken', data.token);
-                    console.log("Login successful, token stored.");
+      const data = await response.json();
 
-                    setEmail(formData.email);
-                    
-                    setLogin(true);
-                    
+      if (response.ok) {
+        const loginRole = data.user.role;
+        setEmail(formData.email);
+        setRole(loginRole);
+        setLogin(true);
+        setAddress(data.user.address);
+        setName(data.user.name);
 
-                    // Fetch user data from /me route to get the position
-                    const meResponse = await fetch('/api/auth/me', {
-                        headers: {
-                            'Authorization': `Bearer ${data.token}`
-                        }
-                    });
-
-                    if (meResponse.ok) {
-                        const meData = await meResponse.json();
-                        setRole(meData.userData.position);
-
-                        if (meData.userData.position === "user") {
-                            navigate("/home");
-                        } else if (meData.userData.position === "admin") {
-                            navigate("/view-all-accounts");
-                        } else if (meData.userData.position === "manager") {
-                            navigate("/ManagerDashboard");
-                        } else {
-                            console.warn("Login successful but navigation for role not specified:", meData.userData.position);
-                            navigate("/dashboard");
-                        }
-                    } else {
-                        console.error("Failed to fetch user data from /me");
-                        setError("Login successful, but failed to fetch user data.");
-                    }
-                } else {
-                    console.error("Login successful but no token received from backend.");
-                    setError("Login succeeded but failed to receive authentication token.");
-                }
-            } else {
-                console.error("Login failed:", data.message);
-                setError(data.message || "Login failed. Please check credentials");
-            }
-        } catch (error) {
-            console.error("An error occurred during login fetch:", error);
-            setError("An error occurred during login. Please try again.");
-        }
-    };
-
+        if (loginRole === "user") navigate("/home");
+        else if (loginRole === "admin") navigate("/view-all-accounts");
+        else if (loginRole === "manager") navigate("/ManagerDashboard");
+        else navigate("/dashboard");
+      } else {
+        console.error("Login failed", data.message);
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
+      setError("An error occurred during login. Please try again.");
+    }
+  };
 
   return (
     <>
