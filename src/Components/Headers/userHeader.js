@@ -1,51 +1,66 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
-import UserHeader from '../Components/Headers/userHeader';
-import { AuthContext } from "../App";  // Import context from App.js
+import React, { useEffect, useState, useContext} from "react";
+import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
+import {AuthContext} from '../../App';
+import { Link } from "react-router-dom";
+import '../../css/Header.css';
+import logo from '../../images/logo.png';
+import { FaShoppingCart } from 'react-icons/fa';
 
-export default function Logout() {  // Accept setIsLoggedIn as a prop
-    const navigate = useNavigate();
-    const { setLogin, setRole, setEmail,setName,setAddress,setUserEmail } = useContext(AuthContext);  // Use context to set email, login, and role
-    
-    useEffect(()=>{
-        setLogin(false);
-    },[])
-    function resetStates(){
-        localStorage.clear(); // this already clears everything
-        setLogin(false);
-        setRole("");
-        setEmail("");
-        setName("");       
-        setAddress("");     
-        setUserEmail("");  
-    }
+export default function UserHeader() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const { login } = useContext(AuthContext ); 
+  useEffect(() => {
+    setIsLoggedIn(login);
+  }, [login]);
+  return (
+    <Navbar bg="dark" variant="dark" expand="lg" className="custom-navbar">
+      <Container>
+      <>
+        <Navbar.Brand as={Link} to="/home" className="logo">
+          <img src={logo} alt="logo" height={"50px"} width={"50px"} />
+        </Navbar.Brand>
 
-    const handleLogout = () => {
-        resetStates() 
-        navigate("/login");
-    };
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
 
-    const handleBackToHome = () => {
-        resetStates() 
-        navigate("/home");
-    };
-    
+          <Nav className="me-auto">
+            <NavDropdown title="Shop" id="shop-dropdown" style={{fontSize: '20px'}}>
+              <NavDropdown.Item as={Link} to="/shoppage">Shop All</NavDropdown.Item>
+            </NavDropdown>
 
-    return (
-        <>
-            <UserHeader loginStatus={false}/>
-            <Container fluid className="d-flex justify-content-center align-items-center" style={{ height: '70vh' }}>
-                <Row>
-                    <Col className="text-center">
-                        <h1>You have successfully logged out.</h1>
-                        <br/>
-                        <Button variant="primary" onClick={handleLogout}>Login</Button> {/* Logout and redirect to login */}
-                        <Button variant="primary" onClick={handleBackToHome}>Back To Home</Button> {/* Logout and redirect to login */}
+          {
+            isLoggedIn &&(
+              <>
+                <Nav.Link as={Link} to="/upload-product" style={{fontSize: '20px'}}>Sell</Nav.Link>
+            <Nav.Link as={Link} to="/mixmatch" style={{fontSize: '20px'}}>Mix & Match</Nav.Link></>
+            )
+          }
+          
+          </Nav>
 
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    );
+          <Nav>
+            {isLoggedIn ? (
+              <>
+                <NavDropdown title="Profile" id="profile-dropdown" style={{fontSize: '20px'}}>
+                  <NavDropdown.Item as={Link} to="/user-profile">Profile</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/manage-list">Manage Listings</NavDropdown.Item>
+                </NavDropdown>
+                <Nav.Link as={Link} to="/logout" style={{fontSize: '20px'}}>Logout</Nav.Link>
+                <Nav.Link as={Link} to="/cart" style={{ fontSize: '20px'}}>
+                  <FaShoppingCart />
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/login" style={{fontSize: '20px'}}>Login</Nav.Link>
+                <Nav.Link as={Link} to="/register" style={{fontSize: '20px'}}>Register</Nav.Link>
+              </>
+            )}
+          </Nav>
+
+        </Navbar.Collapse>
+      </>
+      </Container>
+    </Navbar>
+  );
 }
