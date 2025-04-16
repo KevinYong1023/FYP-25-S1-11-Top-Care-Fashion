@@ -176,6 +176,8 @@ const Payment = () => {
         }
         console.log("Total Amount To Send: ", totalAmountToSend);
         console.log("createOrder - userName:", userName);  // Add this line
+
+    
         try {
             const orderResponse = await fetch("/api/create-order", {
                 method: "POST",
@@ -204,12 +206,35 @@ const Payment = () => {
                     
                 }),
             });
-
             if (!orderResponse.ok) {
                 const orderData = await orderResponse.json();
                 throw new Error(orderData.message || "Failed to create order");
             }
-
+    
+            // 🔁 Update each product's isOrdered to true
+            for (const item of cartItems) {
+                try {
+                    const res = await fetch(`/api/products/update-product-status`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ productName: item.productName, isOrdered: true }),
+                    });
+    
+                    const data = await res.json();
+                    if (res.ok) {
+                        console.log(`Product "${item.productName}" order status updated`);
+                    } else {
+                        console.error(`Failed to update "${item.productName}":`, data.message);
+                        setMessage(`Product order status update failed: ${data.message}`);
+                        setMessageType("danger");
+                    }
+                } catch (err) {
+                    console.error(`Error updating "${item.productName}":`, err);
+                }
+            }
+    
             const orderData = await orderResponse.json();
             console.log("Order created successfully", orderData.orderDetails);
             setMessage("Order created successfully!");
@@ -222,6 +247,7 @@ const Payment = () => {
             throw orderError;
         }
     };
+    
 
     const canSubmit = cartItems.length > 0 && totalAmount > 0 && !isLoading && !isRedirecting;
 

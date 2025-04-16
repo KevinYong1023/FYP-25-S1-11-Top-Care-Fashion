@@ -28,7 +28,7 @@ router.post('/products', async (req, res) => {
 });
 
 // Get the user products
-router.get("/products/user/:email", authenticate, async (req, res) => {
+router.get("/products/user/:email", async (req, res) => {
     try {
         const email = req.params.email;
         const products = await Product.find({ email });
@@ -74,47 +74,61 @@ router.delete("/products/:id", authenticate, async (req, res) => {
 // Search Product
 router.get("/products/search", async (req, res) => {
     try {
-        const { query, categories, maxPrice, page = 1, limit = 9 } = req.query;
+      const { query, categories, maxPrice, page = 1, limit = 9 } = req.query;
+  
+      const searchFilter = query
+        ? {
+            $or: [
+              { title: { $regex: query, $options: "i" } },
+              { description: { $regex: query, $options: "i" } },
+              { category: { $regex: query, $options: "i" } }
+            ]
+          }
+        : {};
+  
+      const categoryFilter = categories
+        ? { category: { $in: categories.split(",") } }
+        : {};
+  
+      const priceFilter = maxPrice
+        ? { price: { $lt: parseFloat(maxPrice) } }
+        : {};
+  
+      const availabilityFilter = {
+        isOrdered: false,
+      };
+  
+      const combinedFilter = {
+        ...searchFilter,
+        ...categoryFilter,
+        ...priceFilter,
+        ...availabilityFilter,
+      };
+  
+      const pageNumber = parseInt(page);
+      const limitNumber = parseInt(limit);
+      const skip = (pageNumber - 1) * limitNumber;
+  
+      const [products, total] = await Promise.all([
+        Product.find(combinedFilter)
+          .skip(skip)
+          .limit(limitNumber),
+        Product.countDocuments(combinedFilter),
+      ]);
+  
+      const totalPages = Math.ceil(total / limitNumber);
 
-        const searchFilter = query
-            ? {
-                $or: [
-                    { title: { $regex: query, $options: "i" } },
-                    { description: { $regex: query, $options: "i" } },
-                    { category: { $regex: query, $options: "i" } }
-                ]
-            }
-            : {};
-
-        const categoryFilter = categories
-            ? { category: { $in: categories.split(",") } }
-            : {};
-
-        const priceFilter = maxPrice ? { price: { $lt: parseFloat(maxPrice) } } : {};
-
-        const filters = { ...searchFilter, ...categoryFilter, ...priceFilter };
-
-        const pageNumber = parseInt(page) || 1;
-        const limitNumber = parseInt(limit) || 9;
-        const skip = (pageNumber - 1) * limitNumber;
-
-        const products = await Product.find(filters)
-            .skip(skip)
-            .limit(limitNumber);
-
-        const total = await Product.countDocuments(filters);
-
-        res.json({
-            products,
-            totalPages: Math.ceil(total / limitNumber),
-            currentPage: pageNumber
-        });
-
+      res.json({
+        products,
+        totalPages,
+        currentPage: pageNumber,
+      });
     } catch (err) {
-        console.error("Error filtering products:", err);
-        res.status(500).json({ message: "Server error" });
+      console.error("Error filtering products:", err);
+      res.status(500).json({ message: "Server error" });
     }
-});
+  });
+  
 
 // Get latest 3 product
 router.get("/products/latest", async (req, res) => {
@@ -141,7 +155,7 @@ router.get("/products", async (req, res) => {
   }
 });
   // GET /api/products/:id - Fetch product by ID
- router.get("/products/:id", authenticate, async (req, res) => {
+ router.get("/products/:id",  async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Not found" });
@@ -152,6 +166,37 @@ router.get("/products", async (req, res) => {
   }
 
 });
+
+// Update product status based on product name
+router.put("/products/update-product-status", async (req, res) => {
+    try {
+        const { productName, isOrdered } = req.body;
+
+        if (!productName || typeof isOrdered !== 'boolean') {
+            return res.status(400).json({ message: "Invalid input" });
+        }
+
+        // Find the product by name
+        const product = await Product.findOne({ title: productName });
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // Update the isOrdered status
+        product.isOrdered = isOrdered;
+
+        // Save the updated product
+        await product.save();
+
+        res.json({ message: "Product order status updated successfully", product });
+    } catch (err) {
+        console.error("Error updating product status:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+  
 
 // Get product insights
 router.get("/products/insights", async (req, res) => {

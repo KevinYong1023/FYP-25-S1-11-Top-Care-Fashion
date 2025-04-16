@@ -62,7 +62,7 @@ export default function UserOrders({ email }) {
         });
     };
 
-    const saveStatus = async (orderNumber, sellerName, newStatus) => {
+    const saveStatus = async (orderNumber, sellerName, newStatus, productName) => {
         try {
             const response = await fetch(`/api/update-order-status/${orderNumber}`, {
                 method: "PUT",
@@ -71,19 +71,47 @@ export default function UserOrders({ email }) {
                 },
                 body: JSON.stringify({ sellerName, status: newStatus }),
             });
-
+    
             const data = await response.json();
-
+    
             if (!response.ok) {
                 alert(data.message || "Failed to update order status");
-            }else{
-                alert("Order Updated")
+            } else {
+                alert("Order Updated");
+    
+                // 🟢 If status is Delivered, set isOrdered to false for product
+                if (newStatus === "Delivered") {
+                    try {
+                        const res = await fetch(`/api/products/update-product-status`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ productName, isOrdered: false }),
+                        });
+    
+                        const updateData = await res.json();
+                        if (res.ok) {
+                            console.log("Product order status updated:", updateData.product);
+                        } else {
+                            console.error("Failed to update:", updateData.message);
+                            alert(`Product order status update failed: ${updateData.message}`);
+                        }
+                    } catch (err) {
+                        console.error("Error updating product order status:", err);
+                        alert("Error updating product status.");
+                    }
+                }
+    
+                // 🔄 Refresh the order details view
                 fetchOrderDetails();
             }
         } catch (error) {
             console.error("Error updating order status:", error);
+            alert("An unexpected error occurred while updating order status.");
         }
     };
+    
 
     function createTicket(orderId) {
         navigate(`/create-ticket/${orderId}`);
@@ -183,6 +211,7 @@ export default function UserOrders({ email }) {
                                                     saveStatus(
                                                         row.orderNumber,
                                                         item.sellerName,
+                                                        item.productName,
                                                         updatedStatus[row.orderNumber]?.[sellerIndex] || item.status
                                                     )
                                                 }

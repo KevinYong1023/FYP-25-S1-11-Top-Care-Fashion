@@ -172,6 +172,7 @@ const ManageList = ({ email }) => {
                       <Button
                         variant="success"
                         size="sm"
+                        disabled={product.isOrdered}
                         onClick={() => handleUpdate(product)}
                         className="me-2"
                       >
@@ -180,6 +181,7 @@ const ManageList = ({ email }) => {
                       <Button
                         variant="danger"
                         size="sm"
+                        disabled={product.isOrdered}
                         onClick={() => handleDelete(product._id)}
                       >
                         Delete
