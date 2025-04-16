@@ -3,6 +3,7 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App";
+import { storeAuthToken } from '../utils/auth';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -12,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    localStorage.clear(); // this already clears everything
+    //localStorage.clear(); // this already clears everything
   },[])
 
   const handleChange = (e) => {
