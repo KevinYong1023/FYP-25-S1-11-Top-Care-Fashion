@@ -12,7 +12,7 @@ console.log(authHeader)
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.userId;
+        req.userId = decoded.id;
         
         console.log("type of req.userId: ", typeof req.userId); //add this line
         next();

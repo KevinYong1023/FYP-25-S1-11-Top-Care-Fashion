@@ -28,7 +28,7 @@ router.post('/products', async (req, res) => {
 });
 
 // Get the user products
-router.get("/products/user/:email", authenticate, async (req, res) => {
+router.get("/products/user/:email", async (req, res) => {
     try {
         const email = req.params.email;
         const products = await Product.find({ email });
@@ -141,7 +141,7 @@ router.get("/products", async (req, res) => {
   }
 });
   // GET /api/products/:id - Fetch product by ID
- router.get("/products/:id", authenticate, async (req, res) => {
+ router.get("/products/:id",  async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Not found" });
