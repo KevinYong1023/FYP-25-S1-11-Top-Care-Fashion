@@ -46,6 +46,10 @@ const productSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  isOrdered:{
+    type: Boolean,
+    default: false
   }
 });
 

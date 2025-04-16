@@ -34,7 +34,8 @@ const ShopPage = () => {
     try {
       const res = await fetch(`/api/products/search?${queryParams.toString()}`);
       const data = await res.json();
-      setProducts(data.products);
+      const filtered = data.products.filter(p => !p.isOrdered);
+      setProducts(filtered);
       setTotalPages(data.totalPages);
     } catch (err) {
       console.error("Failed to fetch products:", err);
