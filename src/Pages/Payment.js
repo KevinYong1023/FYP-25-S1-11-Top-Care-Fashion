@@ -78,6 +78,8 @@ const Payment = () => {
         };
 
         fetchUserName();
+        const token = getAuthToken();
+console.log("Token from localStorage:", token);
     }, []);
 
     const handleSubmit = async (e) => {
