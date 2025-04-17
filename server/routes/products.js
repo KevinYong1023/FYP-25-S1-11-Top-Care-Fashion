@@ -39,8 +39,38 @@ router.get("/products/user/:email", async (req, res) => {
     }
 });
 
+// Update product status based on product name
+router.put("/products/update-product-status", async (req, res) => {
+  try {
+    const { productName, isOrdered } = req.body;
+
+    if (!productName || typeof isOrdered !== "boolean") {
+      return res.status(400).json({ message: "Invalid input" });
+    }
+
+    // Case-insensitive match to ensure reliability
+    const product = await Product.findOne({
+      title: { $regex: new RegExp(`^${productName.trim()}$`, "i") },
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.isOrdered = isOrdered;
+
+    // Disable validation in case required fields (like `occasion`) aren't present
+    await product.save({ validateBeforeSave: false });
+
+    res.json({ message: "Product order status updated successfully", product });
+  } catch (err) {
+    console.error("Error updating product status:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Update Product
-router.put("/products/:id", authenticate, async (req, res) => {
+router.put("/products/:id", async (req, res) => {
     try {
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
@@ -58,7 +88,7 @@ router.put("/products/:id", authenticate, async (req, res) => {
 });
 
 // Delete Product
-router.delete("/products/:id", authenticate, async (req, res) => {
+router.delete("/products/:id",  async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
         if (!deletedProduct) {
@@ -167,34 +197,7 @@ router.get("/products", async (req, res) => {
 
 });
 
-// Update product status based on product name
-router.put("/products/update-product-status", async (req, res) => {
-    try {
-        const { productName, isOrdered } = req.body;
 
-        if (!productName || typeof isOrdered !== 'boolean') {
-            return res.status(400).json({ message: "Invalid input" });
-        }
-
-        // Find the product by name
-        const product = await Product.findOne({ title: productName });
-
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-
-        // Update the isOrdered status
-        product.isOrdered = isOrdered;
-
-        // Save the updated product
-        await product.save();
-
-        res.json({ message: "Product order status updated successfully", product });
-    } catch (err) {
-        console.error("Error updating product status:", err);
-        res.status(500).json({ message: "Server error" });
-    }
-});
 
   
 
