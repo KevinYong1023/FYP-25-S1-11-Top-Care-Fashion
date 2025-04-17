@@ -115,7 +115,7 @@ export default function ManagerDashboard() {
                   padding: '30px',
                 }}
               >
-                <h2 className="mb-3">Website Insights</h2>
+                <h2 className="mb-3" style={{ color: '#6e4f37'}}>Website Insights</h2>
                 <hr />
     
                 {/* Users Section */}
@@ -130,7 +130,7 @@ export default function ManagerDashboard() {
                         backgroundColor: '#ffffff',
                       }}
                     >
-                      <h5>Total Users</h5>
+                      <h5 style={{fontWeight: 'bold'}}>Total Users</h5>
                       <p>{dashboardData.totalUsers}</p>
                     </Card>
                   </div>
@@ -143,7 +143,7 @@ export default function ManagerDashboard() {
                         backgroundColor: '#ffffff',
                       }}
                     >
-                      <h5>Active Now</h5>
+                      <h5 style={{fontWeight: 'bold'}}>Active Now</h5>
                       <p>{dashboardData.active}</p>
                     </Card>
                   </div>
@@ -156,7 +156,7 @@ export default function ManagerDashboard() {
                         backgroundColor: '#ffffff',
                       }}
                     >
-                      <h5>Suspended Now</h5>
+                      <h5 style={{fontWeight: 'bold'}}>Suspended Now</h5>
                       <p>{dashboardData.suspense}</p>
                     </Card>
                   </div>
@@ -176,7 +176,7 @@ export default function ManagerDashboard() {
                         backgroundColor: '#ffffff',
                       }}
                     >
-                      <h5>Total Products</h5>
+                      <h5 style={{fontWeight: 'bold'}}>Total Products</h5>
                       <p>{dashboardData.totalProducts}</p>
                     </Card>
                   </div>
@@ -189,7 +189,7 @@ export default function ManagerDashboard() {
                         backgroundColor: '#ffffff',
                       }}
                     >
-                      <h5>By Categories</h5>
+                      <h5 style={{fontWeight: 'bold'}}>By Categories</h5>
                       <ul className="mb-0">
                         <li>Footwear: {dashboardData.categoryCounts.Footwear}</li>
                         <li>Top: {dashboardData.categoryCounts.Top}</li>

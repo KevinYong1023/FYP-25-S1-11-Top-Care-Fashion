@@ -125,7 +125,7 @@ export default function CustomerSupportProfileUpdate() {
                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                             padding:"20px"
                           }}>
-                            <h3 className="mb-4">Update Profile</h3>
+                            <h3 className="mb-4" style={{ color: '#6e4f37'}}>Update Profile</h3>
                             <hr />
                             {errorMessage && (
                                 <div className="alert alert-danger" role="alert">
@@ -135,7 +135,7 @@ export default function CustomerSupportProfileUpdate() {
     
                             <Form  onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="username">
-                                    <Form.Label>Username</Form.Label>
+                                    <Form.Label style={{ fontWeight: 'bold', fontSize: '20px'}}>Username</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="username"
@@ -145,7 +145,7 @@ export default function CustomerSupportProfileUpdate() {
                                 </Form.Group>
     
                                 <Form.Group className="mb-3" controlId="name">
-                                    <Form.Label>Name</Form.Label>
+                                    <Form.Label style={{ fontWeight: 'bold', fontSize: '20px'}}>Name</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="name"
@@ -155,7 +155,7 @@ export default function CustomerSupportProfileUpdate() {
                                 </Form.Group>
     
                                 <Form.Group className="mb-3" controlId="email">
-                                    <Form.Label>Email</Form.Label>
+                                    <Form.Label style={{ fontWeight: 'bold', fontSize: '20px'}}>Email</Form.Label>
                                     <Form.Control
                                         type="email"
                                         name="email"
@@ -166,7 +166,7 @@ export default function CustomerSupportProfileUpdate() {
                                 </Form.Group>
     
                                 <Form.Group className="mb-3" controlId="dob">
-                                    <Form.Label>Date of Birth</Form.Label>
+                                    <Form.Label style={{ fontWeight: 'bold', fontSize: '20px'}}>Date of Birth</Form.Label>
                                     <Form.Control
                                         type="date"
                                         name="dob"
@@ -176,7 +176,7 @@ export default function CustomerSupportProfileUpdate() {
                                 </Form.Group>
     
                                 <Form.Group className="mb-3" controlId="gender">
-                                    <Form.Label>Gender</Form.Label>
+                                    <Form.Label style={{ fontWeight: 'bold', fontSize: '20px'}}>Gender</Form.Label>
                                     <Form.Select
                                         name="gender"
                                         value={profile.gender}
@@ -189,7 +189,7 @@ export default function CustomerSupportProfileUpdate() {
                                 </Form.Group>
     
                                 <Form.Group className="mb-3" controlId="phone">
-                                    <Form.Label>Phone Number</Form.Label>
+                                    <Form.Label style={{ fontWeight: 'bold', fontSize: '20px'}}>Phone Number</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         name="phone"
@@ -200,13 +200,13 @@ export default function CustomerSupportProfileUpdate() {
     
                                 <div className="text-center mt-4">
                                     <Button  style={{
-                        backgroundColor: '#6b705c',
-                        borderColor: '#6b705c',
-                        fontSize: '20px', // Adjusted button font size
-                        padding: '10px 20px',
-                        borderRadius: '5px',
-                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                      }} type="submit" className="w-100">
+                                    backgroundColor: '#6b705c',
+                                    borderColor: '#6b705c',
+                                    fontSize: '20px', // Adjusted button font size
+                                    padding: '10px 20px',
+                                    borderRadius: '5px',
+                                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                    }} type="submit" className="w-100">
                                         Update Profile
                                     </Button>
                                 </div>

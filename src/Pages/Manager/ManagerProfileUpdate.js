@@ -124,7 +124,7 @@ export default function ManagerProfileUpdate() {
                     padding: '20px',
                   }}
                 >
-                  <h3 className="mb-4">Update Profile</h3>
+                  <h2 className="mb-4" style={{ color: '#6e4f37', fontWeight: 'bold'}}>Update Profile</h2>
                   <hr />
                   {errorMessage && (
                     <div className="alert alert-danger" role="alert">
@@ -133,8 +133,8 @@ export default function ManagerProfileUpdate() {
                   )}
       
                   <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="username">
-                      <Form.Label>Username</Form.Label>
+                    <Form.Group className="mb-3" controlId="username" style={{ fontSize: '20px'}}>
+                      <Form.Label style={{ fontWeight: 'bold'}}>Username</Form.Label>
                       <Form.Control
                         type="text"
                         name="username"
@@ -143,8 +143,8 @@ export default function ManagerProfileUpdate() {
                       />
                     </Form.Group>
       
-                    <Form.Group className="mb-3" controlId="name">
-                      <Form.Label>Name</Form.Label>
+                    <Form.Group className="mb-3" controlId="name" style={{ fontSize: '20px'}}>
+                      <Form.Label style={{ fontWeight: 'bold'}}>Name</Form.Label>
                       <Form.Control
                         type="text"
                         name="name"
@@ -153,8 +153,8 @@ export default function ManagerProfileUpdate() {
                       />
                     </Form.Group>
       
-                    <Form.Group className="mb-3" controlId="email">
-                      <Form.Label>Email</Form.Label>
+                    <Form.Group className="mb-3" controlId="email" style={{ fontSize: '20px'}}>
+                      <Form.Label style={{ fontWeight: 'bold'}}>Email</Form.Label>
                       <Form.Control
                         type="email"
                         name="email"
@@ -164,8 +164,8 @@ export default function ManagerProfileUpdate() {
                       />
                     </Form.Group>
       
-                    <Form.Group className="mb-3" controlId="dob">
-                      <Form.Label>Date of Birth</Form.Label>
+                    <Form.Group className="mb-3" controlId="dob" style={{ fontSize: '20px'}}>
+                      <Form.Label style={{ fontWeight: 'bold'}}>Date of Birth</Form.Label>
                       <Form.Control
                         type="date"
                         name="dob"
@@ -174,8 +174,8 @@ export default function ManagerProfileUpdate() {
                       />
                     </Form.Group>
       
-                    <Form.Group className="mb-3" controlId="gender">
-                      <Form.Label>Gender</Form.Label>
+                    <Form.Group className="mb-3" controlId="gender" style={{ fontSize: '20px'}}>
+                      <Form.Label style={{ fontWeight: 'bold'}}>Gender</Form.Label>
                       <Form.Select
                         name="gender"
                         value={profile.gender}
@@ -187,8 +187,8 @@ export default function ManagerProfileUpdate() {
                       </Form.Select>
                     </Form.Group>
       
-                    <Form.Group className="mb-3" controlId="phone">
-                      <Form.Label>Phone Number</Form.Label>
+                    <Form.Group className="mb-3" controlId="phone" style={{ fontSize: '20px'}}>
+                      <Form.Label style={{ fontWeight: 'bold'}}>Phone Number</Form.Label>
                       <Form.Control
                         type="tel"
                         name="phone"
