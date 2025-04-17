@@ -207,7 +207,9 @@ export default function ViewAccounts() {
                         gap: '10px',
                       }}
                     >
-                      <Button variant="primary" onClick={handleSearch}>
+                      <Button 
+                      style={{backgroundColor: '#87986a', borderColor: '#87986a' }}
+                      onClick={handleSearch}>
                         Search
                       </Button>
                       <Button variant="secondary" onClick={handleReset}>

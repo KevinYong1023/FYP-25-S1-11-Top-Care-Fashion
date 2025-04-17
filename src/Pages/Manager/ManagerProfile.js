@@ -66,13 +66,13 @@ const ManagerProfile = () => {
                       padding: '30px',
                     }}
                   >
-                    <h2 className="mb-3">Your Profile                    </h2>
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Name:</strong> {user.name}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Date of Birth:</strong> {user.dob}</p>
-                    <p><strong>Gender:</strong> {user.gender}</p>
-                    <p><strong>Phone:</strong> {user.phone}</p>
+                    <h2 className="mb-3" style={{ color: '#6e4f37'}}>Your Profile                    </h2>
+                    <p style={{ fontSize: '22px'}}><strong>Username:</strong> {user.username}</p>
+                    <p style={{ fontSize: '22px'}}><strong>Name:</strong> {user.name}</p>
+                    <p style={{ fontSize: '22px'}}><strong>Email:</strong> {user.email}</p>
+                    <p style={{ fontSize: '22px'}}><strong>Date of Birth:</strong> {user.dob}</p>
+                    <p style={{ fontSize: '22px'}}><strong>Gender:</strong> {user.gender}</p>
+                    <p style={{ fontSize: '22px'}}><strong>Phone:</strong> {user.phone}</p>
                   </Card>
     
                       {/* Update Profile Button */}
