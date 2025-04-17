@@ -72,7 +72,7 @@ const Payment = () => {
         <>
                          <UserHeader loginStatus={true}/>
         <Container className="mt-4">  
-            <h1>Payment</h1>  
+            <h1 style={{color: '#6f4e37'}}>Payment</h1>  
             <Row className="payment-container">  
                 <Col className="payment-method">  
                     <Form.Group>  
@@ -146,7 +146,10 @@ const Payment = () => {
                                         label="Terms and conditions..."   
                                     />  
                                 </Form.Group>  
-                                <Button variant="primary" type="submit">Confirm</Button>  
+                                <Button style={{ backgroundColor: '#6e4f37', borderColor: '#6e4f37' }} type="submit">
+                                    Confirm
+                                </Button>
+  
                             </div>  
                         )}  
                         {paymentMethod === 'paynow' && (  
@@ -162,7 +165,10 @@ const Payment = () => {
                                 <Form.Group>  
                                     
                                 </Form.Group>  
-                                <Button variant="primary" type="submit">Confirm</Button>  
+                                <Button style={{ backgroundColor: '#6e4f37', borderColor: '#6e4f37' }} type="submit">
+                                    Confirm
+                                </Button>
+  
                             </div>  
                         )}  
                     </Form>  

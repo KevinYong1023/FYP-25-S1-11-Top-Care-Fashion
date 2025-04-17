@@ -9,8 +9,8 @@ export default function CustomerSupportHeader(){
         <>
           <Navbar expand="lg" className="custom-navbar">
             <Container>
-                <Navbar.Brand href="/dashboard" style={{ color: 'black', marginLeft: '20px' }}>
-                    <img src={logo} alt="logo" height={"50px"} width={"50px"} />
+                <Navbar.Brand href="/dashboard">
+                    <img src={logo} alt="logo" height={"100px"} width={"100px"} />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ borderColor: 'black' }} />
                 <Navbar.Collapse id="basic-navbar-nav">

@@ -102,11 +102,11 @@ const Register = () => {
         <>
             <UserHeader loginStatus={false} />
             <Container className="d-flex flex-column align-items-center py-5" style={{ minHeight: '100vh' }}>
-                <h2 className="mb-4">Create an Account</h2>
+                <h2 className="mb-4" style={{ color: '#6f4e37', fontWeight: 'bold'}}>Create an Account</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form className="w-50" onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Username</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Username</Form.Label>
                         <Form.Control
                             type="text"
                             name="username"
@@ -117,7 +117,7 @@ const Register = () => {
                         {errors.username && <Alert variant="danger">{errors.username}</Alert>}
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Name</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Name</Form.Label>
                         <Form.Control
                             type="text"
                             name="name"
@@ -128,7 +128,7 @@ const Register = () => {
                         {errors.name && <Alert variant="danger">{errors.name}</Alert>}
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Email Address</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Email Address</Form.Label>
                         <Form.Control
                             type="email"
                             name="email"
@@ -139,7 +139,7 @@ const Register = () => {
                         {errors.email && <Alert variant="danger">{errors.email}</Alert>}
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Phone Number</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Phone Number</Form.Label>
                         <Form.Control
                             type="text"
                             name="phone"
@@ -151,7 +151,7 @@ const Register = () => {
                     </Form.Group>
                     {/* Position Field */}
                     <Form.Group className="mb-3">
-                        <Form.Label>Position</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Position</Form.Label>
                         <Form.Select
                             name="position"
                             value={formData.position}
@@ -168,7 +168,7 @@ const Register = () => {
                    {/* Address Field - Only show if position is 'user' */}
                 {formData.position === "user" && (
                     <Form.Group className="mb-3">
-                        <Form.Label>Address</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Address</Form.Label>
                         <Form.Control
                             type="text"
                             name="address"
@@ -180,7 +180,7 @@ const Register = () => {
                     </Form.Group>)}
                     {/* Gender Field */}
                     <Form.Group className="mb-3">
-                        <Form.Label>Gender</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Gender</Form.Label>
                         <div>
                             <Form.Check
                                 type="radio"
@@ -205,7 +205,7 @@ const Register = () => {
                     </Form.Group>
                     {/* Date of Birth Field */}
                     <Form.Group className="mb-3">
-                        <Form.Label>Date of Birth</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Date of Birth</Form.Label>
                         <Form.Control
                             type="date"
                             name="dob"
@@ -214,7 +214,7 @@ const Register = () => {
                         />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Password</Form.Label>
                         <Form.Control
                             type="password"
                             name="password"
@@ -225,7 +225,7 @@ const Register = () => {
                         {errors.password && <Alert variant="danger">{errors.password}</Alert>}
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Label style={{fontWeight:'bold'}}>Confirm Password</Form.Label>
                         <Form.Control
                             type="password"
                             name="confirmPassword"
@@ -235,12 +235,29 @@ const Register = () => {
                         />
                         {errors.confirmPassword && <Alert variant="danger">{errors.confirmPassword}</Alert>}
                     </Form.Group>
-                    <Button variant="primary" type="submit" className="w-100">
+                    <Button
+                        type="submit"
+                        className="w-100"
+                        style={{
+                            backgroundColor: "#97a97c",
+                            borderColor: "#97a97c",
+                            color: "white",
+                            transition: "background-color 0.3s ease",
+                        }}
+                        onMouseOver={(e) => {
+                            e.target.style.backgroundColor = "#85986c";
+                            e.target.style.borderColor = "#85986c";
+                        }}
+                        onMouseOut={(e) => {
+                            e.target.style.backgroundColor = "#97a97c";
+                            e.target.style.borderColor = "#97a97c";
+                        }}
+                        >
                         Register
                     </Button>
                 </Form>
                 <p className="mt-3">
-                    Already have an account? <a href="/login">Login here</a>
+                    Already have an account? <a href="/login" style={{ fontWeight: 'bold'}}>Login here</a>
                 </p>
             </Container>
         </>

@@ -66,13 +66,19 @@ const UserProfile = ({ email, setName, setAddress }) => {
                                 </Card>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col className="text-center">
-                                <Button variant="primary" onClick={updateProfile} className="me-2">
-                                    Update Profile
+                        <Row className="mt-3">
+                            <Col className="d-flex justify-content-center gap-3">
+                                <Button
+                                style={{ backgroundColor: '#6f4e37', borderColor: '#6f4e37' }}
+                                onClick={updateProfile}
+                                >
+                                Update Profile
                                 </Button>
-                                <Button variant="secondary" onClick={checkOrders}>
-                                    Check Your Orders
+                                <Button
+                                style={{ backgroundColor: '#6f4e37', borderColor: '#6f4e37' }}
+                                onClick={checkOrders}
+                                >
+                                Check Your Orders
                                 </Button>
                             </Col>
                         </Row>

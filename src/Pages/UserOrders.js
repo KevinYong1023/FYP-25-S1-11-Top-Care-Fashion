@@ -82,7 +82,7 @@ return (
         <>
               <UserHeader loginStatus={true} />
               <Container fluid>
-                   <h2>Your Orders:</h2>
+                   <h2 className='text-center' style={{ fontWeight: 'bold' , color: '#6f4e37'}}>Your Orders:</h2>
                    <hr/>
                    <h3>Buy:</h3>
                    <table className="table table-bordered">

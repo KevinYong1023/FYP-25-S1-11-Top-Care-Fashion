@@ -97,11 +97,11 @@ export default function UpdateAccount({ email }) {
         <UserHeader loginStatus={true} />
         <Container fluid>
             <Row>
-                <Col md={9} className="p-4">
-                    <h3>Update Profile</h3>
+                <Col className="p-4 ms-5 me-5">
+                    <h3 className='text-center' style={{ fontWeight: 'bold' , color: '#6f4e37'}}>Update Profile</h3>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="username">
-                            <Form.Label>Username</Form.Label>
+                            <Form.Label style={{ fontWeight: 'bold'}}>Username</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="username"
@@ -111,7 +111,7 @@ export default function UpdateAccount({ email }) {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="name">
-                            <Form.Label>Name</Form.Label>
+                            <Form.Label style={{ fontWeight: 'bold'}}>Name</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"
@@ -122,7 +122,7 @@ export default function UpdateAccount({ email }) {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="email">
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label style={{ fontWeight: 'bold'}}>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 name="email"
@@ -133,7 +133,7 @@ export default function UpdateAccount({ email }) {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="dob">
-                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Label style={{ fontWeight: 'bold'}}>Date of Birth</Form.Label>
                             <Form.Control
                                 type="date"
                                 name="dob"
@@ -144,7 +144,7 @@ export default function UpdateAccount({ email }) {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="gender">
-                            <Form.Label>Gender</Form.Label>
+                            <Form.Label style={{ fontWeight: 'bold'}}>Gender</Form.Label>
                             <Form.Select
                                 name="gender"
                                 value={profile.gender}
@@ -158,7 +158,7 @@ export default function UpdateAccount({ email }) {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="phone">
-                            <Form.Label>Phone Number</Form.Label>
+                            <Form.Label style={{ fontWeight: 'bold'}}>Phone Number</Form.Label>
                             <Form.Control
                                 type="tel"
                                 name="phone"
@@ -169,7 +169,7 @@ export default function UpdateAccount({ email }) {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="address">
-                            <Form.Label>Address</Form.Label>
+                            <Form.Label style={{ fontWeight: 'bold'}}>Address</Form.Label>
                             <Form.Control
                                 type="text"
                                 name="address"
@@ -179,9 +179,15 @@ export default function UpdateAccount({ email }) {
                             />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit">
-                            Update Profile
-                        </Button>
+                        <div className="d-flex justify-content-center mt-4">
+                            <Button
+                                style={{ backgroundColor: '#6f4e37', borderColor: '#6f4e37' }}
+                                type="submit"
+                            >
+                                Update Profile
+                            </Button>
+                        </div>
+
                     </Form>
                 </Col>
             </Row>

@@ -70,7 +70,7 @@ const CustomerSupportProfile = () => {
                       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                     }}
                   >
-                    <h2 className="mb-4" style={{ color: '#6b705c',fontWeight:"bold"}}>Your Profile</h2>
+                    <h2 className="mb-4" style={{ color: '#6e4f37',fontWeight:"bold"}}>Your Profile</h2>
       
                     {user ? (
                       <>
