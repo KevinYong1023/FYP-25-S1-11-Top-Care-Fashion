@@ -79,7 +79,7 @@ const ProductPage = ({ email }) => {
   }, [product]);
 
   const handleAddToCart = () => {
-    if(product.isOrdered){
+    if(!product.isOrdered){
     if (product && product.userId && product._id) {
         console.log("Attempting to add product to cart:", product);
         const itemToAdd = {
