@@ -26,11 +26,10 @@ const productSchema = new Schema({
     enum: ['Casual', 'Smart', 'Formal', 'Sport'],
     required: true
   },
-  imageUrl: {
+  imageUrl: { // use base64 store
     type: String,
     required: true
   },
-
   seller: {  // user full name
     type: String,
     required: true

@@ -16,7 +16,9 @@ export default function ViewAccounts() {
     const { email } = useContext(AuthContext);
 
     useEffect(() => {
+      if(email){
         fetchUsers();
+      }
     }, [email]);
 
     const fetchUsers = async () => {
