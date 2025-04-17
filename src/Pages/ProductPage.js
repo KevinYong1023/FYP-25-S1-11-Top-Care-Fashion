@@ -214,6 +214,7 @@ const ProductPage = ({ email }) => {
             style={{ backgroundColor: "#6a4c37", borderColor: "#6a4c37", color: "white" }}
             type="submit" className="mt-2">Submit Comment</Button>
           </Form>
+          </>)}
 
         </div>
         </Row>) : (
