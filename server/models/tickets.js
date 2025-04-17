@@ -36,23 +36,22 @@ const ticketSchema = new mongoose.Schema({
 
 // Pre-save hook to set auto-increment ticketId using Counter
 ticketSchema.pre('save', async function (next) {
-    if (this.isNew && !this.ticketId) {
-        try {
-            const counter = await Counter.findOneAndUpdate(
-                { name: 'ticket' },
-                { $inc: { value: 1 } },
-                { new: true, upsert: true }
-            );
-            this.ticketId = counter.value;
-            next();
-        } catch (error) {
-            console.error('Error auto-incrementing ticketId:', error);
-            next(error);
-        }
-    } else {
-        next();
+    if (this.isNew) {
+      try {
+        const counter = await Counter.findOneAndUpdate(
+          { name: 'ticketId' },  // Query by the 'name' field instead of _id
+          { $inc: { value: 0 } }, // Increment the counter
+          { new: true, upsert: true }
+        );
+        this.ticketId = counter.value;  // Set ticketId based on the counter value
+      } catch (error) {
+        console.error('Error auto-incrementing ticketId from counter:', error);
+        return next(error);
+      }
     }
-});
+    next();
+  });
+  
 
 // Create the Ticket model
 const Ticket = mongoose.model('Ticket', ticketSchema);

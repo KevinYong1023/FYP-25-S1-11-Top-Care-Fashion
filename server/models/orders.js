@@ -42,20 +42,20 @@ const orderSchema = new mongoose.Schema({
 
 // Pre-save hook to set the orderNumber before saving
 orderSchema.pre('save', async function (next) {
-    if (this.isNew && !this.orderNumber) {
+      if (this.isNew) {
         try {
-            const counter = await Counter.findOneAndUpdate(
-                { name: 'order' },
-                { $inc: { value: 1 } },
-                { new: true, upsert: true }
-            );
-            this.orderNumber = counter.value;
+          const counter = await Counter.findOneAndUpdate(
+            { name: 'orderNumber' },  // Query by the 'name' field instead of _id
+            { $inc: { value: 0 } }, // Increment the counter
+            { new: true, upsert: true }
+          );
+          this.orderNumber = counter.value;  // Set orderNumber based on the counter value
         } catch (error) {
-            console.error('Error auto-incrementing:', error);
-            next(error);
+          console.error('Error auto-incrementing orderNumber from counter:', error);
+          return next(error);
         }
-    }
-    next();
+      }
+      next();
 });
 
 // Create the Order model
