@@ -143,7 +143,7 @@ export default function ViewAccounts() {
                 {error}
               </div>
             )}
-                        <h2>User Accounts</h2>
+            <h2 style={{ color: '#6e4f37', textAlign: 'center'}}>User Accounts</h2>
             {/* Filter and Search Form */}
             <Card className="mb-4 shadow-sm">
               <Card.Body>
@@ -274,7 +274,7 @@ export default function ViewAccounts() {
               variant="warning"
               onClick={() => handleStatus(user.email, 'Suspended')}
               className="me-2"
-              style={{ fontSize: '16px' }}
+              style={{ fontSize: '16px', backgroundColor: '#97a97c', borderColor: '#97a97c'}}
             >
               Suspend
             </Button>
@@ -283,7 +283,7 @@ export default function ViewAccounts() {
               variant="success"
               onClick={() => handleStatus(user.email, 'Active')}
               className="me-2"
-              style={{ fontSize: '16px' }}
+              style={{ fontSize: '16px' , backgroundColor: '#97a97c', borderColor: '#97a97c'}}
             >
               Activate
             </Button>
@@ -291,7 +291,7 @@ export default function ViewAccounts() {
           <Button
             variant="danger"
             onClick={() => handleDelete(user.email)}
-            style={{ fontSize: '16px' }}
+            style={{ fontSize: '16px' , backgroundColor: '#ef233c', borderColor: '#ef233c'}}
           >
             Delete
           </Button>

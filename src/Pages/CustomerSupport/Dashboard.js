@@ -130,10 +130,11 @@ export default function Dashboard() {
               </div>
             )}
             <div className="d-flex justify-content-between align-items-center">
-              <h2>All Available Tickets</h2>
+              <h2 style={{ color: '#6e4f37'}}>All Available Tickets</h2>
             </div>
             <hr/>
-            <Button as="a" class="p-2 bd-highlight" href="/assigned-ticket" variant="primary" size="lg">
+            <Button as="a" class="p-2 bd-highlight" href="/assigned-ticket" 
+            style={{ backgroundColor: '#495867', borderColor: '#495867'}} size="lg">  
                 Your Tickets
               </Button>
             <hr />
@@ -171,18 +172,18 @@ export default function Dashboard() {
         <td>{ticket.user}</td>
         <td>{ticket.status}</td>
         <td>{ticket.created}</td>
-        <td>
-          <div style={{ display: 'flex', gap: '10px' }}>
+        <td className='text-center'>
+          <div className="d-flex justify-content-center gap-2 flex-wrap">
             <Link to={`/ticket-info/${ticket.ticketId}`}>
               <Button variant="success"  size="lg"
-              style={{ fontSize: '16px' }}>
+              style={{ fontSize: '16px', marginRight: '20px', backgroundColor: '#97a97c', borderColor: '#97a97c' }}>
                 Review
               </Button>
             </Link>
             <Button
               variant="danger"
               size="lg"
-              style={{ fontSize: '16px' }}
+              style={{ fontSize: '16px', marginRight: '20px', backgroundColor: '#ef233c', borderColor: '#ef233c' }}
               onClick={() => handleDelete(ticket.ticketId)}
             >
               Delete
@@ -190,7 +191,7 @@ export default function Dashboard() {
             <Button
               variant="warning"
               size="lg"
-              style={{ fontSize: '16px' }}
+              style={{ fontSize: '16px', marginRight: '20px', backgroundColor: '#ffcb69', borderColor: '#ffcb69' }}
               onClick={() => assignTicket(ticket.ticketId)}
             >
               Assign to me

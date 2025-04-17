@@ -59,7 +59,7 @@ const Cart = () => {
     <>
       <UserHeader loginStatus={true} />
       <Container className="mt-4">
-        <h2>Your Cart</h2>
+        <h2 style={{fontWeight: 'bold', color: '#6f4e37'}}>Your Cart</h2>
         {cart.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
@@ -83,7 +83,23 @@ const Cart = () => {
                       <p>${item.price.toFixed(2)}</p>
                     </Col>
                     <Col md={2}>
-                      <Button variant="danger" onClick={() => handleRemove(item.id)}>Remove</Button>
+                      <Button 
+                        className="btn"
+                        style={{
+                        backgroundColor: "#f08080",
+                        borderColor: "#f08080",
+                        color: "white",
+                        fontWeight: 'bold',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = "#f4978e";
+                        e.target.style.borderColor = "#f4978e";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = "#f08080";
+                        e.target.style.borderColor = "#f08080";
+                      }}
+                      onClick={() => handleRemove(item.id)}>Remove</Button>
                     </Col>
                   </Row>
                 </BootstrapCard.Body>
@@ -93,7 +109,7 @@ const Cart = () => {
             <Row className="mb-4">
               <Col className="d-flex justify-content-end">
                 <Form.Group controlId="discountCode">
-                  <Form.Label>Discount / Promo Code</Form.Label>
+                  <Form.Label style={{fontWeight: 'bold'}}>Discount / Promo Code</Form.Label>
                   <div className="d-flex">
                     <Form.Control
                       type="text"
@@ -102,7 +118,23 @@ const Cart = () => {
                       onChange={(e) => setDiscountCode(e.target.value)}
                       className="me-2 discount-input"
                     />
-                    <Button variant="primary" onClick={handleApplyDiscount}>Apply</Button>
+                    <Button 
+                    className="btn"
+                    style={{
+                      backgroundColor: "#ad9984",
+                      borderColor: "#ad9984",
+                      color: "white",
+                      fontWeight: 'bold',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ddbea9";
+                      e.target.style.borderColor = "#ddbea9";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "#ad9984";
+                      e.target.style.borderColor = "#ad9984";
+                    }}
+                    onClick={handleApplyDiscount}>Apply</Button>
                   </div>
                 </Form.Group>
               </Col>
@@ -125,14 +157,48 @@ const Cart = () => {
             </Row>
             <Row className="mt-2">
               <Col className="d-flex justify-content-end">
-                <h5>Total: ${total.toFixed(2)}</h5>
+                <h5 style={{fontWeight: 'bold', fontSize: '24px'}}>Total: ${total.toFixed(2)}</h5>
               </Col>
             </Row>
 
             <Row className="mt-2">
               <Col className="d-flex flex-column align-items-end">
-                <Button variant="danger" onClick={clearCart} className="clear-cart-button mb-2">Clear Cart</Button>
-                <Button variant="success" onClick={handleCheckout} className="checkout-button">Check Out</Button>
+                <Button 
+                className="btn mb-2"
+                style={{
+                  backgroundColor: "#f08080",
+                  borderColor: "#f08080",
+                  color: "white",
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#f4978e";
+                  e.target.style.borderColor = "#f4978e";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "#f08080";
+                  e.target.style.borderColor = "#f08080";
+                }}
+                onClick={clearCart}>Clear Cart</Button>
+                <Button 
+                style={{
+                  backgroundColor: "#97a97c",
+                  borderColor: "#97a97c",
+                  color: "white",
+                  transition: "background-color 0.3s ease",
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#85986c";
+                  e.target.style.borderColor = "#85986c";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#97a97c";
+                  e.target.style.borderColor = "#97a97c";
+                }}
+                onClick={handleCheckout} className="checkout-button">Check Out</Button>
               </Col>
             </Row>
           </>

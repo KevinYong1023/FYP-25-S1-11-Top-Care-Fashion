@@ -144,7 +144,7 @@ const ProductPage = ({ email }) => {
             {/* Right: Info + Add to Cart */}
             <Col md={6}>
               <Card className="p-4">
-                <h2>{product.title}</h2>
+                <h2 style={{ fontWeight: 'bold', color: '#6f4e37'}}>{product.title}</h2>
                 <p><strong>Price:</strong> ${product.price}</p>
                 <p><strong>Category:</strong> {product.category}</p>
                 <p><strong>Occasion:</strong> {product.occasion}</p>
@@ -168,7 +168,8 @@ const ProductPage = ({ email }) => {
                       variant="primary"
                       onClick={handleAddToCart}
                       disabled={email === product.email || !login}
-                      style={email === product.email ? { pointerEvents: "none" } : {}}
+                      style={email === product.email ? { pointerEvents: "none" } : 
+                      {backgroundColor: "#97a97c", borderColor: "#97a97c", color: "white"}}
                     >
                       Add to Cart
                     </Button>
@@ -208,8 +209,12 @@ const ProductPage = ({ email }) => {
                 onChange={(e) => setComment(e.target.value)}                
               />
             </Form.Group>
-            <Button variant="primary" type="submit"  className="mt-2">Submit Comment</Button>
-          </Form></>)}
+
+            <Button 
+            style={{ backgroundColor: "#6a4c37", borderColor: "#6a4c37", color: "white" }}
+            type="submit" className="mt-2">Submit Comment</Button>
+          </Form>
+
         </div>
         </Row>) : (
           <div className="text-center mt-5">

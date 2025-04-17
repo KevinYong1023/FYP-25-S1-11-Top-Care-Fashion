@@ -141,7 +141,7 @@ export default function TotalTicket() {
               </div>
             ) : (
               <>
-                <h2>Your Tickets</h2>
+                <h2 style={{ color: '#6e4f37'}}>Your Tickets</h2>
                 <hr />
                 <table
                   className="table table-hover table-striped"
@@ -168,17 +168,18 @@ export default function TotalTicket() {
                         <td>{ticket.user}</td>
                         <td>{ticket.status}</td>
                         <td>{ticket.created}</td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '10px' }}>
+                        <td className='text-center'>
+                          <div className="d-flex justify-content-center gap-2 flex-wrap">
                             <Link to={`/ticket-info/${ticket.ticketId}`} rel="noopener noreferrer">
-                              <Button variant="success" size="lg" style={{ fontSize: '16px' }}>
+                              <Button variant="success" size="lg" 
+                              style={{ fontSize: '16px', marginRight: '20px', backgroundColor: '#97a97c', borderColor: '#97a97c' }}>
                                 Review
                               </Button>
                             </Link>
                             <Button
                               variant="danger"
                               size="lg"
-                              style={{ fontSize: '16px' }}
+                              style={{ fontSize: '16px', marginRight: '20px', backgroundColor: '#ef233c', borderColor: '#ef233c' }}
                               onClick={() => handleDelete(ticket.ticketId)}
                             >
                               Delete
@@ -186,7 +187,7 @@ export default function TotalTicket() {
                             <Button
                                variant="warning"
                               size="lg"
-                              style={{ fontSize: '16px' }}
+                              style={{ fontSize: '16px', marginRight: '20px', backgroundColor: '#ffcb69', borderColor: '#ffcb69' }}
                               onClick={() => removeAssign(ticket.ticketId)}
                             >
                               Remove
