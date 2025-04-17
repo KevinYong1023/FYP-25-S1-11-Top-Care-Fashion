@@ -211,8 +211,8 @@ export default function UserOrders({ email }) {
                                                     saveStatus(
                                                         row.orderNumber,
                                                         item.sellerName,
-                                                        item.productName,
-                                                        updatedStatus[row.orderNumber]?.[sellerIndex] || item.status
+                                                        updatedStatus[row.orderNumber]?.[sellerIndex] || item.status, 
+                                                        item.productName 
                                                     )
                                                 }
                                             >

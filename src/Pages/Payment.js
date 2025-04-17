@@ -216,6 +216,7 @@ console.log("Token from localStorage:", token);
             // 🔁 Update each product's isOrdered to true
             for (const item of cartItems) {
                 try {
+                    console.log("⏫ Updating product with name:", item.productName);
                     const res = await fetch(`/api/products/update-product-status`, {
                         method: "PUT",
                         headers: {
