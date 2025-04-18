@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema({
             type: String,
             required: true,
             default: 'Processing',
-            enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], // added enum for validation.
+            enum: ['Processing', 'Shipped', 'Delivered'], // added enum for validation.
         }
     }],
     created: {

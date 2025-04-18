@@ -20,6 +20,7 @@ router.get('/order-history', async (req, res) => {
 router.put('/update-order-status/:orderNumber', async (req, res) => {
     const { orderNumber } = req.params;
     const { sellerName, status } = req.body;
+    console.log("status",status)
 
     const validStatuses = ['Processing', 'Shipped', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
