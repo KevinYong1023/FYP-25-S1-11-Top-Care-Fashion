@@ -56,15 +56,15 @@ const Login = () => {
   return (
     <>
       <UserHeader loginStatus={false} />
-      <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <h2 className="mb-4" style={{ fontFamily: 'Math', color: '#6f4e37' }}>
+      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ marginTop: "200px", marginBottom: "80px" }}>
+        <h2 className="mb-4" style={{ fontWeight:'bold' , color: '#6f4e37' }}>
           Login to Your Account
         </h2>
         {error && <Alert variant="danger">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
         <Form className="w-50" onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
-            <Form.Label>Email Address</Form.Label>
+            <Form.Label style={{ fontWeight:'bold'}}>Email Address</Form.Label>
             <Form.Control
               type="email"
               name="email"
@@ -74,7 +74,7 @@ const Login = () => {
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
+            <Form.Label style={{ fontWeight:'bold'}}>Password</Form.Label>
             <Form.Control
               type="password"
               name="password"
@@ -106,10 +106,10 @@ const Login = () => {
           </Button>
         </Form>
         <p className="mt-3">
-          Don't have an account? <a href="/register">Register here</a>
+          Don't have an account? <a href="/register" style={{ fontWeight: 'bold'}}>Register here</a>
         </p>
         <p className="mt-3">
-          Forgot Password? <a href="/reset-password">Reset here</a>
+          Forgot Password? <a href="/reset-password" style={{ fontWeight: 'bold'}}>Reset here</a>
         </p>
       </Container>
     </>

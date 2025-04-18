@@ -26,7 +26,7 @@ const Home = () => {
       <UserHeader loginStatus={true} />
 
       {/* Banner */}
-      <div style={{ background: "#000", color: "#fff", padding: "60px 20px", textAlign: "center" }}>
+      <div style={{ background: "#edede9", color: "#6b705c", padding: "60px 20px", textAlign: "center" }}>
         <h1>Welcome to Top Care Fashion</h1>
         <p>Style made simple. Buy, sell, and match your perfect outfit.</p>
       </div>
@@ -67,9 +67,9 @@ const Home = () => {
                     onError={(e) => (e.target.src = "https://via.placeholder.com/300")}
                   />
                   <Card.Body>
-                    <Card.Title>{product.title}</Card.Title>
+                    <Card.Title style={{ fontWeight: 'bold', fontSize: '22px'}}>{product.title}</Card.Title>
                     <Card.Text>${product.price}</Card.Text>
-                    <Button variant="primary" href={`/productpage/${product._id}`}>
+                    <Button style={{ backgroundColor: '#6f4e37', borderColor: '#6f4e37'}} href={`/productpage/${product._id}`}>
                       View Product
                     </Button>
                   </Card.Body>

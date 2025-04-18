@@ -96,7 +96,7 @@ const ManageList = ({ email }) => {
     <>
       <UserHeader loginStatus={true} />
       <div className="mt-4 px-3">
-        <h2>Manage Listings</h2>
+        <h2 className='text-center' style={{ fontWeight: 'bold' , color: '#6f4e37'}}>Manage Listings</h2>
   
         {message && <Alert variant="info">{message}</Alert>}
         {error && (
@@ -175,6 +175,7 @@ const ManageList = ({ email }) => {
                         disabled={product.isOrdered}
                         onClick={() => handleUpdate(product)}
                         className="me-2"
+                        style={{ backgroundColor: '#97a97c', borderColor: '#97a97c', fontSize: '18px'}}
                       >
                         Update
                       </Button>
@@ -183,6 +184,7 @@ const ManageList = ({ email }) => {
                         size="sm"
                         disabled={product.isOrdered}
                         onClick={() => handleDelete(product._id)}
+                        style={{ backgroundColor: '#ef233c', borderColor: '#ef233c', fontSize: '18px'}}
                       >
                         Delete
                       </Button>

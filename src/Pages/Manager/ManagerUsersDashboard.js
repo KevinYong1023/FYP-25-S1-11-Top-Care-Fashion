@@ -134,7 +134,7 @@ export default function ManagerUsersDashboard() {
                 </div>
               ) : (
                 <>
-                  <h2 style={{ color: '#6b705c' }}>User Accounts</h2>
+                  <h2 style={{ color: '#6e4f37' }}>User Accounts</h2>
                   <hr />
       
                   {/* Filter Section */}
@@ -168,11 +168,11 @@ export default function ManagerUsersDashboard() {
                       </div>
                       <div className="col-12 col-md-4 d-flex justify-content-md-end gap-2">
                         <Button variant="primary" size="lg"
-              style={{ fontSize: '16px' }} onClick={handleSearch}>
+                        style={{ fontSize: '16px', backgroundColor: '#87986a', borderColor: '#87986a' }} onClick={handleSearch}>
                           Search
                         </Button>
                         <Button variant="secondary" size="lg"
-              style={{ fontSize: '16px' }} onClick={resetFilters}>
+                        style={{ fontSize: '16px' }} onClick={resetFilters}>
                           Reset
                         </Button>
                       </div>
@@ -221,7 +221,7 @@ export default function ManagerUsersDashboard() {
                                 <Button
                                   variant="success"
                                   size="lg"
-              style={{ fontSize: '16px' }}
+                                  style={{ fontSize: '16px' }}
                                   className="me-2"
                                   onClick={() => handleStatus(user.email, 'Active')}
                                 >
@@ -233,7 +233,7 @@ export default function ManagerUsersDashboard() {
                                     variant="danger"
                                     className="me-2"
                                     size="lg"
-              style={{ fontSize: '16px' }}
+                                    style={{ fontSize: '16px', backgroundColor: '#ef233c', borderColor: '#ef233c' }}
                                     onClick={() => handleStatus(user.email, 'Suspended')}
                                   >
                                     Suspend
@@ -241,7 +241,7 @@ export default function ManagerUsersDashboard() {
                                   <Button
                                     variant="primary"
                                     size="lg"
-                                    style={{ fontSize: '16px' }}
+                                    style={{ fontSize: '16px', backgroundColor: '#87986a', borderColor: '#87986a' }}
                                     onClick={() => checkUserProducts(user.email)}
                                   >
                                     Review

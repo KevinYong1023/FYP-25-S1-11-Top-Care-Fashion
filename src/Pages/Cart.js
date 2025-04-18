@@ -1,13 +1,10 @@
-// src/Pages/Cart.js (No Quantity Version)
+// src/Pages/Cart.js
 import React, { useState } from 'react';
-import { Container, Row, Col, Card as BootstrapCard, Button, Form, ListGroup, Image, Alert } from 'react-bootstrap';
+import { useCart } from '../Components/CartContext';
+import { Container, Row, Col, Card as BootstrapCard, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../Components/CartContext'; // Ensure this path is correct
-import '../css/Cart.css'; // Ensure this path is correct
-import UserHeader from '../Components/Headers/userHeader'; // Ensure this path is correct
-
-// Placeholder - Make sure you have a real way to check login status
-const isLoggedIn = () => !!localStorage.getItem('authToken');
+import '../css/Cart.css';
+import UserHeader from '../Components/Headers/userHeader';
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart } = useCart();
@@ -16,170 +13,195 @@ const Cart = () => {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [appliedDiscountCode, setAppliedDiscountCode] = useState('');
 
-  // --- Calculate subtotal (No quantity multiplier needed) --- CHANGED
   const subtotal = cart.reduce((total, item) => total + item.price, 0);
-  // --- END CHANGE ---
+  const total = subtotal - discountAmount;
 
-  // Calculate final total after discount
-  const total = Math.max(0, subtotal - discountAmount); // Ensure total doesn't go below zero
-
-  // Handler to remove item from cart
   const handleRemove = (itemId) => {
     removeFromCart(itemId);
-    // Clear discount when items change, user must re-apply
-    setDiscountAmount(0);
-    setAppliedDiscountCode('');
+    if (discountAmount > 0) {
+      applyDiscount(appliedDiscountCode);
+    }
   };
 
-
-  
-  // Handler to navigate to the payment/checkout page
   const handleCheckout = () => {
-    // Check for sellerId remains critical
-    if (cart.some(item => !item.sellerId)) {
-        alert("Error: Cart contains items without seller information. Cannot proceed.");
-        console.error("Cart items missing sellerId:", cart);
-        return;
-    }
-    if (cart.length === 0) {
-      alert("Your cart is empty.");
-      return;
-    }
-
-    // Prepare data to pass to the payment/checkout page
-    const checkoutData = {
-      // Map cart items, 
-      cartItems: cart.map(item => ({
-        productId: item.id || item.productId,
-        sellerId: item.sellerId,
-        price: item.price,
-        sellerName: item.seller,
-        productName:item.title,
-      })),
-      totalAmount: total, // Pass the final calculated total
-      
-    };
-    console.log("Cart Checkout Data:", checkoutData); // Check cart data
-    // Navigate to payment page and pass checkoutData via location state
-    navigate('/payment', { state: checkoutData });
+    navigate('/payment');
   };
 
-  // --- Discount Logic ---
   const handleApplyDiscount = () => {
     applyDiscount(discountCode);
   };
 
   const applyDiscount = (code) => {
     let discount = 0;
-    // --- Recalculate current subtotal (no quantity) --- CHANGED
-    const currentSubtotal = cart.reduce((total, item) => total + item.price, 0);
-    // --- END CHANGE ---
-
-    // Example discount codes (replace with your actual logic)
     if (code === 'SAVE10') {
-      discount = currentSubtotal * 0.1;
+      discount = subtotal * 0.1;
+      setAppliedDiscountCode(code);
     } else if (code === 'FLAT20') {
       discount = 20;
+      setAppliedDiscountCode(code);
     } else if (code === 'FREE') {
-        discount = currentSubtotal;
+      discount = subtotal;
+      setAppliedDiscountCode(code);
     } else {
       alert(`Invalid discount code: "${code}"`);
       setDiscountCode('');
       return;
     }
 
-    discount = Math.min(discount, currentSubtotal); // Ensure discount <= subtotal
     setDiscountAmount(discount);
-    setAppliedDiscountCode(code);
     if (discount > 0) {
-        alert(`Discount code "${code}" applied!`);
+      alert(`Discount code "${code}" applied!`);
     }
     setDiscountCode('');
   };
-  // --- End Discount Logic ---
 
-
-  // --- Render Component ---
   return (
     <>
-      <UserHeader loginStatus={isLoggedIn()} />
-      <Container className="mt-4 cart-container">
-        <h2>Your Cart</h2>
+      <UserHeader loginStatus={true} />
+      <Container className="mt-4">
+        <h2 style={{fontWeight: 'bold', color: '#6f4e37'}}>Your Cart</h2>
         {cart.length === 0 ? (
-          <Alert variant="info">Your cart is empty.</Alert>
+          <p>Your cart is empty.</p>
         ) : (
-          <Row>
-            {/* Cart Items Column */}
-            <Col lg={8}>
-              <ListGroup variant="flush">
-                {cart.map((item) => (
-                  <ListGroup.Item className="cart-item-card" key={item.id || item.productId}>
-                    <Row className="align-items-center">
-                      <Col xs={3} sm={2}>
-                      <Image
-                          src={item.imageUrl}  // <-- Provide the image source URL from the item object
-                          alt={item.title}     // <-- Add descriptive alt text (good for accessibility)
-                          fluid                // <-- Makes the image responsive (scales within the column
-                        />
-                      </Col>
-                      <Col xs={9} sm={5}>
-                        <h5>{item.title}</h5>
-                        {/* <small>Sold by: {item.sellerName || 'Unknown'}</small> */}
-                      </Col>
-                      <Col xs={6} sm={2} className="text-end text-sm-start mt-2 mt-sm-0">
-                        {/* --- Display only price (no quantity) --- CHANGED */}
-                        <p>${item.price.toFixed(2)}</p>
-                        {/* --- END CHANGE --- */}
-                      </Col>
-                      <Col xs={6} sm={3} className="text-end mt-2 mt-sm-0">
-                        <Button variant="outline-danger" size="sm" onClick={() => handleRemove(item.id || item.productId)}>Remove</Button>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Col>
+          <>
+            {cart.map((item) => (
+              <BootstrapCard className="mb-4" key={item.id}>
+                <BootstrapCard.Body>
+                  <Row>
+                    <Col md={3}>
+                      <img
+                        src={item.imageUrl || "https://via.placeholder.com/100"}
+                        alt={item.title || "Item"}
+                        className="img-fluid"
+                        style={{ maxHeight: "100px", objectFit: "cover" }}
+                      />
+                    </Col>
+                    <Col md={5}>
+                      <h5>{item.title}</h5>
+                    </Col>
+                    <Col md={2}>
+                      <p>${item.price.toFixed(2)}</p>
+                    </Col>
+                    <Col md={2}>
+                      <Button 
+                        className="btn"
+                        style={{
+                        backgroundColor: "#f08080",
+                        borderColor: "#f08080",
+                        color: "white",
+                        fontWeight: 'bold',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = "#f4978e";
+                        e.target.style.borderColor = "#f4978e";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = "#f08080";
+                        e.target.style.borderColor = "#f08080";
+                      }}
+                      onClick={() => handleRemove(item.id)}>Remove</Button>
+                    </Col>
+                  </Row>
+                </BootstrapCard.Body>
+              </BootstrapCard>
+            ))}
 
-            {/* Summary Column */}
-            <Col lg={4}>
-              <div className="cart-summary">
-                <h5>Summary</h5>
-                <ListGroup variant="flush">
-                   {/* Subtotal display (no quantity change needed here) */}
-                  <ListGroup.Item className="d-flex justify-content-between">
-                    <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
-                  </ListGroup.Item>
-                   {/* Discount display */}
-                  <ListGroup.Item className="d-flex justify-content-between">
-                    <span>Discount {appliedDiscountCode && `(${appliedDiscountCode})`}</span>
-                    <span>-${discountAmount.toFixed(2)}</span>
-                  </ListGroup.Item>
-                   {/* Total display */}
-                  <ListGroup.Item className="d-flex justify-content-between">
-                    <strong>Total</strong>
-                    <strong>${total.toFixed(2)}</strong>
-                  </ListGroup.Item>
-                </ListGroup>
-
-                 {/* Discount Form */}
-                <Form.Group controlId="discountCode" className="my-3">
-                    { /* ... discount form controls ... */ }
-                     <Form.Label>Discount / Promo Code</Form.Label>
-                     <div className="d-flex">
-                       <Form.Control type="text"/>
-                       <Button variant="secondary" onClick={handleApplyDiscount}>Apply</Button>
-                     </div>
+            <Row className="mb-4">
+              <Col className="d-flex justify-content-end">
+                <Form.Group controlId="discountCode">
+                  <Form.Label style={{fontWeight: 'bold'}}>Discount / Promo Code</Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter code"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value)}
+                      className="me-2 discount-input"
+                    />
+                    <Button 
+                    className="btn"
+                    style={{
+                      backgroundColor: "#ad9984",
+                      borderColor: "#ad9984",
+                      color: "white",
+                      fontWeight: 'bold',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#ddbea9";
+                      e.target.style.borderColor = "#ddbea9";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "#ad9984";
+                      e.target.style.borderColor = "#ad9984";
+                    }}
+                    onClick={handleApplyDiscount}>Apply</Button>
+                  </div>
                 </Form.Group>
+              </Col>
+            </Row>
 
-                 {/* Buttons */}
-                <div className="d-grid gap-2">
-                  <Button variant="success" size="lg" onClick={handleCheckout}>Check Out</Button>
-                  <Button variant="outline-danger" onClick={clearCart}>Clear Cart</Button>
-                </div>
-              </div>
-            </Col>
-          </Row>
+            <Row className="mt-4">
+              <Col className="d-flex justify-content-end">
+                <h5>Summary</h5>
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col className="d-flex justify-content-end">
+                <p>Subtotal: ${subtotal.toFixed(2)}</p>
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col className="d-flex justify-content-end">
+                <p>Discount: ${discountAmount.toFixed(2)} {appliedDiscountCode && `(${appliedDiscountCode})`}</p>
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col className="d-flex justify-content-end">
+                <h5 style={{fontWeight: 'bold', fontSize: '24px'}}>Total: ${total.toFixed(2)}</h5>
+              </Col>
+            </Row>
+
+            <Row className="mt-2">
+              <Col className="d-flex flex-column align-items-end">
+                <Button 
+                className="btn mb-2"
+                style={{
+                  backgroundColor: "#f08080",
+                  borderColor: "#f08080",
+                  color: "white",
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#f4978e";
+                  e.target.style.borderColor = "#f4978e";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "#f08080";
+                  e.target.style.borderColor = "#f08080";
+                }}
+                onClick={clearCart}>Clear Cart</Button>
+                <Button 
+                style={{
+                  backgroundColor: "#97a97c",
+                  borderColor: "#97a97c",
+                  color: "white",
+                  transition: "background-color 0.3s ease",
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#85986c";
+                  e.target.style.borderColor = "#85986c";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#97a97c";
+                  e.target.style.borderColor = "#97a97c";
+                }}
+                onClick={handleCheckout} className="checkout-button">Check Out</Button>
+              </Col>
+            </Row>
+          </>
         )}
       </Container>
     </>

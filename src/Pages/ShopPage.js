@@ -34,8 +34,7 @@ const ShopPage = () => {
     try {
       const res = await fetch(`/api/products/search?${queryParams.toString()}`);
       const data = await res.json();
-      const filtered = data.products.filter(p => !p.isOrdered);
-      setProducts(filtered);
+      setProducts(data.products);
       setTotalPages(data.totalPages);
     } catch (err) {
       console.error("Failed to fetch products:", err);
@@ -165,20 +164,18 @@ const ShopPage = () => {
                         }
                       />
                       <Card.Body>
-                          <Card.Title>{product.title}</Card.Title>
-                          <Card.Subtitle className="mb-2 text-muted">
-                            ${product.price}
-                          </Card.Subtitle>
-                          <Card.Text>Category: {product.category}</Card.Text>
-                          
-                            <Card.Text><strong>Seller: {product.seller}</strong></Card.Text>
-                          <Button
-                            variant="primary"
-                            onClick={() => goToProduct(product._id)}
-                          >
-                            View Product
-                          </Button>
-                        </Card.Body>
+                        <Card.Title style={{ fontWeight: 'bold'}}>{product.title}</Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: '20px'}}>
+                          ${product.price}
+                        </Card.Subtitle>
+                        <Card.Text>Category: {product.category}</Card.Text>
+                        <Button
+                          style={{ backgroundColor: "#6a4c37", borderColor: "#6a4c37", color: "white" }}
+                          onClick={() => goToProduct(product._id)}
+                        >
+                          View Product
+                        </Button>
+                      </Card.Body>
                     </Card>
                   </Col>
                 ))

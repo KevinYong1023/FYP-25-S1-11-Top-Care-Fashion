@@ -235,7 +235,7 @@ const UploadProduct = ({ email }) => {
           <Card.Body>
             <Row>
               <Col md={5} className="border-end text-center d-flex flex-column align-items-center justify-content-center">
-                <h4>Image Preview</h4>
+                <h4 style={{ fontWeight: 'bold'}}>Image Preview</h4>
                 {previewUrl ? (
                   <>
                     <img
@@ -255,7 +255,7 @@ const UploadProduct = ({ email }) => {
               </Col>
 
               <Col md={7}>
-                <h3 className="mb-3">Upload Product</h3>
+                <h3 className="mb-3 text-center" style={{ fontWeight: 'bold' , color: '#6f4e37'}}>Upload Product</h3>
                 {success && <Alert variant="success">Product uploaded successfully!</Alert>}
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleSubmit}>

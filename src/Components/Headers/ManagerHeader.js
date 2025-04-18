@@ -17,8 +17,8 @@ export default function ManagerHeader({loginStatus}){
                       <Navbar expand="lg" className="custom-navbar">
             
                 <Container>
-                    <Navbar.Brand href="/ManagerDashboard" style={{ color: 'black', marginLeft: '10px' }}>
-                        <img src={logo} alt="logo" height={"50px"} width={"50px"} />
+                    <Navbar.Brand href="/ManagerDashboard">
+                        <img src={logo} alt="logo" height={"100px"} width={"100px"} />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ borderColor: 'black' }} />
                     <Navbar.Collapse id="basic-navbar-nav">

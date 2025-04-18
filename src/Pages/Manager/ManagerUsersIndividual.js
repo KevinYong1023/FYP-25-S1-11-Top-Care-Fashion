@@ -181,7 +181,7 @@ export default function ManagerUsersIndividual() {
           ) : (
             userData && (
               <>
-              <h2 style={{ color: '#6b705c', fontWeight:"bold"}}> User: {userData.name}</h2>
+              <h2 style={{ color: '#6e4f37', fontWeight:"bold"}}> User: {userData.name}</h2>
 
                 <hr />
   
@@ -194,7 +194,7 @@ export default function ManagerUsersIndividual() {
                     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
                   }}
                 >
-                  <h4 style={{ color: '#4a4e69' }}>Product Posting History</h4>
+                  <h4 style={{ color: '#4a4e69', fontSize: '28px' }}>Product Posting History</h4>
                   <Table
                     className="table table-hover table-striped mt-3"
                     style={{
@@ -233,7 +233,7 @@ export default function ManagerUsersIndividual() {
                     boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
                   }}
                 >
-                  <h4 style={{ color: '#4a4e69' }}>Comments Made</h4>
+                  <h4 style={{ color: '#4a4e69', fontSize: '28px' }}>Comments Made</h4>
                   <Table
                     className="table table-hover table-striped mt-3"
                     style={{

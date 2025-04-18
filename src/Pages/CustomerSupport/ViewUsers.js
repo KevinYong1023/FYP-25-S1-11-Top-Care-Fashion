@@ -83,7 +83,7 @@ export default function ViewUsers() {
                 </div>
               ) : (
                 <>
-                  <h2 style={{ color: '#6b705c' }}>User Accounts</h2>
+                  <h2 style={{ color: '#6e4f37' }}>User Accounts</h2>
                   <hr />
                   <Table
                     
@@ -118,7 +118,6 @@ export default function ViewUsers() {
                           <td>{user.status}</td>
                           <td >
                             <Button
-                              variant="primary"
                               size="sm"
                               href={`/order-history/${user.name}`}
                               rel="noopener noreferrer"
@@ -127,6 +126,8 @@ export default function ViewUsers() {
                                 borderRadius: '5px',
                                 padding: '6px 12px',
                                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                backgroundColor: '#87986a',
+                                borderColor: '#87986a'
                               }}
                             >
                               View Orders

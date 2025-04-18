@@ -124,12 +124,12 @@ const AdminCreateAccount = () => {
                   Back
                 </Button>
                 <hr/>
-                <h2 className="mb-4">Create an Account</h2>
+                <h2 className="mb-4" style={{ color: '#6f4e37'}}>Create an Account</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleSubmit}>
                   {/* Username */}
                   <Form.Group className="mb-3">
-                    <Form.Label>Username</Form.Label>
+                    <Form.Label style={{fontWeight: 'bold'}}>Username</Form.Label>
                     <Form.Control
                       type="text"
                       name="username"
@@ -142,7 +142,7 @@ const AdminCreateAccount = () => {
     
                   {/* Name */}
                   <Form.Group className="mb-3">
-                    <Form.Label>Name</Form.Label>
+                    <Form.Label style={{fontWeight: 'bold'}}>Name</Form.Label>
                     <Form.Control
                       type="text"
                       name="name"
@@ -155,7 +155,7 @@ const AdminCreateAccount = () => {
     
                   {/* Email */}
                   <Form.Group className="mb-3">
-                    <Form.Label>Email Address</Form.Label>
+                    <Form.Label style={{fontWeight: 'bold'}}>Email Address</Form.Label>
                     <Form.Control
                       type="email"
                       name="email"
@@ -168,7 +168,7 @@ const AdminCreateAccount = () => {
     
                   {/* Phone */}
                   <Form.Group className="mb-3">
-                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Label style={{fontWeight: 'bold'}}>Phone Number</Form.Label>
                     <Form.Control
                       type="text"
                       name="phone"
@@ -183,7 +183,7 @@ const AdminCreateAccount = () => {
                   <div className="d-flex gap-3 mb-3">
                     {/* Position */}
                     <div style={{ flex: 1 }}>
-                      <Form.Label>Position</Form.Label>
+                      <Form.Label style={{fontWeight: 'bold'}}>Position</Form.Label>
                       <Form.Select
                         name="position"
                         value={formData.position}
@@ -199,7 +199,7 @@ const AdminCreateAccount = () => {
     
                     {/* DOB */}
                     <div style={{ flex: 1 }}>
-                      <Form.Label>Date of Birth</Form.Label>
+                      <Form.Label style={{fontWeight: 'bold'}}>Date of Birth</Form.Label>
                       <Form.Control
                         type="date"
                         name="dob"
@@ -211,7 +211,7 @@ const AdminCreateAccount = () => {
     
                     {/* Gender */}
                     <div style={{ flex: 1 }}>
-                      <Form.Label>Gender</Form.Label>
+                      <Form.Label style={{fontWeight: 'bold'}}>Gender</Form.Label>
                       <div className="d-flex align-items-center gap-2">
                         <Form.Check
                           type="radio"
@@ -236,7 +236,7 @@ const AdminCreateAccount = () => {
     
                   {/* Password */}
                   <Form.Group className="mb-3">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label style={{fontWeight: 'bold'}}>Password</Form.Label>
                     <Form.Control
                       type="password"
                       name="password"
@@ -249,7 +249,7 @@ const AdminCreateAccount = () => {
     
                   {/* Confirm Password */}
                   <Form.Group className="mb-3">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label style={{fontWeight: 'bold'}}>Confirm Password</Form.Label>
                     <Form.Control
                       type="password"
                       name="confirmPassword"

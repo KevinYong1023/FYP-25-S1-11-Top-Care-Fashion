@@ -40,8 +40,44 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
                     <Col className="text-center">
                         <h1>You have successfully logged out.</h1>
                         <br/>
-                        <Button variant="primary" onClick={handleLogout}>Login</Button> {/* Logout and redirect to login */}
-                        <Button variant="primary" onClick={handleBackToHome}>Back To Home</Button> {/* Logout and redirect to login */}
+                        <Button
+                            style={{
+                                backgroundColor: "#97a97c",
+                                borderColor: "#97a97c",
+                                color: "white",
+                            }}
+                            className="me-3"
+                            onClick={handleLogout}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "#85986c";
+                                e.target.style.borderColor = "#85986c";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "#97a97c";
+                                e.target.style.borderColor = "#97a97c";
+                            }}
+                            >
+                            Login
+                        </Button>
+
+                        <Button
+                            style={{
+                                backgroundColor: "#97a97c",
+                                borderColor: "#97a97c",
+                                color: "white",
+                            }}
+                            onClick={handleBackToHome}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "#85986c";
+                                e.target.style.borderColor = "#85986c";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "#97a97c";
+                                e.target.style.borderColor = "#97a97c";
+                            }}
+                            >
+                            Back To Home
+                        </Button>
 
                     </Col>
                 </Row>

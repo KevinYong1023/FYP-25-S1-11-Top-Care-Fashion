@@ -73,13 +73,13 @@ export default function ResetPassword() {
   return (
     <>
       <UserHeader loginStatus={false} />
-      <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <h2 className="mb-4">Reset Password</h2>
+      <Container className="d-flex flex-column justify-content-center align-items-center" style={{ marginTop: "200px", marginBottom: "80px" }}>
+        <h2 className="mb-4" style={{ color: '#6f4e37', fontWeight:'bold'}}>Reset Password</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
         <Form className="w-50" onSubmit={handleResetPassword}>
           <Form.Group className="mb-3">
-            <Form.Label>Email Address</Form.Label>
+            <Form.Label style={{fontWeight:'bold'}}>Email Address</Form.Label>
             <Form.Control
               type="email"
               name="email"
@@ -90,7 +90,7 @@ export default function ResetPassword() {
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>New Password</Form.Label>
+            <Form.Label style={{fontWeight:'bold'}}>New Password</Form.Label>
             <Form.Control
               type="password"
               name="newPassword"
@@ -101,7 +101,7 @@ export default function ResetPassword() {
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Confirm Password</Form.Label>
+            <Form.Label style={{fontWeight:'bold'}}>Confirm Password</Form.Label>
             <Form.Control
               type="password"
               name="confirmPassword"
@@ -112,12 +112,25 @@ export default function ResetPassword() {
             />
           </Form.Group>
           <Row>
-            <Button variant="primary" type="submit" className="w-100">
+          <div className="d-flex flex-column gap-3">
+          <Button
+            style={{ backgroundColor: "#97a97c", borderColor: "#97a97c", color: "white" }}
+            className="w-100"
+            type="submit"
+          >
             Reset Password
           </Button>
-          <Button variant="primary" onClick={backToLogin} >
+
+          <Button
+            style={{ backgroundColor: "#6b705c", borderColor: "#6b705c", color: "white" }}
+            className="w-100"
+            onClick={backToLogin}
+          >
             Back to Login
           </Button>
+
+          </div>
+
           </Row>
          
         </Form>
