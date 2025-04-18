@@ -1,7 +1,13 @@
 import Product from '../../models/product.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const productData = async () => {
-  // await Product.deleteMany({});
+  // Required for ES Modules to get __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
   const users = [
     { name: 'JJ', email: 'user001@mail.com', userId: 1 },
@@ -49,13 +55,24 @@ const productData = async () => {
         const titlePool = titleOptions[occasion][category];
         const title = titlePool[Math.floor(Math.random() * titlePool.length)];
 
+        const fileName = `${occasion}-${category}-${i}.png`;
+        const filePath = path.resolve(__dirname, '../Data/images', fileName);// Image File Path: server\Test\Data\images\Casual-Bottom-3.png
+
+        let base64Image = ''; 
+        try {
+          const imageBuffer = fs.readFileSync(filePath);
+          base64Image = `data:image/png;base64,${imageBuffer.toString('base64')}`;
+        } catch (err) {
+          console.error(`Failed to read image: ${filePath}`, err);
+        }
+
         const product = {
           title,
           description: descriptions[category],
           price: parseFloat((Math.random() * 100 + 100).toFixed(2)),
           category,
           occasion,
-          imageUrl: `/images/${occasion}-${category}-${i}.png`,
+          imageUrl: base64Image,
           seller: randomUser.name,
           email: randomUser.email,
           userId: randomUser.userId,
