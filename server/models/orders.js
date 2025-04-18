@@ -46,7 +46,7 @@ orderSchema.pre('save', async function (next) {
         try {
           const counter = await Counter.findOneAndUpdate(
             { name: 'orderNumber' },  // Query by the 'name' field instead of _id
-            { $inc: { value: 0 } }, // Increment the counter
+            { $inc: { value: 1 } }, // Increment the counter
             { new: true, upsert: true }
           );
           this.orderNumber = counter.value;  // Set orderNumber based on the counter value
