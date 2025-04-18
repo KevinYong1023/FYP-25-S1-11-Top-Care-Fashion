@@ -19,7 +19,7 @@ router.get('/order-history', async (req, res) => {
 
 router.put('/update-order-status/:orderNumber', async (req, res) => {
     const { orderNumber } = req.params;
-    const { sellerName, status } = req.body;
+    const { sellerName, productName, status } = req.body;
 
     const validStatuses = ['Processing', 'Shipped', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
@@ -33,21 +33,19 @@ router.put('/update-order-status/:orderNumber', async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        // Update the specific seller's status
-        const sellerIndex = order.seller.findIndex(s => s.sellerName === sellerName);
-        if (sellerIndex === -1) {
-            return res.status(404).json({ message: 'Seller not found in this order' });
-        }
+        const sellerIndex = order.seller.findIndex(
+            s => s.sellerName === sellerName && s.productName === productName
+        );
 
+        if (sellerIndex === -1) {
+            return res.status(404).json({ message: 'Seller + product not found in this order' });
+        }
+      
         order.seller[sellerIndex].status = status;
 
-        // Check if ALL sellers have status "Delivered"
         const allDelivered = order.seller.every(s => s.status === 'Delivered');
 
-        // If all seller items are delivered, set main order status to "Completed"
-        if (allDelivered) {
-            order.status = 'Completed';
-        }
+        order.status = allDelivered ? 'Completed' : 'Processing';
 
         await order.save();
 
