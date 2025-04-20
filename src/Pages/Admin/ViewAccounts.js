@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from '../../App';
 import { Container, Row, Col, Button, Form, Table, Card, Pagination, Spinner } from 'react-bootstrap';
 import AdminHeader from '../../Components/Headers/AdminHeader';
-import '../../css/ViewAccounts.css';
 
 export default function ViewAccounts() {
     const [users, setUsers] = useState([]);

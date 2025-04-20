@@ -238,7 +238,6 @@ const UploadProduct = ({ email }) => {
                       src={previewUrl}
                       alt="Preview"
                       className="img-thumbnail mt-2"
-                      style={{ width: "100%", objectFit: "cover", maxHeight: "300px" }}
                     />
                     <div className="text-muted mt-2" style={{ fontSize: "0.9rem" }}>
                       Dimensions: {imageInfo.width} × {imageInfo.height}px<br />
