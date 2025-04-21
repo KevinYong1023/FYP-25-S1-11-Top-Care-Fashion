@@ -1,55 +1,62 @@
 const mongoose = require('mongoose');
+const Counter = require('./counter'); // Import the counter model
 
-// Define the orderHistory schema
 const orderSchema = new mongoose.Schema({
     orderNumber: {
-        type: Number,
-        unique: true,  // Ensure the orderNumber is unique
+        type: Number, 
+        unique: true,
     },
-    seller: {  // User sells the product
-        type: Array,
-        required: true
-    },
+    seller: [{ // Array of product objects
+        sellerName: { type: String, required: true },
+        productName: { type: String, required: true },
+        price: {
+            type: Number,
+            required: true
+          },
+        status: {
+            type: String,
+            required: true,
+            default: 'Processing',
+            enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled'], // added enum for validation.
+        }
+    }],
     created: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
-    products: {
-        type: String,
-        required: true
-    },
-    total: { // Total Price
-        type: String,
-        required: true
+    total: { // total price of the order
+        type: Number, // Changed to Number
+        required: true,
     },
     status: {
         type: String,
         required: true,
-        default: "Processing"
+        default: 'Processing',
+        enum: ['Processing', 'Completed'], // added enum for validation.
     },
-    buyer: {  // User buys the product
+    buyerName: { // Changed to buyerName for clarity
         type: String,
-        required: true
-    }
-});
-
-// Custom auto-increment method for orderNumber
-orderSchema.statics.getNextOrderNumber = async function() {
-    const lastOrder = await this.findOne().sort({ orderNumber: -1 });  // Get the last order
-    if (!lastOrder) {
-        return 1;  // If no orders exist, start from 1
-    }
-    return lastOrder.orderNumber + 1;  // Increment the last order number
-};
+        required: true,
+    },
+}, { timestamps: false });
 
 // Pre-save hook to set the orderNumber before saving
-orderSchema.pre('save', async function(next) {
-    if (!this.orderNumber) {
-        this.orderNumber = await this.constructor.getNextOrderNumber();  // Get the next order number
+orderSchema.pre('save', async function (next) {
+    if (this.isNew) {
+      try {
+        const counter = await Counter.findOneAndUpdate(
+          { name: 'orderNumber' },  // Query by the 'name' field instead of _id
+          { $inc: { value: 1 } }, // Increment the counter
+          { new: true, upsert: true }
+        );
+        this.orderNumber = counter.value;  // Set orderNumber based on the counter value
+      } catch (error) {
+        console.error('Error auto-incrementing orderNumber from counter:', error);
+        return next(error);
+      }
     }
     next();
 });
-
 // Create the Order model
 const Order = mongoose.model('Order', orderSchema);
 

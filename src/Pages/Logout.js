@@ -8,9 +8,10 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
     const navigate = useNavigate();
     const { setLogin, setRole, setEmail,setName,setAddress,setUserEmail } = useContext(AuthContext);  // Use context to set email, login, and role
     
-    useEffect(()=>{
-        setLogin(false);
-    },[])
+    useEffect(() => {
+        resetStates();
+    }, []);
+    
     function resetStates(){
         localStorage.clear(); // this already clears everything
         setLogin(false);

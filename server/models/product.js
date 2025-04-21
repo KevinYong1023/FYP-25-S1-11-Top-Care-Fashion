@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -25,7 +26,7 @@ const productSchema = new mongoose.Schema({
     enum: ['Casual', 'Smart', 'Formal', 'Sport'],
     required: true
   },
-  imageUrl: {
+  imageUrl: { // use base64 store
     type: String,
     required: true
   },
@@ -44,6 +45,10 @@ const productSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  isOrdered:{
+    type: Boolean,
+    default: false
   }
 });
 

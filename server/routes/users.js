@@ -2,41 +2,56 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/users.js');
+const authenticate = require('../middleware/authenticate');
+const jwt = require('jsonwebtoken'); // make sure this is at the top!
+
 
 // Login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
+
     try {
-        // Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
         }
 
-        // Check if the password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Wrong Password' });
         }
-        // Check user status is active or not
+
         if (user.status !== 'Active') {
             return res.status(400).json({ message: 'Inactive Account.' });
         }
 
-        // If login is successful, return user data (without the password)
+        const token = jwt.sign(
+            {
+                id: user.userId,
+                email: user.email,
+                role: user.position,
+            },
+            process.env.JWT_SECRET || 'fallbackSecretKey',
+            { expiresIn: '1h' }
+        );
+
         res.json({
             message: 'Login successful',
+            token,
             user: {
-                id: user.userId, // Use 'userId' instead of '_id'
+                id: user.userId,
                 email: user.email,
-                role: user.position, // Use 'position' instead of 'role'
-                name: user.name
+                role: user.position,
+                name: user.name,
+                address: user.address || ''
             }
         });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 // Reset Password
 router.put('/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
@@ -249,5 +264,23 @@ router.put('/user/:email/status', async (req, res) => {
         res.status(500).json({ message: 'Error updating user status' });
     }
 });
+
+// Get user name by userId
+router.get('/users/:userId/name', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findOne({ userId });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({ name: user.name });
+    } catch (error) {
+        console.error('Error fetching user name:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+
 
 module.exports = router;

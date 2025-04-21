@@ -48,6 +48,9 @@ const ManageList = ({ email }) => {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),
+        title: product.title,
+        description: product.description,
+        price: product.price,
       });
 
       if (res.ok) {
@@ -71,17 +74,17 @@ const ManageList = ({ email }) => {
         method: "DELETE",
       });
 
-      if (res.ok) {
-        setProducts((prev) => prev.filter((p) => p._id !== id));
-        setMessage("Product deleted.");
-      } else {
-        setMessage("Error deleting product.");
-      }
-    } catch (err) {
-      console.error(err);
-      setMessage("Server error during delete.");
-    }
-  };
+            if (res.ok) {
+                setProducts((prev) => prev.filter((p) => p._id !== id));
+                setMessage("Product deleted.");
+            } else {
+                setMessage("Error deleting product.");
+            }
+        } catch (err) {
+            console.error(err);
+            setMessage("Server error during delete.");
+        }
+    };
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -96,7 +99,7 @@ const ManageList = ({ email }) => {
     <>
       <UserHeader loginStatus={true} />
       <div className="mt-4 px-3">
-        <h2 className='text-center' style={{ fontWeight: 'bold' , color: '#6f4e37'}}>Manage Listings</h2>
+        <h2>Manage Listings</h2>
   
         {message && <Alert variant="info">{message}</Alert>}
         {error && (
@@ -172,17 +175,17 @@ const ManageList = ({ email }) => {
                       <Button
                         variant="success"
                         size="sm"
+                        disabled={product.isOrdered}
                         onClick={() => handleUpdate(product)}
                         className="me-2"
-                        style={{ backgroundColor: '#97a97c', borderColor: '#97a97c', fontSize: '18px'}}
                       >
                         Update
                       </Button>
                       <Button
                         variant="danger"
                         size="sm"
+                        disabled={product.isOrdered}
                         onClick={() => handleDelete(product._id)}
-                        style={{ backgroundColor: '#ef233c', borderColor: '#ef233c', fontSize: '18px'}}
                       >
                         Delete
                       </Button>

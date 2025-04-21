@@ -197,10 +197,14 @@ const UploadProduct = ({ email }) => {
       userId
     };
 
+    const token = localStorage.getItem("token");
     try {
       const res = await fetch("/api/products", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+        Authorization: `Bearer ${token}` // 👈 Add this line
+      },
         body: JSON.stringify(productData)
       });
 
