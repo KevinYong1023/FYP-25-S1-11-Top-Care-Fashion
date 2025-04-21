@@ -46,6 +46,7 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
                                 backgroundColor: "#97a97c",
                                 borderColor: "#97a97c",
                                 color: "white",
+                                fontSize:"20px"
                             }}
                             className="me-3"
                             onClick={handleLogout}
@@ -66,6 +67,7 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
                                 backgroundColor: "#97a97c",
                                 borderColor: "#97a97c",
                                 color: "white",
+                                fontSize:"20px"
                             }}
                             onClick={handleBackToHome}
                             onMouseEnter={(e) => {
