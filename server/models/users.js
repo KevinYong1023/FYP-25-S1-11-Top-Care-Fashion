@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Counter = require('./counter'); // Import the Counter model
 
 // Define the user schema
 const userSchema = new mongoose.Schema({
@@ -45,30 +46,39 @@ const userSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    required: true
+    required: true,
+    default:"Active"
   },
   address: {
     type: String,
     required: false
   },
-  revenue: {
-    type: String, // Change it to the corresponding value
-    required: false
+
+  revenue:{
+    type: Number, // Change it to the correspond value
+    required:false,
+    min: [0, 'Balance cannot be negative.']
   }
 });
 
-// Pre-save hook to set auto-increment userId
+
 userSchema.pre('save', async function (next) {
   if (this.isNew) {
     try {
-      const lastUser = await User.findOne().sort({ userId: -1 });
-      this.userId = lastUser ? lastUser.userId + 1 : 1; // Start from 1 if no users exist
+      const counter = await Counter.findOneAndUpdate(
+        { name: 'userId' },  // Query by the 'name' field instead of _id
+        { $inc: { value: 0 } }, // Increment the counter
+        { new: true, upsert: true }
+      );
+      this.userId = counter.value;  // Set userId based on the counter value
     } catch (error) {
-      console.error('Error auto-incrementing userId:', error);
+      console.error('Error auto-incrementing userId from counter:', error);
+      return next(error);
     }
   }
   next();
 });
+
 
 // Create the User model
 const User = mongoose.model('User', userSchema);

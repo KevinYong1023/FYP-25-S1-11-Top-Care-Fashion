@@ -79,16 +79,33 @@ const ProductPage = ({ email }) => {
   }, [product]);
 
   const handleAddToCart = () => {
-    if (product) {
-      addToCart({
-        id: product._id,
-        title: product.title,
-        price: product.price,
-        imageUrl: product.imageUrl,
-      });
-      navigate("/cart");
+    if(!product.isOrdered){
+    if (product && product.userId && product._id) {
+        console.log("Attempting to add product to cart:", product);
+        const itemToAdd = {
+            id: product._id,
+            productId: product._id,
+            title: product.title,
+            price: product.price,
+            imageUrl: product.imageUrl,
+            sellerId: product.userId,
+            seller:product.seller
+        };
+        console.log("Item object being passed to addToCart:", itemToAdd);
+        try {
+            addToCart(itemToAdd);
+            alert(`${product.title} added to cart!`);
+        } catch (cartError) {
+            console.error("Error adding to cart:", cartError);
+            alert(`Failed to add item to cart: ${cartError.message}`);
+        }
+    } else {
+        console.error("Cannot add to cart: Product data or seller ID is missing.", product);
+        alert("Cannot add this item to cart due to missing information.");
+    }}else{
+        setError("Order Sold, Please Select another one.");
     }
-  };
+};
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
@@ -144,7 +161,7 @@ const ProductPage = ({ email }) => {
             {/* Right: Info + Add to Cart */}
             <Col md={6}>
               <Card className="p-4">
-                <h2 style={{ fontWeight: 'bold', color: '#6f4e37'}}>{product.title}</h2>
+                <h2>{product.title}</h2>
                 <p><strong>Price:</strong> ${product.price}</p>
                 <p><strong>Category:</strong> {product.category}</p>
                 <p><strong>Occasion:</strong> {product.occasion}</p>
@@ -167,9 +184,8 @@ const ProductPage = ({ email }) => {
                     <Button
                       variant="primary"
                       onClick={handleAddToCart}
-                      disabled={email === product.email || !login}
-                      style={email === product.email ? { pointerEvents: "none" } : 
-                      {backgroundColor: "#97a97c", borderColor: "#97a97c", color: "white"}}
+                      disabled={email === product.email || !login || product.isOrdered}
+                      style={email === product.email ? { pointerEvents: "none" } : {}}
                     >
                       Add to Cart
                     </Button>
@@ -209,13 +225,8 @@ const ProductPage = ({ email }) => {
                 onChange={(e) => setComment(e.target.value)}                
               />
             </Form.Group>
-
-            <Button 
-            style={{ backgroundColor: "#6a4c37", borderColor: "#6a4c37", color: "white" }}
-            type="submit" className="mt-2">Submit Comment</Button>
-          </Form>
-          </>)}
-
+            <Button variant="primary" type="submit"  className="mt-2">Submit Comment</Button>
+          </Form></>)}
         </div>
         </Row>) : (
           <div className="text-center mt-5">

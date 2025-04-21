@@ -3,6 +3,7 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App";
+import { storeAuthToken } from '../utils/auth';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -12,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    localStorage.clear(); // this already clears everything
+    //localStorage.clear(); // this already clears everything
   },[])
 
   const handleChange = (e) => {
@@ -28,10 +29,13 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
+      
+      console.log("Full login response:", response);
       const data = await response.json();
+      console.log("Received token from server:", data.token);
 
       if (response.ok) {
+        storeAuthToken(data.token); 
         const loginRole = data.user.role;
         setEmail(formData.email);
         setRole(loginRole);
