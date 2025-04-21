@@ -42,10 +42,11 @@ router.get("/products/user/:email", async (req, res) => {
 // Update product status based on product ID or product name
 router.put("/products/update-product-status", async (req, res) => {
   try {
-    const { productId, productName, isOrdered } = req.body;
+    const { productId, productName, seller, isOrdered } = req.body;
 
     console.log("Product ID:", productId);
     console.log("Product Name:", productName);
+    console.log("Seller:", seller);
     console.log("isOrdered:", isOrdered);
 
     if (typeof isOrdered !== "boolean") {
@@ -56,10 +57,10 @@ router.put("/products/update-product-status", async (req, res) => {
 
     if (productId) {
       product = await Product.findById(productId);
-    } else if (productName) {
+    } else if (productName && seller) {
       product = await Product.findOne({ title: productName });
     } else {
-      return res.status(400).json({ message: "Missing product identifier" });
+      return res.status(400).json({ message: "Missing product identifier or seller" });
     }
 
     if (!product) {

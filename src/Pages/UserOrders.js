@@ -96,7 +96,7 @@ export default function UserOrders({ email }) {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ productName , isOrdered: false }),
+                        body: JSON.stringify({ productName, seller, isOrdered: false }),
                     });
     
                     const updateData = await res.json();
