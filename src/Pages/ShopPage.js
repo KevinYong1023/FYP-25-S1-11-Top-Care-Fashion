@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button, Card, Pagination, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import UserHeader from "../Components/Headers/userHeader";
 
@@ -15,7 +15,6 @@ const ShopPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false)
 
   const limit = 9;
 
@@ -33,16 +32,14 @@ const ShopPage = () => {
     });
 
     try {
-      setIsLoading(true)
       const res = await fetch(`/api/products/search?${queryParams.toString()}`);
       const data = await res.json();
+      console.log(data)
       const filtered = data.products.filter(p => !p.isOrdered);
       setProducts(filtered);
       setTotalPages(data.totalPages);
     } catch (err) {
       console.error("Failed to fetch products:", err);
-    }finally{
-      setIsLoading(false)
     }
   };
 
@@ -87,13 +84,7 @@ const ShopPage = () => {
     <>
       <UserHeader loginStatus={true} />
       <Container fluid className="mt-4">
-      {isLoading ? (
-          <div className="text-center mt-5">
-            <Spinner animation="border" role="status" variant="primary" />
-            <p className="mt-2">Loading...</p>
-          </div>
-        ) : (<>
-        <Form className="mb-3 text-center" onSubmit={handleSearch}>
+      <Form className="mb-3 text-center" onSubmit={handleSearch}>
           <Form.Control
             type="text"
             placeholder="Search products..."
@@ -201,7 +192,7 @@ const ShopPage = () => {
               {renderPagination()}
             </div>
           </Col>
-        </Row></>)}
+        </Row>
       </Container>
     </>
   );
