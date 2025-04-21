@@ -202,7 +202,7 @@ const ProductPage = ({ email }) => {
             <ListGroup variant="flush">
               {productComments.map((comment) => (
                 <ListGroup.Item key={comment.commentNo}>
-                  <h5>{comment.description}</h5>
+                  <h3>{comment.description}</h3>
                   <p><strong>Made By:</strong> {comment.madeBy}</p>
                   <p><strong>Made At:</strong> {new Date(comment.created).toLocaleString()}</p>
                 </ListGroup.Item>
