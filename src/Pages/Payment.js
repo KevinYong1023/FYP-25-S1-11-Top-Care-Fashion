@@ -269,7 +269,7 @@ const Payment = () => {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ productName: item.productName, isOrdered: true }),
+                        body: JSON.stringify({ productId: item.productId, isOrdered: true }),
                     });
     
                     const data = await res.json();

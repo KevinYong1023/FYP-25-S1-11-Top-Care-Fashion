@@ -42,16 +42,14 @@ router.get("/products/user/:email", async (req, res) => {
 // Update product status based on product name
 router.put("/products/update-product-status", async (req, res) => {
   try {
-    const { productName, isOrdered } = req.body;
+    const { productId, isOrdered } = req.body;
 
-    if (!productName || typeof isOrdered !== "boolean") {
+    if (!productId || typeof isOrdered !== "boolean") {
       return res.status(400).json({ message: "Invalid input" });
     }
 
-    // Case-insensitive match to ensure reliability
-    const product = await Product.findOne({
-      title: { $regex: new RegExp(`^${productName.trim()}$`, "i") },
-    });
+   
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
