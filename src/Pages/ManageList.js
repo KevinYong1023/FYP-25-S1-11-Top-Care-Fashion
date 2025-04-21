@@ -48,6 +48,9 @@ const ManageList = ({ email }) => {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),
+        title: product.title,
+        description: product.description,
+        price: product.price,
       });
 
       if (res.ok) {

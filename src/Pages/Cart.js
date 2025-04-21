@@ -2,8 +2,8 @@
 import React from 'react';
 import { Container, Row, Col, Card as BootstrapCard, Button, Form, ListGroup, Image, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../Components/CartContext'; 
-import '../css/Cart.css'; 
+import { useCart } from '../Components/CartContext';
+import '../css/Cart.css';
 import UserHeader from '../Components/Headers/userHeader';
 
 // Placeholder - Make sure you have a real way to check login status
@@ -13,9 +13,9 @@ const Cart = () => {
   const { cart, removeFromCart, clearCart } = useCart();
   const navigate = useNavigate();
 
-
+  // Calculate subtotal
   const subtotal = cart.reduce((total, item) => total + item.price, 0);
-
+  const total = subtotal;
 
   const handleRemove = (itemId) => {
     removeFromCart(itemId);
@@ -33,7 +33,6 @@ const Cart = () => {
       return;
     }
 
- 
     const checkoutData = {
       cartItems: cart.map(item => ({
         productId: item.id || item.productId,
@@ -42,8 +41,7 @@ const Cart = () => {
         sellerName: item.seller,
         productName: item.title,
       })),
-      totalAmount: total, 
-      
+      totalAmount: total,
     };
 
     console.log("Cart Checkout Data:", checkoutData);
