@@ -7,7 +7,7 @@ const ManageList = ({ email }) => {
   const [message, setMessage] = useState("");
   const [error,setError] = useState("")
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(10);
+  const [productsPerPage] = useState(5);
   const [isLoading, setIsLoading] = useState(false); 
 
   const getUserProduct = async () => {
@@ -21,6 +21,7 @@ const ManageList = ({ email }) => {
         setError("Please Refresh the page and try again");
         console.error("Failed to fetch listings:", error);
       } finally {
+        setMessage("")
         setIsLoading(false); // Always set loading to false at the end
       }
     }
@@ -115,9 +116,16 @@ const ManageList = ({ email }) => {
           </div>
         ) : (
           <>
-            <Table striped bordered hover responsive>
-              <thead>
-                <tr>
+            <Table bordered hover responsive style={{ fontSize: "20px" }}>
+              <thead
+                style={{
+                  background: "linear-gradient(to right, #dfe9f3, #ffffff)",
+                  fontWeight: "bold",
+                  color: "#333",
+                  fontSize: "20px"
+                }}
+              >
+                <tr className="text-center" >
                   <th>Product</th>
                   <th>Category</th>
                   <th>Title</th>
@@ -128,27 +136,32 @@ const ManageList = ({ email }) => {
               </thead>
               <tbody>
                 {currentProducts.map((product, index) => (
-                  <tr key={product._id}>
-                    <td width={'200px'}>
+                  <tr
+                    key={product._id}
+                    style={{
+                      backgroundColor: index % 2 === 0 ? "#f8f9fa" : "#ffffff",
+                      verticalAlign: "middle",
+                      borderBottom: "1px solid #dee2e6"
+                    }}
+                  >
+                    <td width="180px" className="text-center">
                       <Image
                         src={product.imageUrl}
                         alt="Product"
-                        width="300"
-                        height="300"
+
                         rounded
                         onError={(e) =>
-                          (e.target.src = "https://via.placeholder.com/80")
+                          (e.target.src = "https://via.placeholder.com/120")
                         }
                       />
                     </td>
-                    <td  width={'200px'}>{product.category}</td>
+                    <td className="text-capitalize text-center">{product.category}</td>
                     <td>
                       <Form.Control
                         type="text"
                         value={product.title}
-                        onChange={(e) =>
-                          handleChange(index, "title", e.target.value)
-                        }
+                        onChange={(e) => handleChange(index, "title", e.target.value)}
+                        style={{ fontSize: "20px" }}
                       />
                     </td>
                     <td>
@@ -156,28 +169,26 @@ const ManageList = ({ email }) => {
                         as="textarea"
                         rows={2}
                         value={product.description}
-                        onChange={(e) =>
-                          handleChange(index, "description", e.target.value)
-                        }
+                        onChange={(e) => handleChange(index, "description", e.target.value)}
+                        style={{ fontSize: "20px" }}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="number"
                         value={product.price}
-                        onChange={(e) =>
-                          handleChange(index, "price", e.target.value)
-                        }
+                        onChange={(e) => handleChange(index, "price", e.target.value)}
+                        style={{ fontSize: "20px" }}
                       />
                     </td>
-                   
-                    <td>
+                    <td className="text-center">
                       <Button
                         variant="success"
                         size="sm"
                         disabled={product.isOrdered}
                         onClick={() => handleUpdate(product)}
                         className="me-2"
+                        style={{ fontSize: "20px" }}
                       >
                         Update
                       </Button>
@@ -186,6 +197,7 @@ const ManageList = ({ email }) => {
                         size="sm"
                         disabled={product.isOrdered}
                         onClick={() => handleDelete(product._id)}
+                        style={{ fontSize: "20px" }}
                       >
                         Delete
                       </Button>
@@ -194,7 +206,6 @@ const ManageList = ({ email }) => {
                 ))}
               </tbody>
             </Table>
-  
             <Pagination className="justify-content-center mt-4">
               <Pagination.Prev
                 onClick={() => handlePageChange(currentPage - 1)}
