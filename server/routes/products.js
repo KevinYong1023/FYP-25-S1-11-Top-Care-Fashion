@@ -39,17 +39,28 @@ router.get("/products/user/:email", async (req, res) => {
     }
 });
 
-// Update product status based on product name
+// Update product status based on product ID or product name
 router.put("/products/update-product-status", async (req, res) => {
   try {
-    const { productId, isOrdered } = req.body;
+    const { productId, productName, isOrdered } = req.body;
 
-    if (!productId || typeof isOrdered !== "boolean") {
-      return res.status(400).json({ message: "Invalid input" });
+    console.log("Product ID:", productId);
+    console.log("Product Name:", productName);
+    console.log("isOrdered:", isOrdered);
+
+    if (typeof isOrdered !== "boolean") {
+      return res.status(400).json({ message: "Invalid 'isOrdered' value" });
     }
 
-   
-    const product = await Product.findById(productId);
+    let product;
+
+    if (productId) {
+      product = await Product.findById(productId);
+    } else if (productName) {
+      product = await Product.findOne({ title: productName });
+    } else {
+      return res.status(400).json({ message: "Missing product identifier" });
+    }
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -57,15 +68,17 @@ router.put("/products/update-product-status", async (req, res) => {
 
     product.isOrdered = isOrdered;
 
-    // Disable validation in case required fields (like `occasion`) aren't present
+    // Skip validation for incomplete test data
     await product.save({ validateBeforeSave: false });
 
     res.json({ message: "Product order status updated successfully", product });
+
   } catch (err) {
     console.error("Error updating product status:", err.message);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // Update Product
 router.put("/products/:id", async (req, res) => {

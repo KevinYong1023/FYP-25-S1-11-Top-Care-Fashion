@@ -41,7 +41,6 @@ export default function UserOrders({ email }) {
                 order.seller.some(s => s.sellerName === name) && order.seller.some(s => s.status !== 'Delivered')
             );
             setSellList(sellOrders);
-            console.log("availableOrder",availableOrder)
             const buyOrders = availableOrder.filter(order => order.buyerName === name);
             console.log("buyOrders",buyOrders)
 
@@ -72,7 +71,7 @@ export default function UserOrders({ email }) {
         });
     };
     
-    const saveStatus = async (orderNumber, sellerName, newStatus, productName) => {
+    const saveStatus = async (orderNumber, sellerName, newStatus, productName,productId) => {
         
         try {
             setIsLoading(true);
@@ -97,13 +96,16 @@ export default function UserOrders({ email }) {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ productName, isOrdered: false }),
+                        body: JSON.stringify({ productName , isOrdered: false }),
                     });
     
                     const updateData = await res.json();
+                    console.log(updateData)
                     if (!res.ok) {
                         console.error("Failed to update product:", updateData.message);
                         alert(`Product status update failed: ${updateData.message}`);
+                    }else{
+                        alert("isOrdered status updated")
                     }
                 }
     
@@ -208,7 +210,6 @@ export default function UserOrders({ email }) {
                                                 <option value="Processing">Processing</option>
                                                 <option value="Shipped">Shipped</option>
                                                 <option value="Delivered">Delivered</option>
-                                                <option value="Cancelled">Cancelled</option>
                                             </Form.Select>
                                         </td>
                                         <td>
