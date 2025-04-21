@@ -35,12 +35,60 @@ const Payment = () => {
         }
     }, [location.state, cartItems, navigate]);
 
+     const isCardNumberValid = () => {
+        const trimmed = cardNumber.replace(/\s+/g, '');
+        return /^\d{16}$/.test(trimmed);
+    };
+
+    const isExpiryValid = () => {
+        const [month, year] = expirationDate.split('/');
+        if (!month || !year || !/^\d{2}\/\d{2}$/.test(expirationDate)) return false;
+
+        const now = new Date();
+        const expMonth = parseInt(month, 10);
+        const expYear = parseInt('20' + year, 10);
+
+        if (expMonth < 1 || expMonth > 12) return false;
+
+        const expiryDate = new Date(expYear, expMonth);
+        return expiryDate > now;
+    };
+
+    const isCvvValid = () => /^\d{3}$/.test(cvv);
+
+    const isNameValid = () => /^[A-Za-z ]{2,}$/.test(nameOnCard.trim());
+
     const checkFormFilled = () => {
         if (!cardNumber || !expirationDate || !cvv || !nameOnCard) {
             setMessage('Please fill in all fake card details to simulate payment.');
             setMessageType('danger');
             return false;
         }
+
+        if (!isCardNumberValid()) {
+            setMessage('Invalid card number. It must be 16 digits.');
+            setMessageType('danger');
+            return false;
+        }
+
+        if (!isExpiryValid()) {
+            setMessage('Invalid expiry date. Format must be MM/YY and in the future.');
+            setMessageType('danger');
+            return false;
+        }
+
+        if (!isCvvValid()) {
+            setMessage('Invalid CVV. It must be 3 digits.');
+            setMessageType('danger');
+            return false;
+        }
+
+        if (!isNameValid()) {
+            setMessage('Name must only contain letters and spaces.');
+            setMessageType('danger');
+            return false;
+        }
+
         setMessage('');
         setMessageType('');
         return true;
@@ -69,7 +117,6 @@ const Payment = () => {
 
                 const userData = await response.json();
                 setLoggedInUserName(userData.name);
-                
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 setMessage(`Error fetching user data: ${error.message}`);
@@ -79,7 +126,7 @@ const Payment = () => {
 
         fetchUserName();
         const token = getAuthToken();
-console.log("Token from localStorage:", token);
+        console.log("Token from localStorage:", token);
     }, []);
 
     const handleSubmit = async (e) => {
@@ -129,16 +176,14 @@ console.log("Token from localStorage:", token);
             setCvv('');
             setNameOnCard('');
             console.log("cartItems within handleSubmit: ", cartItems)
-            console.log("User Name within handleSubmit: ", loggedInUserName); //CHECK HERE
+            console.log("User Name within handleSubmit: ", loggedInUserName);
 
             await createOrder(cartItems, totalAmount, token, loggedInUserName);
 
-            //  Disable button and show "Redirecting to home..."
-                setIsRedirecting(true);
-
-                setTimeout(() => {
-                    navigate('/home');
-                }, 3000);
+            setIsRedirecting(true);
+            setTimeout(() => {
+                navigate('/home');
+            }, 3000);
 
         } catch (error) {
             console.error('Checkout Error:', error);
@@ -148,6 +193,8 @@ console.log("Token from localStorage:", token);
             setIsLoading(false);
         }
     };
+
+    
 
     const createOrder = async (cartItems, totalAmount, token, userName) => {
         let allSellerNames = "";

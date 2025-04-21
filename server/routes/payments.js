@@ -5,7 +5,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const authenticate = require('../middleware/authenticate');
 const User = require('../models/users.js');
-const transaction = require('../models/transaction.js');
 
 function getNumericUserId(userId) {
     const numericUserId = typeof userId === 'number' ? userId : parseInt(userId, 10);
@@ -142,7 +141,7 @@ router.post('/checkout', authenticate, async (req, res) => {
         }
 
         const sellerUpdatePromises = [];
-        let transactionLogs = [];
+  
 
         for (const [sellerId, payoutAmount] of sellerPayouts.entries()) {
             if (numericBuyerUserId !== sellerId) {
@@ -159,18 +158,7 @@ router.post('/checkout', authenticate, async (req, res) => {
                     { $inc: { revenue: payoutAmount } }
                 ).session(session);
                 sellerUpdatePromises.push(updatePromise);
-
-                transactionLogs.push({
-                    senderId: numericBuyerUserId,
-                    receiverId: sellerId,
-                    senderName: buyerUser.name,
-                    receiverName: sellerUser.name,
-                    amount: payoutAmount,
-                    date: new Date(),
-                    description: `Payment for cart items from seller ${sellerUser.name}`,
-                    status: 'completed',
-                    productName: productName,
-                });
+            
             }
         }
 
@@ -187,10 +175,6 @@ router.post('/checkout', authenticate, async (req, res) => {
                 }
             }
         });
-
-        if (transactionLogs.length > 0) {
-            await transaction.insertMany(transactionLogs, { session });
-        }
 
         await session.commitTransaction();
 
