@@ -71,8 +71,7 @@ export default function UserOrders({ email }) {
         });
     };
     
-    const saveStatus = async (orderNumber, sellerName, newStatus, productName) => {
-        
+    const saveStatus = async (orderNumber, sellerName, newStatus, productName) => {    
         try {
             setIsLoading(true);
             const response = await fetch(`/api/update-order-status/${orderNumber}`, {
@@ -96,7 +95,7 @@ export default function UserOrders({ email }) {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ productName, sellerName, isOrdered: false }),
+                        body: JSON.stringify({ productName, seller: sellerName, isOrdered: false }),
                     });
     
                     const updateData = await res.json();
