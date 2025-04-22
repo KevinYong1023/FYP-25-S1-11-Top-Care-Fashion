@@ -40,7 +40,9 @@ export default function ManagerUsersIndividual() {
         const data = await response.json();
         setUserData(data); // Save the user data
         fetchUserProducts(data.email); // Fetch products related to the user's email
-        fetchUserComments(data.name);
+        if(data.name){
+           fetchUserComments(data.name);
+        }
       } catch (err) {
         setError("Server Error: Please Refresh the Page")
         console.error("Error fetching user data:", err);
@@ -173,7 +175,7 @@ export default function ManagerUsersIndividual() {
             </div>
           )}
   
-          {isLoading ? (
+          {isLoading? (
             <div className="text-center mt-5">
               <Spinner animation="border" role="status" variant="primary" />
               <p className="mt-2">Loading...</p>

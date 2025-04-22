@@ -79,12 +79,13 @@ function App() {
 
     // Save state changes to localStorage when values update
     useEffect(() => {
+        localStorage.setItem("userEmail", userEmail);
         localStorage.setItem("email", email);
         localStorage.setItem("role", role);
         localStorage.setItem("login", login);
         localStorage.setItem("name", name);
         localStorage.setItem("address", address);
-    }, [email, role, login, name, address]);
+    }, [userEmail,email, role, login, name, address]);
 
     return ( 
         <AuthContext.Provider value={{ login, setLogin, role, setRole, email, setEmail, name, setName, address, setAddress,userEmail, setUserEmail}}>
