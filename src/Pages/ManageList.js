@@ -48,10 +48,11 @@ const ManageList = ({ email }) => {
       const res = await fetch(`/api/products/${product._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(product),
+        body: JSON.stringify({
         title: product.title,
         description: product.description,
-        price: product.price,
+        price: product.price
+      })
       });
 
       if (res.ok) {

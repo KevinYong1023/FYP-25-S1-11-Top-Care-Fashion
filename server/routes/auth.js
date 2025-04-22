@@ -60,7 +60,7 @@ router.post('/register', async (req, res) => {
         };
 
         if (position === 'user') {
-            newUserObject.balance = 0;
+            newUserObject.revenue = 0;
             console.log(`Registering 'user', setting initial balance for ${email}`);
         } else {
             console.log(`Registering '${position}', balance field will be omitted.`);
