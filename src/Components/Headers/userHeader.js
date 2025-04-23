@@ -44,6 +44,7 @@ export default function UserHeader() {
                 <NavDropdown title="Profile" id="profile-dropdown" style={{fontSize: '20px'}}>
                   <NavDropdown.Item as={Link} to="/user-profile">Profile</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/manage-list">Manage Listings</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/your-orders">Your Orders</NavDropdown.Item>
                 </NavDropdown>
                 <Nav.Link as={Link} to="/logout" style={{fontSize: '20px'}}>Logout</Nav.Link>
                 <Nav.Link as={Link} to="/cart" style={{ fontSize: '20px'}}>
