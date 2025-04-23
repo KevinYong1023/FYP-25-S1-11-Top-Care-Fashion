@@ -18,7 +18,6 @@ import UserProfile from "./Pages/UserProfile";
 import TotalTicket from "./Pages/CustomerSupport/TotalTicket";
 import ShippingDetail from "./Pages/ShippingDetail.js";
 import ManageList from "./Pages/ManageList.js";
-import ProfitPage from "./Pages/ProfitPage.js";
 import ViewAccounts from "./Pages/Admin/ViewAccounts";
 import AdminProfile from "./Pages/Admin/AdminProfile.js";
 import AdminCreateAccount from "./Pages/Admin/AdminCreateAccount";
@@ -114,7 +113,6 @@ function App() {
                         <Route path="/upload-product" element={<UploadProduct email={email} />} />
                         <Route path="/shipping-detail" element={<ShippingDetail />} />
                         <Route path="/manage-list" element={<ManageList email={email} />} />
-                        <Route path="/profit-page" element={<ProfitPage />} />
                         <Route path="/view-all-accounts" element={<ViewAccounts/>} />
                         <Route path="/admin-profile" element={<AdminProfile />} />
                         <Route path="/admin-profile-update" element={<AdminProfileUpdate/>} />
