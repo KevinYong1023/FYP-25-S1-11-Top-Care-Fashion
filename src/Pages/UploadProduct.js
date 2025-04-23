@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
-import * as mobilenet from "@tensorflow-models/mobilenet";
-import * as tf from "@tensorflow/tfjs";
+import { loadMobileNetModel } from "../Components/loadMobileNet";
+import { occasionDataset } from "./OccassionDataset";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from 'react-router-dom';  
@@ -62,14 +62,16 @@ const UploadProduct = ({ email }) => {
 
   useEffect(() => {
     const loadModel = async () => {
-      await tf.ready();
-      const loadedModel = await mobilenet.load();
-      setModel(loadedModel);
-      console.log("Model loaded");
+      try {
+        const loadedModel = await loadMobileNetModel();
+        setModel(loadedModel);
+      } catch (error) {
+        alert("Failed to load model, please try again.");
+      }
     };
     loadModel();
   }, []);
-
+  
   const resizeAndConvertToBase64 = (file, maxSize = 800, quality = 0.7) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -107,63 +109,85 @@ const UploadProduct = ({ email }) => {
   };
 
   const classifyImage = async (imageDataUrl) => {
-    if (!imageDataUrl) { 
-        return;
-    } else {   
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.src = imageDataUrl;
-          img.onload = async () => {
-            try {
-              const predictions = await model.classify(img);
-              for (let prediction of predictions) {
-                const className = prediction.className.toLowerCase();
-                console.log("Detected Class:", className);
-                for (const keyword in categoryMap) {
-                  if (className.includes(keyword)) {
-                    resolve(categoryMap[keyword]);
-                    console.log(keyword);
-                    console.log(categoryMap[keyword]);
-                    return;
-                  }
+    if (!imageDataUrl) return;
+  
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = imageDataUrl;
+      img.onload = async () => {
+        try {
+          const predictions = await model.classify(img);
+  
+          let detectedCategory = "Uncategorized";
+          let detectedOccasion = "Unknown";
+  
+          //Object detection prediction 
+          for (let prediction of predictions) {
+            const className = prediction.className.toLowerCase();
+  
+            //Category detection
+            for (const keyword in categoryMap) {
+              if (className.includes(keyword)) {
+                detectedCategory = categoryMap[keyword];
+                break;
+              }
+            }
+  
+            //Occasion detection
+            const classNames = className.split(",");
+            for (const cls of classNames) {
+              const trimmed = cls.trim();
+              for (const keyword in occasionDataset) {
+                if (trimmed.includes(keyword)) {
+                  detectedOccasion = occasionDataset[keyword];
+                  break;
                 }
               }
-              alert("Image provided is not a suitable product, please upload another image");
-              resolve("Uncategorized");
-            } catch (error) {
-              console.error("Error during classification:", error);
-              reject("Error during classification");
+              if (detectedOccasion !== "Unknown") break;
             }
-          };
-          
-          img.onerror = () => {
-            console.error("Error loading the image.");
-            reject("Error loading the image");
-          };
-        });
-      }
+          }
+  
+          if (detectedCategory === "Uncategorized") {
+            alert("Image provided is not a suitable product, please upload another image");
+          }
+  
+          resolve({ category: detectedCategory, occasion: detectedOccasion });
+        } catch (error) {
+          console.error("Error during classification:", error);
+          reject("Error during classification");
+        }
+      };
+  
+      img.onerror = () => {
+        console.error("Error loading the image.");
+        reject("Error loading the image");
+      };
+    });
   };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
+  
     if (!model) {
-      console.log("Model not loaded yet");
       alert("Model is not loaded yet. Please re-upload the image.");
       return;
     }
-
+  
     try {
       const resizedBase64 = await resizeAndConvertToBase64(file);
-      const detectedCategory = await classifyImage(resizedBase64);
+      const { category, occasion } = await classifyImage(resizedBase64);
+      
       setPreviewUrl(resizedBase64);
       setForm((prev) => ({
         ...prev,
-        category: detectedCategory,
+        category,
+        occasion,
         imageUrl: resizedBase64,
       }));
-      console.log("Category is" + form.category);
+  
+      console.log("Category:", category);
+      console.log("Occasion:", occasion);
     } catch (err) {
       console.error("Image processing failed:", err);
       alert("There was a problem processing the image.");
@@ -305,19 +329,12 @@ const UploadProduct = ({ email }) => {
                     <Col md={4}>
                     <Form.Group className="mb-3">
                         <Form.Label>Occasion</Form.Label>
-                        <Form.Select
+                        <Form.Control
+                          type="text"
                           value={form.occasion}
-                          onChange={(e) =>
-                            setForm({ ...form, occasion: e.target.value })
-                          }
-                          required
-                        >
-                          <option value="">Select occasion</option>
-                          <option value="Casual">Casual</option>
-                          <option value="Smart">Smart</option>
-                          <option value="Formal">Formal</option>
-                          <option value="Sport">Sport</option>
-                        </Form.Select>
+                          readOnly
+                          placeholder="Detected automatically"
+                        />
                     </Form.Group>
                     </Col>
                   </Row>
