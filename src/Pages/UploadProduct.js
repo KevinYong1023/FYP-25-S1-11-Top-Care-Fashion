@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Container, Alert, Card, Row, Col, Spinner} from "react-bootstrap";
-import * as mobilenet from "@tensorflow-models/mobilenet";
-import * as tf from "@tensorflow/tfjs";
+import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
+import { loadMobileNetModel } from "../Components/loadMobileNet";
+import { occasionDataset } from "./OccassionDataset";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserHeader from "../Components/Headers/userHeader";
 import { useNavigate } from 'react-router-dom';  
@@ -43,21 +43,17 @@ const UploadProduct = ({ email }) => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [model, setModel] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (email) {
         try {
-          setIsLoading(true)
           const response = await fetch(`/api/user/${email}`);
           const data = await response.json();
           setName(data.name);
           setUserId(data.userId);
         } catch (error) {
           console.error("Error fetching user details:", error);
-        }finally{
-          setIsLoading(false)
         }
       }
     };
@@ -66,18 +62,16 @@ const UploadProduct = ({ email }) => {
 
   useEffect(() => {
     const loadModel = async () => {
-      await tf.ready();
-      setIsLoading(true)
-      const loadedModel = await mobilenet.load();
-      if(loadedModel){
-      setModel(loadedModel);
-      setIsLoading(false)
-      console.log("Model loaded");
-    }
+      try {
+        const loadedModel = await loadMobileNetModel();
+        setModel(loadedModel);
+      } catch (error) {
+        alert("Failed to load model, please try again.");
+      }
     };
     loadModel();
   }, []);
-
+  
   const resizeAndConvertToBase64 = (file, maxSize = 800, quality = 0.7) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -115,72 +109,88 @@ const UploadProduct = ({ email }) => {
   };
 
   const classifyImage = async (imageDataUrl) => {
-    if (!imageDataUrl) { 
-        return;
-    } else {   
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.src = imageDataUrl;
-          img.onload = async () => {
-            try {
-              setIsLoading(true)
-              const predictions = await model.classify(img);
-              for (let prediction of predictions) {
-                const className = prediction.className.toLowerCase();
-                console.log("Detected Class:", className);
-                for (const keyword in categoryMap) {
-                  if (className.includes(keyword)) {
-                    resolve(categoryMap[keyword]);
-                    console.log(keyword);
-                    console.log(categoryMap[keyword]);
-                    return;
-                  }
+    if (!imageDataUrl) return;
+  
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = imageDataUrl;
+      img.onload = async () => {
+        try {
+          const predictions = await model.classify(img);
+  
+          let detectedCategory = "Uncategorized";
+          let detectedOccasion = "Unknown";
+  
+          //Object detection prediction 
+          for (let prediction of predictions) {
+            const className = prediction.className.toLowerCase();
+  
+            //Category detection
+            for (const keyword in categoryMap) {
+              if (className.includes(keyword)) {
+                detectedCategory = categoryMap[keyword];
+                break;
+              }
+            }
+  
+            //Occasion detection
+            const classNames = className.split(",");
+            for (const cls of classNames) {
+              const trimmed = cls.trim();
+              for (const keyword in occasionDataset) {
+                if (trimmed.includes(keyword)) {
+                  detectedOccasion = occasionDataset[keyword];
+                  break;
                 }
               }
-              alert("Image provided is not a suitable product, please upload another image");
-              resolve("Uncategorized");
-            } catch (error) {
-              console.error("Error during classification:", error);
-              reject("Error during classification");
-            }finally{
-              setIsLoading(false)
+              if (detectedOccasion !== "Unknown") break;
             }
-          };
-          
-          img.onerror = () => {
-            console.error("Error loading the image.");
-            reject("Error loading the image");
-          };
-        });
-      }
+          }
+  
+          if (detectedCategory === "Uncategorized") {
+            alert("Image provided is not a suitable product, please upload another image");
+          }
+  
+          resolve({ category: detectedCategory, occasion: detectedOccasion });
+        } catch (error) {
+          console.error("Error during classification:", error);
+          reject("Error during classification");
+        }
+      };
+  
+      img.onerror = () => {
+        console.error("Error loading the image.");
+        reject("Error loading the image");
+      };
+    });
   };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
+  
     if (!model) {
-      console.log("Model not loaded yet");
       alert("Model is not loaded yet. Please re-upload the image.");
       return;
     }
-
+  
     try {
-      setIsLoading(true)
       const resizedBase64 = await resizeAndConvertToBase64(file);
-      const detectedCategory = await classifyImage(resizedBase64);
+      const { category, occasion } = await classifyImage(resizedBase64);
+      
       setPreviewUrl(resizedBase64);
       setForm((prev) => ({
         ...prev,
-        category: detectedCategory,
+        category,
+        occasion,
         imageUrl: resizedBase64,
       }));
-      console.log("Category is" + form.category);
+  
+      console.log("Category:", category);
+      console.log("Occasion:", occasion);
     } catch (err) {
       console.error("Image processing failed:", err);
       alert("There was a problem processing the image.");
-    }finally{
-      setIsLoading(false)
     }
   };
 
@@ -211,15 +221,10 @@ const UploadProduct = ({ email }) => {
       userId
     };
 
-    const token = localStorage.getItem("token");
     try {
-      setIsLoading(true)
       const res = await fetch("/api/products", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-        Authorization: `Bearer ${token}` // 👈 Add this line
-      },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData)
       });
 
@@ -239,21 +244,13 @@ const UploadProduct = ({ email }) => {
     } catch (err) {
       console.error(err);
       setError("Server error");
-    }finally{
-      setIsLoading(false)
     }
   };
 
   return (
     <>
-      <UserHeader loginStatus={true} />               
+      <UserHeader loginStatus={true} />
       <Container className="mt-4">
-      {isLoading ?
-        <div className="text-center mt-5">
-                   <Spinner animation="border" role="status" variant="primary" />
-                   <p className="mt-2">Loading...</p>
-                 </div>
-      :<>
         <Card>
           <Card.Body>
             <Row>
@@ -265,6 +262,7 @@ const UploadProduct = ({ email }) => {
                       src={previewUrl}
                       alt="Preview"
                       className="img-thumbnail mt-2"
+                      style={{ width: "100%", objectFit: "cover", maxHeight: "300px" }}
                     />
                     <div className="text-muted mt-2" style={{ fontSize: "0.9rem" }}>
                       Dimensions: {imageInfo.width} × {imageInfo.height}px<br />
@@ -331,19 +329,12 @@ const UploadProduct = ({ email }) => {
                     <Col md={4}>
                     <Form.Group className="mb-3">
                         <Form.Label>Occasion</Form.Label>
-                        <Form.Select
+                        <Form.Control
+                          type="text"
                           value={form.occasion}
-                          onChange={(e) =>
-                            setForm({ ...form, occasion: e.target.value })
-                          }
-                          required
-                        >
-                          <option value="">Select occasion</option>
-                          <option value="Casual">Casual</option>
-                          <option value="Smart">Smart</option>
-                          <option value="Formal">Formal</option>
-                          <option value="Sport">Sport</option>
-                        </Form.Select>
+                          readOnly
+                          placeholder="Detected automatically"
+                        />
                     </Form.Group>
                     </Col>
                   </Row>
@@ -366,7 +357,6 @@ const UploadProduct = ({ email }) => {
             </Row>
           </Card.Body>
         </Card>
-        </>}
       </Container>
     </>
   );
