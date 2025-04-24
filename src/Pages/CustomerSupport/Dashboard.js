@@ -158,11 +158,11 @@ export default function Dashboard() {
 >
   <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
     <tr>
-      <th>Ticket No.</th>
-      <th>User</th>
-      <th>Status</th>
-      <th>Created</th>
-      <th>Action</th>
+      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Ticket No.</th>
+      <th style={{ backgroundColor: "#6b705c", color: "white" }}>User</th>
+      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
+      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Created</th>
+      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Action</th>
     </tr>
   </thead>
   <tbody>

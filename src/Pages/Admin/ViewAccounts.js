@@ -245,14 +245,14 @@ export default function ViewAccounts() {
                 >
                   <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
                     <tr>
-                      <th>Name</th>
-                      <th>Username</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Position</th>
-                      <th>Created At</th>
-                      <th>Status</th>
-                      <th>Actions</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Name</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Username</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Email</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Phone</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Position</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Created At</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
+                      <th style={{ backgroundColor: "#6b705c", color: "white" }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>

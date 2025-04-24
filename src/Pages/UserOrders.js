@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Spinner, Col, Card, Button, Form } from 'react-bootstrap';
+import { Container, Spinner, Pagination, Button, Form } from 'react-bootstrap';
 import UserHeader from '../Components/Headers/userHeader';
 import { useNavigate } from 'react-router-dom';
 
@@ -85,9 +85,7 @@ export default function UserOrders({ email }) {
             const data = await response.json();
             if (!response.ok) {
                 alert(data.message || "Failed to update order status");
-            } else {
-                alert("Order status updated");
-    
+            } else {    
                 // Only update product status if seller marked it as Delivered
                 if (newStatus === "Delivered") {
                     const res = await fetch(`/api/products/update-product-status`, {
@@ -103,8 +101,6 @@ export default function UserOrders({ email }) {
                     if (!res.ok) {
                         console.error("Failed to update product:", updateData.message);
                         alert(`Product status update failed: ${updateData.message}`);
-                    }else{
-                        alert("isOrdered status updated")
                     }
                 }
     
@@ -139,13 +135,13 @@ export default function UserOrders({ email }) {
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Order No.</th>
-                            <th>Seller</th>
-                            <th>Product</th>
-                            <th>Date</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order No.</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Seller</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Total</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,9 +156,22 @@ export default function UserOrders({ email }) {
                                     <td>{item.status}</td>
                                     <td>
                                         <Button
-                                            variant="primary"
                                             size="sm"
                                             onClick={() => createTicket(row.orderNumber)}
+                                            style={{
+                                                backgroundColor: "#97a97c",
+                                                borderColor: "#97a97c",
+                                                color: "white",
+                                                transition: "background-color 0.3s ease",
+                                              }}
+                                              onMouseOver={(e) => {
+                                                e.target.style.backgroundColor = "#85986c";
+                                                e.target.style.borderColor = "#85986c";
+                                              }}
+                                              onMouseOut={(e) => {
+                                                e.target.style.backgroundColor = "#97a97c";
+                                                e.target.style.borderColor = "#97a97c";
+                                              }}
                                         >
                                             Raise a Ticket
                                         </Button>
@@ -177,14 +186,14 @@ export default function UserOrders({ email }) {
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Order No.</th>
-                            <th>Buyer</th>
-                            <th>Product</th>
-                            <th>Product Price</th>
-                            <th>Date</th>
-                            <th>Order Total</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order No.</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Buyer</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product Price</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order Total</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -216,7 +225,21 @@ export default function UserOrders({ email }) {
                                                { item.status === "Delivered" ?<></> :
                                             <>
                                             <Button
-                                                variant="primary"
+                                                    className="me-2"
+                                                style={{
+                                                    backgroundColor: "#97a97c",
+                                                    borderColor: "#97a97c",
+                                                    color: "white",
+                                                    transition: "background-color 0.3s ease",
+                                                  }}
+                                                  onMouseOver={(e) => {
+                                                    e.target.style.backgroundColor = "#85986c";
+                                                    e.target.style.borderColor = "#85986c";
+                                                  }}
+                                                  onMouseOut={(e) => {
+                                                    e.target.style.backgroundColor = "#97a97c";
+                                                    e.target.style.borderColor = "#97a97c";
+                                                  }}
                                                 size="sm"
                                                 onClick={() =>
                                                     saveStatus(
@@ -230,7 +253,20 @@ export default function UserOrders({ email }) {
                                                 Update Status
                                             </Button>
                                             <Button
-                                                variant="primary"
+                                                style={{
+                                                    backgroundColor: "#97a97c",
+                                                    borderColor: "#97a97c",
+                                                    color: "white",
+                                                    transition: "background-color 0.3s ease",
+                                                  }}
+                                                  onMouseOver={(e) => {
+                                                    e.target.style.backgroundColor = "#85986c";
+                                                    e.target.style.borderColor = "#85986c";
+                                                  }}
+                                                  onMouseOut={(e) => {
+                                                    e.target.style.backgroundColor = "#97a97c";
+                                                    e.target.style.borderColor = "#97a97c";
+                                                  }}
                                                 size="sm"
                                                 onClick={() => createTicket(row.orderNumber)}
                                             >

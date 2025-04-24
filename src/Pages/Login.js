@@ -109,12 +109,20 @@ const Login = () => {
             Login
           </Button>
         </Form>
-        <p className="mt-3">
-          Don't have an account? <a href="/register" style={{ fontWeight: 'bold'}}>Register here</a>
-        </p>
-        <p className="mt-3">
-          Forgot Password? <a href="/reset-password" style={{ fontWeight: 'bold'}}>Reset here</a>
-        </p>
+        <div className="mt-3 text-center">
+          <p style={{ marginBottom: "6px" }}>
+            Don't have an account?{" "}
+            <a href="/register" style={{ fontWeight: "bold", color: "#6f4e37", textDecoration: "none" }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>
+              Register here
+            </a>
+          </p>
+          <p style={{ marginBottom: "0px" }}>
+            Forgot Password?{" "}
+            <a href="/reset-password" style={{ fontWeight: "bold", color: "#6f4e37", textDecoration: "none" }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>
+              Reset here
+            </a>
+          </p>
+        </div>
       </Container>
     </>
   );

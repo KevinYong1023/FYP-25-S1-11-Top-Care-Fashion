@@ -3,7 +3,7 @@ body {
   font-family: "Cambria Math", "Latin Modern Math", "STIX Math", serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size:large !important;
+  background-color: #F9F6F0	 !important;
 }
 
 code {

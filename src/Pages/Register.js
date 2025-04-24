@@ -257,7 +257,8 @@ const Register = () => {
                     </Button>
                 </Form>
                 <p className="mt-3">
-                    Already have an account? <a href="/login" style={{ fontWeight: 'bold'}}>Login here</a>
+                    Already have an account? <a href="/login" style={{ fontWeight: "bold", color: "#6f4e37", textDecoration: "none" }} onMouseOver={e => e.target.style.textDecoration = 'underline'} onMouseOut={e => e.target.style.textDecoration = 'none'}>Login here</a>
+                    
                 </p>
             </Container>
         </>
