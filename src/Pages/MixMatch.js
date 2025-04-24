@@ -76,6 +76,10 @@ const MixMatch = () => {
           if (detectedOccasion !== "Unknown") break;
         }
 
+        if(detectedOccasion === "Unknown"){
+          alert("Image provided could not be identified, please choose another image or select an occasion below")
+        }
+        
         setOccasion(detectedOccasion);
         setLoading(false);
       };
@@ -147,41 +151,35 @@ const MixMatch = () => {
           <Row>
             {/* LEFT SIDE: Inputs */}
             <Col md={5} className="border-end pe-4">
-              <Form onSubmit={handleMixMatch}>
+              
                 <Form.Group className="mb-3">
                   <h4><strong>Upload Clothing Item Picture</strong></h4>
                   <Form.Control type="file" accept="image/*" onChange={handleImageUpload} />
                 </Form.Group>
   
-                <div className="mb-3">
-                  <h5><strong>Detected Occasion:</strong> {occasion || "None"}</h5>
-                  <div className="mb-4">
-                <h5><strong>Image Preview</strong></h5>
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="img-thumbnail mt-2"
-                    width={"450px"} height={"450px"}
-                  />
-                ) : (
-                  <div className="text-muted mt-3">No image selected.</div>
-                )}
-              </div>
-  
-                  <Button type="submit" variant="primary">Mix & Match</Button>
-                </div>
-              </Form>
+                <div className="mb-4">
+                  <h5><strong>Image Preview</strong></h5>
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt="Preview"
+                      className="img-thumbnail mt-2"
+                      width={"450px"} height={"450px"}
+                    />
+                  ) : (
+                    <div className="text-muted mt-3">No image selected.</div>
+                  )}
+                  </div>
+                <h5><strong>Detected Occasion:</strong> {occasion || "None"}</h5>
   
               <div className="mt-4">
-                <p><strong>Incorrect? Choose the occasion manually:</strong></p>
+                <h4><strong>Not the occasion you want? Select the occasion here:</strong></h4>
                 <Form.Group className="mb-3">
                   <Form.Label>Occasion</Form.Label>
                   <Form.Select
                     name="selectOccasion"
                     value={selectOccasion.occasion}
                     onChange={(e) =>{ 
-                        setImageUrl(null)
                         setForm({ ...selectOccasion, occasion: e.target.value })
                         setOutfit([])
                     }}
@@ -194,6 +192,10 @@ const MixMatch = () => {
                   </Form.Select>
                 </Form.Group>
               </div>
+
+              <Form onSubmit={handleMixMatch}>
+                  <Button type="submit" variant="primary">Mix & Match</Button>
+              </Form>
             </Col>
   
             {/* RIGHT SIDE: Preview + Outfit */}
@@ -214,22 +216,23 @@ const MixMatch = () => {
                             />
                           </Col>
 
-            {/* Right: Details */}
-            <Col md={8} lg={9}>
-              <h5>{item.title}</h5>
-              <p className="mb-1"><strong>Category:</strong> {item.category}</p>
-              <p className="mb-1"><strong>Price:</strong> ${item.price}</p>
-             <Button style={{ backgroundColor: '#6f4e37', borderColor: '#6f4e37'}} href={`/productpage/${item._id}`}>
-                                   View Product
-                </Button>
-            </Col>
-          </Row>
-        </Card>
-      ))}
-    </div>
-  ) : (
-    <div className="text-muted">No matching outfit found for this occasion.</div>
-  )}
+                          {/* Right: Details */}
+                          <Col md={8} lg={9}>
+                            <h5>{item.title}</h5>
+                            <p className="mb-1"><strong>Category:</strong> {item.category}</p>
+                            <p className="mb-1"><strong>Price:</strong> ${item.price}</p>
+                            <Button style={{ backgroundColor: '#6f4e37', borderColor: '#6f4e37'}} 
+                                            href={`/productpage/${item._id}`}>
+                              View Product
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Card>
+                        ))}
+                    </div>
+                  ) : (
+                      <div className="text-muted">No matching outfit found for this occasion.</div>
+                  )}
               </div>
             </Col>
           </Row>
