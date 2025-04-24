@@ -169,6 +169,7 @@ const ManageList = ({ email }) => {
                       <Form.Control
                         type="text"
                         value={product.title}
+                        disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "title", e.target.value)}
                         style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
                       />
@@ -178,6 +179,7 @@ const ManageList = ({ email }) => {
                         as="textarea"
                         rows={2}
                         value={product.description}
+                        disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "description", e.target.value)}
                         style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
                       />
@@ -186,6 +188,7 @@ const ManageList = ({ email }) => {
                       <Form.Control
                         type="number"
                         value={product.price}
+                        disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "price", e.target.value)}
                         style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
                       />
@@ -193,7 +196,7 @@ const ManageList = ({ email }) => {
                     <td className="text-center">
                       <Button
                         variant="success"
-                        size="sm"
+                        size="lg"
                         disabled={product.isOrdered}
                         onClick={() => handleUpdate(product)}
                         className="me-2"
@@ -203,7 +206,7 @@ const ManageList = ({ email }) => {
                       </Button>
                       <Button
                         variant="danger"
-                        size="sm"
+                        size="lg"
                         disabled={product.isOrdered}
                         onClick={() => handleDelete(product._id)}
                         style={{ fontSize: "16px" }}
