@@ -51,7 +51,7 @@ const commentData = async () => {
     { $set: { value: counter.value } }
   );
 
-  console.log(`${comments.length} comments created and counter updated.`);
+  console.log(`${comments.length} comments created.`);
 };
 
 export { commentData };

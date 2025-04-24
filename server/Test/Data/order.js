@@ -91,6 +91,16 @@ const orderData = async () => {
   // Save to DB
   await Order.insertMany(orders);
 
+  // Update isOrdered = true for all ordered products
+  const orderedProductTitles = orders.flatMap(order =>
+    order.seller.map(item => item.productName)
+  );
+
+  await Product.updateMany(
+    { title: { $in: orderedProductTitles } },
+    { $set: { isOrdered: true } }
+  );
+
   await Counter.findOneAndUpdate(
     { name: 'orderNumber' },
     { $set: { value: counter.value } }
