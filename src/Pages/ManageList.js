@@ -108,7 +108,7 @@ const ManageList = ({ email }) => {
     <>
       <UserHeader loginStatus={true} />
       <div className="mt-4 px-3">
-        <h2>Manage Listings</h2>
+        <h2 style={{ fontWeight:'bold' , color: '#6f4e37' }}>Manage Listings</h2>
   
         {message && <Alert variant="info">{message}</Alert>}
         {error && (

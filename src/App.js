@@ -91,8 +91,8 @@ function App() {
             <CartProvider email={email}>
                 <Router>
                     <Routes>
+                        <Route path="/" element={<Navigate to="/home" replace />} />
                         <Route path="/home" element={<Home email={email}  />} />
-                        <Route path="/" element={<Navigate to="/login" replace />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login setLogin={setLogin} />} />
                         <Route path="/reset-password" element={<ResetPassword/>}/>
