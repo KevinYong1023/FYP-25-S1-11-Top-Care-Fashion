@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile = ({ email, setName, setAddress }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    const [revenue, setRevenue] = useState(0); // 
+    const [revenue, setRevenue] = useState(0); 
 
     useEffect(() => {
         const fetchUserDetails = async () => {
