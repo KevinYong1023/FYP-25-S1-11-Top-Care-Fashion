@@ -138,8 +138,9 @@ export default function UserOrders({ email }) {
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order No.</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Seller</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product Price</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date</th>
-                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Total</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order Total</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Action</th>
                         </tr>
@@ -151,6 +152,7 @@ export default function UserOrders({ email }) {
                                     <td>{row.orderNumber}</td>
                                     <td>{item.sellerName}</td>
                                     <td>{item.productName}</td>
+                                    <td>{item.price}</td>
                                     <td>{new Date(row.created).toLocaleString()}</td>
                                     <td>{row.total}</td>
                                     <td>{item.status}</td>
