@@ -182,10 +182,11 @@ const ProductPage = ({ email }) => {
               
                   <span className="d-inline-block">
                     <Button
-                      variant="primary"
                       onClick={handleAddToCart}
                       disabled={email === product.email || !login || product.isOrdered}
-                      style={email === product.email ? { pointerEvents: "none" } : {}}
+                      style={email === product.email ? { pointerEvents: "none",  backgroundColor: "#97a97c",
+                        borderColor: "#97a97c", } : {  backgroundColor: "#97a97c",
+                        borderColor: "#97a97c",}}
                     >
                       Add to Cart
                     </Button>
@@ -225,7 +226,7 @@ const ProductPage = ({ email }) => {
                 onChange={(e) => setComment(e.target.value)}                
               />
             </Form.Group>
-            <Button variant="primary" type="submit"  className="mt-2">Submit Comment</Button>
+            <Button style={{  backgroundColor: "#97a97c", borderColor: "#97a97c"}} type="submit"  className="mt-2">Submit Comment</Button>
           </Form></>)}
         </div>
         </Row>) : (

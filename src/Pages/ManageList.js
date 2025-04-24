@@ -171,7 +171,7 @@ const ManageList = ({ email }) => {
                         value={product.title}
                         disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "title", e.target.value)}
-                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
+                       style={{ border:"2px solid black" }}
                       />
                     </td>
                     <td>
@@ -181,7 +181,7 @@ const ManageList = ({ email }) => {
                         value={product.description}
                         disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "description", e.target.value)}
-                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
+                       style={{ border:"2px solid black" }}
                       />
                     </td>
                     <td>
@@ -190,7 +190,7 @@ const ManageList = ({ email }) => {
                         value={product.price}
                         disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "price", e.target.value)}
-                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
+                        style={{ border:"2px solid black" }}
                       />
                     </td>
                     <td className="text-center">

@@ -164,7 +164,7 @@ const MixMatch = () => {
                       src={imageUrl}
                       alt="Preview"
                       className="img-thumbnail mt-2"
-                      width={"450px"} height={"450px"}
+                      width={"300px"} height={"300px"}
                     />
                   ) : (
                     <div className="text-muted mt-3">No image selected.</div>
