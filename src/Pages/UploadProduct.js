@@ -43,21 +43,17 @@ const UploadProduct = ({ email }) => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [model, setModel] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (email) {
         try {
-          setIsLoading(true)
           const response = await fetch(`/api/user/${email}`);
           const data = await response.json();
           setName(data.name);
           setUserId(data.userId);
         } catch (error) {
           console.error("Error fetching user details:", error);
-        }finally{
-          setIsLoading(false)
         }
       }
     };
@@ -179,7 +175,6 @@ const UploadProduct = ({ email }) => {
     }
   
     try {
-      setIsLoading(true)
       const resizedBase64 = await resizeAndConvertToBase64(file);
       const { category, occasion } = await classifyImage(resizedBase64);
       
@@ -196,8 +191,6 @@ const UploadProduct = ({ email }) => {
     } catch (err) {
       console.error("Image processing failed:", err);
       alert("There was a problem processing the image.");
-    }finally{
-      setIsLoading(false)
     }
   };
 
@@ -228,15 +221,10 @@ const UploadProduct = ({ email }) => {
       userId
     };
 
-    const token = localStorage.getItem("token");
     try {
-      setIsLoading(true)
       const res = await fetch("/api/products", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-        Authorization: `Bearer ${token}` // 👈 Add this line
-      },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData)
       });
 
@@ -256,21 +244,13 @@ const UploadProduct = ({ email }) => {
     } catch (err) {
       console.error(err);
       setError("Server error");
-    }finally{
-      setIsLoading(false)
     }
   };
 
   return (
     <>
-      <UserHeader loginStatus={true} />               
+      <UserHeader loginStatus={true} />
       <Container className="mt-4">
-      {isLoading ?
-        <div className="text-center mt-5">
-                   <Spinner animation="border" role="status" variant="primary" />
-                   <p className="mt-2">Loading...</p>
-                 </div>
-      :<>
         <Card>
           <Card.Body>
             <Row>
@@ -282,6 +262,7 @@ const UploadProduct = ({ email }) => {
                       src={previewUrl}
                       alt="Preview"
                       className="img-thumbnail mt-2"
+                      style={{ width: "100%", objectFit: "cover", maxHeight: "300px" }}
                     />
                     <div className="text-muted mt-2" style={{ fontSize: "0.9rem" }}>
                       Dimensions: {imageInfo.width} × {imageInfo.height}px<br />
@@ -376,7 +357,6 @@ const UploadProduct = ({ email }) => {
             </Row>
           </Card.Body>
         </Card>
-        </>}
       </Container>
     </>
   );
