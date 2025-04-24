@@ -48,7 +48,7 @@ const UserProfile = ({ email, setName, setAddress }) => {
                         <Row>
                             <Col md={6}>
                                 <Card className="p-4 mb-4 border-0 shadow">
-                                    <h2 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Profile Details</h2>
+                                    <h3 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Profile Details</h3>
                                     <h4 style={ {fontFamily: 'Math' }}>Username: {user.username}</h4>
                                     <h4 style={ { fontFamily: 'Math' }}>Name: {user.name}</h4>
                                     <h4 style={ { fontFamily: 'Math' }}>Email: {user.email}</h4>
@@ -59,13 +59,13 @@ const UserProfile = ({ email, setName, setAddress }) => {
                             </Col>
                             <Col>
                             <Card className="p-4 mb-4 border-0 shadow">
-                            <h2 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Revenue Earned</h2>
-                            <div className="revenue-amount">${user.revenue?.toFixed(2) || "0.00"}</div>
+                            <h3 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Revenue Earned</h3>
+                            <h4 className="revenue-amount">${user.revenue?.toFixed(2) || "0.00"}</h4>
                             </Card>
                             </Col>
                             <Col md={6}>
                                 <Card className="p-4 mb-4 border-0 shadow">
-                                    <h2 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Shipping Details</h2>
+                                    <h3 style={ {fontFamily: 'Math' , fontWeight:'bold' , color: '#6f4e37' }}>Shipping Details</h3>
                                     <h4 style={ {fontFamily: 'Math' }}>Name: {user.name}</h4>
                                     <h4 style={ {fontFamily: 'Math' }}>Phone: {user.phone}</h4>
                                     <h4 style={ {fontFamily: 'Math' }}>Email: {user.email}</h4>

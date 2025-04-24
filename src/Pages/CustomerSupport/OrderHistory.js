@@ -109,14 +109,14 @@ export default function OrderHistory() {
                     }}>
                                         <thead>
                                             <tr>
-                                                <th>Order ID</th>
-                                                <th>Status</th>
-                                                <th>Seller</th>
-                                                <th>Products</th>
-                                                <th>Each Products Price</th>
-                                                <th>Total</th>
-                                                <th>Date Purchase</th>
-                                                <th>Buyer</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order ID</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Seller</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Products</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Each Products Price</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Total</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date Purchase</th>
+                                                <th style={{ backgroundColor: "#6b705c", color: "white" }}>Buyer</th>
                                             </tr>
                                         </thead>
                                         <tbody>

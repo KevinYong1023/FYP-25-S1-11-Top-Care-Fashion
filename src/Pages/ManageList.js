@@ -36,10 +36,17 @@ const ManageList = ({ email }) => {
   const handleChange = (index, field, value) => {
     setMessage("");
     setError("");
-    const updated = [...products];
-    updated[index][field] = value;
-    setProducts(updated);
+  
+    const actualIndex = (currentPage - 1) * productsPerPage + index;
+  
+    setProducts((prevProducts) =>
+      prevProducts.map((product, i) =>
+        i === actualIndex ? { ...product, [field]: value } : product
+      )
+    );
   };
+  
+  
 
   const handleUpdate = async (product) => {
     const updateCheck = product.price && product.title && product.description
@@ -117,22 +124,20 @@ const ManageList = ({ email }) => {
           </div>
         ) : (
           <>
-            <Table bordered hover responsive style={{ fontSize: "20px" }}>
-              <thead
-                style={{
-                  background: "linear-gradient(to right, #dfe9f3, #ffffff)",
-                  fontWeight: "bold",
-                  color: "#333",
-                  fontSize: "20px"
-                }}
+              <Table
+              bordered
+              hover
+              responsive
               >
-                <tr className="text-center" >
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Price ($)</th>
-                  <th>Actions</th>
+              <thead
+              >
+                <tr className="text-center">
+                  <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product</th>
+                  <th style={{ backgroundColor: "#6b705c", color: "white" }}>Category</th>
+                  <th style={{ backgroundColor: "#6b705c", color: "white" }}>Title</th>
+                  <th style={{ backgroundColor: "#6b705c", color: "white" }}>Description</th>
+                  <th style={{ backgroundColor: "#6b705c", color: "white" }}>Price ($)</th>
+                  <th style={{ backgroundColor: "#6b705c", color: "white" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -140,21 +145,24 @@ const ManageList = ({ email }) => {
                   <tr
                     key={product._id}
                     style={{
-                      backgroundColor: index % 2 === 0 ? "#f8f9fa" : "#ffffff",
+                      backgroundColor:"white",
                       verticalAlign: "middle",
                       borderBottom: "1px solid #dee2e6"
                     }}
                   >
                     <td width="180px" className="text-center">
-                      <Image
-                        src={product.imageUrl}
-                        alt="Product"
-
-                        rounded
-                        onError={(e) =>
-                          (e.target.src = "https://via.placeholder.com/120")
-                        }
-                      />
+                    <Image
+                    src={product.imageUrl}
+                    alt="Product"
+                    rounded
+                    fluid
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      objectFit: "cover", // Ensures images fill container without distortion
+                    }}
+                    onError={(e) => (e.target.src = "https://via.placeholder.com/100")}
+                  />
                     </td>
                     <td className="text-capitalize text-center">{product.category}</td>
                     <td>
@@ -162,7 +170,7 @@ const ManageList = ({ email }) => {
                         type="text"
                         value={product.title}
                         onChange={(e) => handleChange(index, "title", e.target.value)}
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
                       />
                     </td>
                     <td>
@@ -171,7 +179,7 @@ const ManageList = ({ email }) => {
                         rows={2}
                         value={product.description}
                         onChange={(e) => handleChange(index, "description", e.target.value)}
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
                       />
                     </td>
                     <td>
@@ -179,7 +187,7 @@ const ManageList = ({ email }) => {
                         type="number"
                         value={product.price}
                         onChange={(e) => handleChange(index, "price", e.target.value)}
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
                       />
                     </td>
                     <td className="text-center">
@@ -189,7 +197,7 @@ const ManageList = ({ email }) => {
                         disabled={product.isOrdered}
                         onClick={() => handleUpdate(product)}
                         className="me-2"
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: "16px" }}
                       >
                         Update
                       </Button>
@@ -198,7 +206,7 @@ const ManageList = ({ email }) => {
                         size="sm"
                         disabled={product.isOrdered}
                         onClick={() => handleDelete(product._id)}
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: "16px" }}
                       >
                         Delete
                       </Button>

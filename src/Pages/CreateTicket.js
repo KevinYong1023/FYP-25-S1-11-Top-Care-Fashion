@@ -91,7 +91,20 @@ export default function CreateTicket({ email }) {
                             placeholder="Describe your issue here"
                         />
                     </Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button  style={{
+                                                    backgroundColor: "#97a97c",
+                                                    borderColor: "#97a97c",
+                                                    color: "white",
+                                                    transition: "background-color 0.3s ease",
+                                                  }}
+                                                  onMouseOver={(e) => {
+                                                    e.target.style.backgroundColor = "#85986c";
+                                                    e.target.style.borderColor = "#85986c";
+                                                  }}
+                                                  onMouseOut={(e) => {
+                                                    e.target.style.backgroundColor = "#97a97c";
+                                                    e.target.style.borderColor = "#97a97c";
+                                                  }} type="submit">
                         Submit Ticket
                     </Button>
                   

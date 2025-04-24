@@ -206,10 +206,10 @@ export default function ManagerUsersIndividual() {
                   >
                     <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
                       <tr>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Date Posted</th>
+                        <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product Name</th>
+                        <th style={{ backgroundColor: "#6b705c", color: "white" }}>Price</th>
+                        <th style={{ backgroundColor: "#6b705c", color: "white" }}>Description</th>
+                        <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date Posted</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -245,9 +245,9 @@ export default function ManagerUsersIndividual() {
                   >
                     <thead style={{ backgroundColor: '#a5a58d', color: '#ffffff' }}>
                       <tr>
-                        <th>Product Name</th>
-                        <th>Description</th>
-                        <th>Date Posted</th>
+                        <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product Name</th>
+                        <th style={{ backgroundColor: "#6b705c", color: "white" }}>Description</th>
+                        <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date Posted</th>
                         <th className="text-center">Action</th>
                       </tr>
                     </thead>
