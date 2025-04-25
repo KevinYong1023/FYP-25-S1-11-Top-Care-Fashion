@@ -305,7 +305,7 @@ const Payment = () => {
         <>
             <UserHeader loginStatus={isLoggedIn()} />
             <Container className="mt-4 payment-page-container">
-                <h1>Confirm Payment</h1>
+                <h1 style={{color: '#6f4e37'}}>Confirm Payment</h1>
                 <Row>
                     <Col md={7}>
                         <h2>Order Summary</h2>
@@ -333,25 +333,25 @@ const Payment = () => {
                             <fieldset className="fake-card-details mb-3" disabled={isLoading || !canSubmit}>
                                 <legend>Card Details</legend>
                                 <Form.Group controlId="cardNumber" className="mb-2">
-                                    <Form.Label>Card Number</Form.Label>
+                                    <Form.Label style={{fontWeight: 'bold'}}>Card Number</Form.Label>
                                     <Form.Control type="text" placeholder="xxxx xxxx xxxx xxxx" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} disabled={isLoading || !canSubmit} required />
                                 </Form.Group>
                                 <Row>
                                     <Col>
                                         <Form.Group controlId="expirationDate" className="mb-2">
-                                            <Form.Label>Expiration (MM/YY)</Form.Label>
+                                            <Form.Label style={{fontWeight: 'bold'}}>Expiration (MM/YY)</Form.Label>
                                             <Form.Control type="text" placeholder="MM/YY" value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} disabled={isLoading || !canSubmit} required />
                                         </Form.Group>
                                     </Col>
                                     <Col>
                                         <Form.Group controlId="cvv" className="mb-2">
-                                            <Form.Label>CVV</Form.Label>
+                                            <Form.Label style={{fontWeight: 'bold'}}>CVV</Form.Label>
                                             <Form.Control type="text" placeholder="123" value={cvv} onChange={(e) => setCvv(e.target.value)} disabled={isLoading || !canSubmit} maxLength={3} required />
                                         </Form.Group>
                                     </Col>
                                 </Row>
                                 <Form.Group controlId="nameOnCard" className="mb-3">
-                                    <Form.Label>Name on Card</Form.Label>
+                                    <Form.Label style={{fontWeight: 'bold'}}>Name on Card</Form.Label>
                                     <Form.Control type="text" placeholder="Enter name" value={nameOnCard} onChange={(e) => setNameOnCard(e.target.value)} disabled={isLoading || !canSubmit} required />
                                 </Form.Group>
                             </fieldset>
@@ -363,15 +363,15 @@ const Payment = () => {
                             )}
                             {
                                  <Button
-                                 variant="primary"
+                                 style={{backgroundColor: '#0077b6', borderColor:'#0077b6'}}
                                  type="submit"
-                                 disabled={isLoading || isRedirecting} // ✅ this disables the button properly
-                                 className="mt-3 w-100"
+                                 disabled={isLoading || isRedirecting} 
+                                 className="w-100"
                              >
                                  {isRedirecting
                                      ? "Redirecting to home..."
                                      : isLoading
-                                         ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                                         ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true"/>
                                          : `Confirm & Pay $${totalAmount.toFixed(2)}`}
                              </Button>
                             }
