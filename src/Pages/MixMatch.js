@@ -194,14 +194,14 @@ const MixMatch = () => {
               </div>
 
               <Form onSubmit={handleMixMatch}>
-                  <Button type="submit" variant="primary">Mix & Match</Button>
+                  <Button type="submit" style={{backgroundColor: '#97a97c', borderColor: '#97a97c'}}>Mix & Match</Button>
               </Form>
             </Col>
   
             {/* RIGHT SIDE: Preview + Outfit */}
             <Col md={7} className="ps-4">
               <div>
-              <h4><strong>Suggested Outfit</strong></h4>
+              <h4 style={{ color: '#6e4f37'}}><strong>Suggested Outfit</strong></h4>
                 {outfit.length > 0 ? (
                   <div className="d-flex flex-column gap-4">
                     {outfit.map((item, index) => (

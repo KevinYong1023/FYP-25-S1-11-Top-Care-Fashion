@@ -52,7 +52,7 @@ const Cart = () => {
     <>
       <UserHeader loginStatus={isLoggedIn()} />
       <Container className="mt-4 cart-container">
-        <h2>Your Cart</h2>
+        <h2 style={{ color: '#6e4f37', fontWeight: 'bold'}}>Your Cart</h2>
         {cart.length === 0 ? (
           <Alert variant="info">Your cart is empty.</Alert>
         ) : (
@@ -74,7 +74,7 @@ const Cart = () => {
                         <h5>{item.title}</h5>
                       </Col>
                       <Col xs={6} sm={2} className="text-end text-sm-start mt-2 mt-sm-0">
-                        <p>${item.price.toFixed(2)}</p>
+                        <h5>${item.price.toFixed(2)}</h5>
                       </Col>
                       <Col xs={6} sm={3} className="text-end mt-2 mt-sm-0">
                         <Button
@@ -94,7 +94,7 @@ const Cart = () => {
             {/* Summary Column */}
             <Col lg={4}>
               <div className="cart-summary">
-                <h5>Summary</h5>
+                <h4 style={{fontWeight: 'bold'}}>Summary</h4>
                 <ListGroup variant="flush">
                   <ListGroup.Item className="d-flex justify-content-between">
                     <span>Subtotal</span>
@@ -107,8 +107,8 @@ const Cart = () => {
                 </ListGroup>
 
                 <div className="d-grid gap-2">
-                  <Button variant="success" size="lg" onClick={handleCheckout}>Check Out</Button>
-                  <Button variant="outline-danger" onClick={clearCart}>Clear Cart</Button>
+                  <Button style={{ backgroundColor: '#97a97c', borderColor: '#97a97c', marginTop: '10px'}} onClick={handleCheckout}>Check Out</Button>
+                  <Button style={{backgroundColor: '#ef233c', borderColor: '#ef233c'}} onClick={clearCart}>Clear Cart</Button>
                 </div>
               </div>
             </Col>
