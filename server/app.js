@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require("path");
 
 
 // Import the API-related routes
@@ -65,7 +66,10 @@ app.use('/api', commentsRoutes);
 // Use '/api/virtual' for all transactions-related routes
 app.use('/api/virtual', paymentsRoutes);
 
-
+app.use(express.static(path.join(__dirname, "../build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
 
 
 
