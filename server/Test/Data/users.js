@@ -56,8 +56,8 @@ const userData = async () => {
                 },
                 {
                     userId: counter.value++,  // Increment for next user
-                    username: 'yongSup',
-                    name: 'Yong Customer Support',
+                    username: 'tommySup',
+                    name: 'Tommy Customer Support',
                     email: 'csp002@mail.com',
                     password: bcrypt.hashSync('12345678@', saltRounds),
                     dob: '2000-07-15',
@@ -136,8 +136,8 @@ const userData = async () => {
                 },
                 {
                     userId: counter.value++,  // Assign the incremented userId
-                    username: 'yong1023',
-                    name: 'Yong',
+                    username: 'pascal123',
+                    name: 'Pascal',
                     email: 'user005@mail.com',
                     password: bcrypt.hashSync('12345678@', saltRounds),
                     dob: '2000-03-10',
