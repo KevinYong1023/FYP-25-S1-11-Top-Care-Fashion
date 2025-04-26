@@ -40,11 +40,6 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     process.exit(1); // Exit process with failure
   });
 
-// Basic route to test if the server is running
-app.get('/', (req, res) => {
-  res.send('API is running');
-});
-
 // Use all the routes
 
 // Use '/api/users' for all user-related routes
