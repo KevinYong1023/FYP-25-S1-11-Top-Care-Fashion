@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require("path");
 
 
 // Import the API-related routes
@@ -39,10 +40,8 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     process.exit(1); // Exit process with failure
   });
 
-// Basic route to test if the server is running
-app.get('/', (req, res) => {
-  res.send('API is running');
-});
+// Serve the static files from the React build folder
+app.use(express.static(path.join(__dirname, "../src/build")));
 
 // Use all the routes
 
@@ -65,6 +64,15 @@ app.use('/api', commentsRoutes);
 // Use '/api/virtual' for all transactions-related routes
 app.use('/api/virtual', paymentsRoutes);
 
+// Handle React routing, return all other requests to React
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../src/build", "index.html"));
+});
+
+// Basic route to test if the server is running
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
 
 
 
