@@ -66,7 +66,8 @@ const ManageList = ({ email }) => {
         setMessage("Product updated successfully.");
         getUserProduct();
       } else {
-        setError("Error updating product.");
+        const errorData = await res.json();
+        setError(errorData.message || "Error updating product."); // Duplicate title error msg
       }
     } catch (err) {
       console.error(err);
@@ -78,6 +79,7 @@ const ManageList = ({ email }) => {
 };
 
   const handleDelete = async (id) => {
+    setError("")
     try {
       const res = await fetch(`/api/products/${id}`, {
         method: "DELETE",

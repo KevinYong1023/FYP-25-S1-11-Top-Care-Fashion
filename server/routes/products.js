@@ -8,6 +8,18 @@ router.post('/products', async (req, res) => {
     const { title, description, price, category, occasion,imageUrl, seller, email, userId } = req.body;
   
     try {
+       // Check if another product with the title exist
+       const existingProduct = await Product.findOne({
+        title: title
+      });
+
+      if (existingProduct) {
+        return res.status(400).json({
+          message: "Another product with this title already exists for the same user.",
+        });
+      }
+  
+
       const newProduct = new Product({
         title,
         description,
@@ -89,12 +101,23 @@ router.put("/products/:id", async (req, res) => {
             req.body,
             { new: true }
         );
+        // Check if another product with the title exist
+        const existingProduct = await Product.findOne({
+          title: req.body.title
+        });
+
+        if (existingProduct) {
+          return res.status(400).json({
+            message: "Another product with this title already exists for the same user.",
+          });
+        }
+    
         if (!updatedProduct) {
             return res.status(404).json({ message: "Product not found" });
         }
         res.json(updatedProduct);
     } catch (err) {
-        console.error("Error updating product:", err);
+        console.error("Error updating product:", err.message);
         res.status(500).json({ message: "Server error" });
     }
 });
@@ -196,22 +219,7 @@ router.get("/products", async (req, res) => {
       res.status(500).json({ message: "Server error" });
   }
 });
-  // GET /api/products/:id - Fetch product by ID
- router.get("/products/:id",  async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: "Not found" });
-    res.json(product);
-  } catch (err) {
-    console.error("Error fetching product by ID:", err);
-    res.status(500).json({ message: "Server error" });
-  }
 
-});
-
-
-
-  
 
 // Get product insights
 router.get("/products/insights", async (req, res) => {

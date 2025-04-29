@@ -239,8 +239,7 @@ const UploadProduct = ({ email }) => {
         setImageInfo({ width: 0, height: 0, sizeKB: 0 });
         navigate('/shoppage');
       } else {
-        setError("Upload failed, please try again.");
-      }
+        setError(data.message || "Error uploading product.");      }
     } catch (err) {
       console.error(err);
       setError("Server error");
