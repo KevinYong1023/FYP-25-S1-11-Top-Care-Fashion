@@ -55,6 +55,14 @@ function App() {
         const savedName = localStorage.getItem("name");
         const savedAddress = localStorage.getItem("address");
         const savedUserEmail = localStorage.getItem("userEmail");
+        
+        if (!sessionStorage.getItem("hasVisited")) {
+            const savedLogin = localStorage.getItem("login");
+            if (savedLogin !== "true") {
+                localStorage.clear();
+            }
+            sessionStorage.setItem("hasVisited", "true");
+        }
 
         if (savedEmail) {
             setEmail(savedEmail);
