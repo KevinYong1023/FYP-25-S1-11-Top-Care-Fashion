@@ -13,7 +13,8 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
     }, []);
     
     function resetStates(){
-        localStorage.clear(); // this already clears everything
+        localStorage.clear(); 
+        sessionStorage.clear();
         setLogin(false);
         setRole("");
         setEmail("");

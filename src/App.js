@@ -47,6 +47,14 @@ function App() {
     const [address, setAddress] = useState("");
     const [userEmail, setUserEmail] = useState(""); // For manager to check the products that link to the user
 
+    // Clear when load the page for the first time:
+    useEffect(()=>{
+        if (!sessionStorage.getItem("hasVisited")) {
+            localStorage.clear();
+            sessionStorage.setItem("hasVisited", "true");
+        }
+    },[])
+
     // Load data from localStorage when the app starts
     useEffect(() => {
         const savedEmail = localStorage.getItem("email");
@@ -55,14 +63,6 @@ function App() {
         const savedName = localStorage.getItem("name");
         const savedAddress = localStorage.getItem("address");
         const savedUserEmail = localStorage.getItem("userEmail");
-        
-        if (!sessionStorage.getItem("hasVisited")) {
-            const savedLogin = localStorage.getItem("login");
-            if (savedLogin !== "true") {
-                localStorage.clear();
-            }
-            sessionStorage.setItem("hasVisited", "true");
-        }
 
         if (savedEmail) {
             setEmail(savedEmail);
