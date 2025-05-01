@@ -146,6 +146,7 @@ export default function AdminProfileUpdate() {
                       name="name"
                       value={profile.name}
                       onChange={handleChange}
+                      disabled
                     />
                   </Form.Group>
     

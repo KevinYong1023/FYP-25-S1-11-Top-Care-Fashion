@@ -117,7 +117,7 @@ export default function UpdateAccount({ email }) {
                                 name="name"
                                 value={profile.name}
                                 onChange={handleChange}
-                                
+                                disabled
                             />
                         </Form.Group>
 

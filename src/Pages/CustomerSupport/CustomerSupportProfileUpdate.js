@@ -151,6 +151,7 @@ export default function CustomerSupportProfileUpdate() {
                                         name="name"
                                         value={profile.name}
                                         onChange={handleChange}
+                                        disabled
                                     />
                                 </Form.Group>
     
