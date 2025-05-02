@@ -14,7 +14,6 @@ export default function Logout() {  // Accept setIsLoggedIn as a prop
     
     function resetStates(){
         localStorage.clear(); 
-        sessionStorage.clear();
         setLogin(false);
         setRole("");
         setEmail("");

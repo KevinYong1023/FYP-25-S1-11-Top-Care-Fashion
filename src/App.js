@@ -46,15 +46,7 @@ function App() {
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [userEmail, setUserEmail] = useState(""); // For manager to check the products that link to the user
-
-    // Clear when load the page for the first time:
-    useEffect(()=>{
-        if (!sessionStorage.getItem("hasVisited")) {
-            localStorage.clear();
-            sessionStorage.setItem("hasVisited", "true");
-        }
-    },[])
-
+ 
     // Load data from localStorage when the app starts
     useEffect(() => {
         const savedEmail = localStorage.getItem("email");
@@ -99,7 +91,7 @@ function App() {
             <CartProvider email={email}>
                 <Router>
                     <Routes>
-                        <Route path="/" element={<Navigate to="/home" replace />} />
+                        <Route path="/" element={<Navigate to="/login" replace />} />
                         <Route path="/home" element={<Home email={email}  />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login setLogin={setLogin} />} />
