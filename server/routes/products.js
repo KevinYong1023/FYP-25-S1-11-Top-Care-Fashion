@@ -8,18 +8,6 @@ router.post('/products', async (req, res) => {
     const { title, description, price, category, occasion,imageUrl, seller, email, userId } = req.body;
   
     try {
-       // Check if another product with the title exist
-       const existingProduct = await Product.findOne({
-        title: title
-      });
-
-      if (existingProduct) {
-        return res.status(400).json({
-          message: "Another product with this title already exists for the same user.",
-        });
-      }
-  
-
       const newProduct = new Product({
         title,
         description,
@@ -101,17 +89,7 @@ router.put("/products/:id", async (req, res) => {
             req.body,
             { new: true }
         );
-        // Check if another product with the title exist
-        const existingProduct = await Product.findOne({
-          title: req.body.title
-        });
-
-        if (existingProduct) {
-          return res.status(400).json({
-            message: "Another product with this title already exists for the same user.",
-          });
-        }
-    
+  
         if (!updatedProduct) {
             return res.status(404).json({ message: "Product not found" });
         }
