@@ -67,7 +67,7 @@ router.post('/create-order', authenticate, async (req, res) => {
         let buyerUserId = req.user?.userId || req.userId;
         let buyerName;
 
-        const totalPrice = parseFloat(total);
+        const totalPrice = parseFloat(total.toFixed(2));
         console.log("Parsed Total Price:", totalPrice, typeof totalPrice);
 
         if (!Array.isArray(seller) || seller.length === 0) {

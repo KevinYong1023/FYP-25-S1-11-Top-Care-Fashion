@@ -78,8 +78,8 @@ export default function UpdateAccount({ email }) {
 
             if (response.ok) {
                 const updatedUser = await response.json();
-                console.log('Profile updated successfully:', updatedUser);
-                // Optionally, you can set the updated user data back to the state
+                //console.log('Profile updated successfully:', updatedUser);
+
                 setProfile(updatedUser);
 
                 // Navigate back to the profile view

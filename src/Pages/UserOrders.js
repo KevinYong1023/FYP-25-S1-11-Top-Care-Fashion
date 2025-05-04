@@ -42,7 +42,7 @@ export default function UserOrders({ email }) {
             );
             setSellList(sellOrders);
             const buyOrders = availableOrder.filter(order => order.buyerName === name);
-            console.log("buyOrders",buyOrders)
+            //console.log("buyOrders",buyOrders)
 
             setBuyList(buyOrders);
         } catch (error) {
@@ -97,7 +97,7 @@ export default function UserOrders({ email }) {
                     });
     
                     const updateData = await res.json();
-                    console.log(updateData)
+                    //console.log(updateData)
                     if (!res.ok) {
                         console.error("Failed to update product:", updateData.message);
                         alert(`Product status update failed: ${updateData.message}`);
@@ -154,7 +154,7 @@ export default function UserOrders({ email }) {
                                     <td>{item.productName}</td>
                                     <td>{item.price}</td>
                                     <td>{new Date(row.created).toLocaleString()}</td>
-                                    <td>{row.total}</td>
+                                    <td>{row.total.toFixed(2)}</td>
                                     <td>{item.status}</td>
                                     <td>
                                         <Button

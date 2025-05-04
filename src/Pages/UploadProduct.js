@@ -271,7 +271,7 @@ const UploadProduct = ({ email }) => {
                         src={previewUrl}
                         alt="Preview"
                         className="img-thumbnail mt-2"
-                        style={{ width: "100%", height: "100%", objectFit: "cover"/*, maxHeight: "300px"*/ }}
+                        style={{ width: "100%", height: "100%", objectFit: "cover"}}
                       />
                     </>
                   ) : (

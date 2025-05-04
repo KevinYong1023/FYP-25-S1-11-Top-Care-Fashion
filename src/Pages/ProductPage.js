@@ -81,7 +81,7 @@ const ProductPage = ({ email }) => {
   const handleAddToCart = () => {
     if(!product.isOrdered){
     if (product && product.userId && product._id) {
-        console.log("Attempting to add product to cart:", product);
+        //console.log("Attempting to add product to cart:", product);
         const itemToAdd = {
             id: product._id,
             productId: product._id,
@@ -91,7 +91,7 @@ const ProductPage = ({ email }) => {
             sellerId: product.userId,
             seller:product.seller
         };
-        console.log("Item object being passed to addToCart:", itemToAdd);
+        //console.log("Item object being passed to addToCart:", itemToAdd);
         try {
             addToCart(itemToAdd);
             alert(`${product.title} added to cart!`);

@@ -12,7 +12,7 @@ export const loadMobileNetModel = async () => {
 
   try {
     cachedModel = await mobilenet.load(); // load model once
-    console.log("MobileNet model loaded and cached.");
+    //console.log("MobileNet model loaded and cached.");
     return cachedModel;
   } catch (err) {
     console.error("Failed to load MobileNet model:", err);

@@ -44,7 +44,7 @@ const Cart = () => {
       totalAmount: total,
     };
 
-    console.log("Cart Checkout Data:", checkoutData);
+    //console.log("Cart Checkout Data:", checkoutData);
     navigate('/payment', { state: checkoutData });
   };
 

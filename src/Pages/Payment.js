@@ -126,7 +126,7 @@ const Payment = () => {
 
         fetchUserName();
         const token = getAuthToken();
-        console.log("Token from localStorage:", token);
+        //console.log("Token from localStorage:", token);
     }, []);
 
     const handleSubmit = async (e) => {
@@ -175,8 +175,8 @@ const Payment = () => {
             setExpirationDate('');
             setCvv('');
             setNameOnCard('');
-            console.log("cartItems within handleSubmit: ", cartItems)
-            console.log("User Name within handleSubmit: ", loggedInUserName);
+            //console.log("cartItems within handleSubmit: ", cartItems)
+            //console.log("User Name within handleSubmit: ", loggedInUserName);
 
             await createOrder(cartItems, totalAmount, token, loggedInUserName);
 
@@ -199,14 +199,14 @@ const Payment = () => {
     const createOrder = async (cartItems, totalAmount, token, userName) => {
         let allSellerNames = "";
         const uniqueSellerNames = new Set();
-        console.log("Cart Items being sent:", cartItems);
+        //console.log("Cart Items being sent:", cartItems);
 
         let calculatedTotal = 0;
         cartItems.forEach((item) => {
-            console.log("Item:", item);
-            console.log("Item Price (before parse):", item.price, typeof item.price);
+            //console.log("Item:", item);
+            //console.log("Item Price (before parse):", item.price, typeof item.price);
             const price = parseFloat(item.price);
-            console.log("Item Price (after parse):", price, typeof price);
+            //console.log("Item Price (after parse):", price, typeof price);
             if (isNaN(price)) {
                 console.error("ERROR: Price is NaN for item:", item);
                 return;
@@ -216,15 +216,15 @@ const Payment = () => {
                 uniqueSellerNames.add(item.sellerName);
             }
         });
-        console.log("Calculated Total:", calculatedTotal);
+        //console.log("Calculated Total:", calculatedTotal);
         const totalAmountToSend = calculatedTotal;
 
         allSellerNames = Array.from(uniqueSellerNames).join(", ");
         if (!allSellerNames) {
             allSellerNames = "No Sellers";
         }
-        console.log("Total Amount To Send: ", totalAmountToSend);
-        console.log("createOrder - userName:", userName);  // Add this line
+        //console.log("Total Amount To Send: ", totalAmountToSend);
+        //console.log("createOrder - userName:", userName);  // Add this line
 
     
         try {
@@ -236,7 +236,7 @@ const Payment = () => {
                 },
                 body: JSON.stringify({
                     seller: cartItems.map((item) => {
-                        console.log("Item within map:", item);
+                        //console.log("Item within map:", item);
                         if (!item.sellerName) {
                             console.error("ERROR: sellerName is missing for:", item);
                         }
@@ -260,10 +260,10 @@ const Payment = () => {
                 throw new Error(orderData.message || "Failed to create order");
             }
     
-            // 🔁 Update each product's isOrdered to true
+            // Update each product's isOrdered to true
             for (const item of cartItems) {
                 try {
-                    console.log("⏫ Updating product with name:", item.productName);
+                    //console.log(" Updating product with name:", item.productName);
                     const res = await fetch(`/api/products/update-product-status`, {
                         method: "PUT",
                         headers: {
@@ -274,7 +274,7 @@ const Payment = () => {
     
                     const data = await res.json();
                     if (res.ok) {
-                        console.log(`Product "${item.productName}" order status updated`);
+                        //console.log(`Product "${item.productName}" order status updated`);
                     } else {
                         console.error(`Failed to update "${item.productName}":`, data.message);
                         setMessage(`Product order status update failed: ${data.message}`);
@@ -286,7 +286,7 @@ const Payment = () => {
             }
     
             const orderData = await orderResponse.json();
-            console.log("Order created successfully", orderData.orderDetails);
+            //console.log("Order created successfully", orderData.orderDetails);
             setMessage("Order created successfully!");
             setMessageType("success");
             return orderData;

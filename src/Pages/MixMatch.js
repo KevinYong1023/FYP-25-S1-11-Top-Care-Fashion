@@ -58,7 +58,7 @@ const MixMatch = () => {
 
       image.onload = async () => {
         const predictions = await model.classify(image);
-        console.log("Predictions:", predictions);
+        //console.log("Predictions:", predictions);
 
         let detectedOccasion = "Unknown";
         for (const prediction of predictions) {
@@ -92,8 +92,8 @@ const MixMatch = () => {
     e.preventDefault();
     setOutfit([])
 
-    console.log("Occasion: ", occasion);
-    console.log("Form occasion: ", selectOccasion.occasion);
+    //console.log("Occasion: ", occasion);
+    //console.log("Form occasion: ", selectOccasion.occasion);
 
     let finalOccasion = occasion || selectOccasion.occasion;
 
@@ -103,7 +103,7 @@ const MixMatch = () => {
         finalOccasion = occasion;
     }
 
-    console.log("final occasion: ", finalOccasion)
+    //console.log("final occasion: ", finalOccasion)
     if (finalOccasion) {
       try {
         setLoading(true);
