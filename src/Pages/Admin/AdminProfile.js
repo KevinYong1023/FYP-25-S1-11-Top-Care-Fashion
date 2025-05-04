@@ -17,12 +17,12 @@ const AdminProfile = () => {
             if (email) {
                 try {
                     setIsLoading(true)
-                    const response = await fetch(`/api/user/${email}`);  // Assuming your API follows this route
+                    const response = await fetch(`/api/user/${email}`);  
                     const data = await response.json();
                     setUser(data);
                 } catch (error) {
                     setError("Server Error, Please Refresh the Page")
-                    console.log('Error fetching user details:', error);
+                    //console.log('Error fetching user details:', error);
                 }finally{
                     setIsLoading(false)
                 }

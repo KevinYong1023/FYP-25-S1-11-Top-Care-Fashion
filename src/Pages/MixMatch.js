@@ -58,7 +58,7 @@ const MixMatch = () => {
 
       image.onload = async () => {
         const predictions = await model.classify(image);
-        console.log("Predictions:", predictions);
+        //console.log("Predictions:", predictions);
 
         let detectedOccasion = "Unknown";
         for (const prediction of predictions) {
@@ -92,8 +92,8 @@ const MixMatch = () => {
     e.preventDefault();
     setOutfit([])
 
-    console.log("Occasion: ", occasion);
-    console.log("Form occasion: ", selectOccasion.occasion);
+    //console.log("Occasion: ", occasion);
+    //console.log("Form occasion: ", selectOccasion.occasion);
 
     let finalOccasion = occasion || selectOccasion.occasion;
 
@@ -103,7 +103,7 @@ const MixMatch = () => {
         finalOccasion = occasion;
     }
 
-    console.log("final occasion: ", finalOccasion)
+    //console.log("final occasion: ", finalOccasion)
     if (finalOccasion) {
       try {
         setLoading(true);
@@ -164,7 +164,7 @@ const MixMatch = () => {
                       src={imageUrl}
                       alt="Preview"
                       className="img-thumbnail mt-2"
-                      width={"450px"} height={"450px"}
+                      width={"300px"} height={"300px"}
                     />
                   ) : (
                     <div className="text-muted mt-3">No image selected.</div>
@@ -194,14 +194,14 @@ const MixMatch = () => {
               </div>
 
               <Form onSubmit={handleMixMatch}>
-                  <Button type="submit" variant="primary">Mix & Match</Button>
+                  <Button type="submit" style={{backgroundColor: '#97a97c', borderColor: '#97a97c'}}>Mix & Match</Button>
               </Form>
             </Col>
   
             {/* RIGHT SIDE: Preview + Outfit */}
             <Col md={7} className="ps-4">
               <div>
-              <h4><strong>Suggested Outfit</strong></h4>
+              <h4 style={{ color: '#6e4f37'}}><strong>Suggested Outfit</strong></h4>
                 {outfit.length > 0 ? (
                   <div className="d-flex flex-column gap-4">
                     {outfit.map((item, index) => (

@@ -4,16 +4,16 @@ import { useNavigate } from "react-router-dom";
 import UserHeader from '../Components/Headers/userHeader';
 import { AuthContext } from "../App";  // Import context from App.js
 
-export default function Logout() {  // Accept setIsLoggedIn as a prop
+export default function Logout() {  
     const navigate = useNavigate();
-    const { setLogin, setRole, setEmail,setName,setAddress,setUserEmail } = useContext(AuthContext);  // Use context to set email, login, and role
+    const { setLogin, setRole, setEmail,setName,setAddress,setUserEmail } = useContext(AuthContext);  
     
     useEffect(() => {
         resetStates();
     }, []);
     
     function resetStates(){
-        localStorage.clear(); // this already clears everything
+        localStorage.clear(); 
         setLogin(false);
         setRole("");
         setEmail("");

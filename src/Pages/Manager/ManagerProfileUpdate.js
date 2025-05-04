@@ -86,8 +86,7 @@ export default function ManagerProfileUpdate() {
 
             if (response.ok) {
                 const updatedUser = await response.json();
-                console.log('Profile updated successfully:', updatedUser);
-                // Optionally, you can set the updated user data back to the state
+                //console.log('Profile updated successfully:', updatedUser);
                 setProfile(updatedUser);
 
                 // Navigate back to the profile view
@@ -150,6 +149,7 @@ export default function ManagerProfileUpdate() {
                         name="name"
                         value={profile.name}
                         onChange={handleChange}
+                        disabled
                       />
                     </Form.Group>
       

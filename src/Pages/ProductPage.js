@@ -81,7 +81,7 @@ const ProductPage = ({ email }) => {
   const handleAddToCart = () => {
     if(!product.isOrdered){
     if (product && product.userId && product._id) {
-        console.log("Attempting to add product to cart:", product);
+        //console.log("Attempting to add product to cart:", product);
         const itemToAdd = {
             id: product._id,
             productId: product._id,
@@ -91,7 +91,7 @@ const ProductPage = ({ email }) => {
             sellerId: product.userId,
             seller:product.seller
         };
-        console.log("Item object being passed to addToCart:", itemToAdd);
+        //console.log("Item object being passed to addToCart:", itemToAdd);
         try {
             addToCart(itemToAdd);
             alert(`${product.title} added to cart!`);
@@ -182,10 +182,11 @@ const ProductPage = ({ email }) => {
               
                   <span className="d-inline-block">
                     <Button
-                      variant="primary"
                       onClick={handleAddToCart}
                       disabled={email === product.email || !login || product.isOrdered}
-                      style={email === product.email ? { pointerEvents: "none" } : {}}
+                      style={email === product.email ? { pointerEvents: "none",  backgroundColor: "#97a97c",
+                        borderColor: "#97a97c", } : {  backgroundColor: "#97a97c",
+                        borderColor: "#97a97c",}}
                     >
                       Add to Cart
                     </Button>
@@ -225,7 +226,7 @@ const ProductPage = ({ email }) => {
                 onChange={(e) => setComment(e.target.value)}                
               />
             </Form.Group>
-            <Button variant="primary" type="submit"  className="mt-2">Submit Comment</Button>
+            <Button style={{  backgroundColor: "#97a97c", borderColor: "#97a97c"}} type="submit"  className="mt-2">Submit Comment</Button>
           </Form></>)}
         </div>
         </Row>) : (

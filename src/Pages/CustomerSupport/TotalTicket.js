@@ -35,7 +35,7 @@ export default function TotalTicket() {
             }
         };
         fetchAssignedTickets();
-    }, [name]); // Run this effect when userName is set
+    }, [name]); 
 
     // Pagination Logic
     const indexOfLastTicket = currentPage * ticketsPerPage;

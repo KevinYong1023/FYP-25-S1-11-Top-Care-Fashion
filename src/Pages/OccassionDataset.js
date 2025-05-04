@@ -1,4 +1,3 @@
-// Expanded Mapping of Clothing Items to Occasions
 const occasionDataset = {
     // Tops
     "t-shirt": "Casual",

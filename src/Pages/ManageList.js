@@ -13,7 +13,7 @@ const ManageList = ({ email }) => {
   const getUserProduct = async () => {
     if (email) {
       try {
-        setIsLoading(true); // Set loading to true when fetch starts
+        setIsLoading(true); 
         const response = await fetch(`/api/products/user/${email}`);
         const data = await response.json();
         setProducts(data);
@@ -22,7 +22,7 @@ const ManageList = ({ email }) => {
         console.error("Failed to fetch listings:", error);
       } finally {
         setMessage("")
-        setIsLoading(false); // Always set loading to false at the end
+        setIsLoading(false); 
       }
     }
   };
@@ -66,7 +66,8 @@ const ManageList = ({ email }) => {
         setMessage("Product updated successfully.");
         getUserProduct();
       } else {
-        setError("Error updating product.");
+        const errorData = await res.json();
+        setError(errorData.message || "Error updating product."); 
       }
     } catch (err) {
       console.error(err);
@@ -78,6 +79,7 @@ const ManageList = ({ email }) => {
 };
 
   const handleDelete = async (id) => {
+    setError("")
     try {
       const res = await fetch(`/api/products/${id}`, {
         method: "DELETE",
@@ -108,7 +110,7 @@ const ManageList = ({ email }) => {
     <>
       <UserHeader loginStatus={true} />
       <div className="mt-4 px-3">
-        <h2>Manage Listings</h2>
+        <h2 style={{ fontWeight:'bold' , color: '#6f4e37' }}>Manage Listings</h2>
   
         {message && <Alert variant="info">{message}</Alert>}
         {error && (
@@ -159,7 +161,7 @@ const ManageList = ({ email }) => {
                     style={{
                       width: "200px",
                       height: "200px",
-                      objectFit: "cover", // Ensures images fill container without distortion
+                      objectFit: "cover", 
                     }}
                     onError={(e) => (e.target.src = "https://via.placeholder.com/100")}
                   />
@@ -171,7 +173,7 @@ const ManageList = ({ email }) => {
                         value={product.title}
                         disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "title", e.target.value)}
-                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
+                       style={{ border:"2px solid black" }}
                       />
                     </td>
                     <td>
@@ -181,7 +183,7 @@ const ManageList = ({ email }) => {
                         value={product.description}
                         disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "description", e.target.value)}
-                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
+                       style={{ border:"2px solid black" }}
                       />
                     </td>
                     <td>
@@ -190,7 +192,7 @@ const ManageList = ({ email }) => {
                         value={product.price}
                         disabled={product.isOrdered}
                         onChange={(e) => handleChange(index, "price", e.target.value)}
-                        style={{ fontSize: "16px", fontWeight:"bold", border:"2px solid black" }}
+                        style={{ border:"2px solid black" }}
                       />
                     </td>
                     <td className="text-center">

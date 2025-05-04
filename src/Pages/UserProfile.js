@@ -10,12 +10,12 @@ const UserProfile = ({ email, setName, setAddress }) => {
 
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log("Email:", email);
+            //console.log("Email:", email);
             if (email) {
                 try {
                     const response = await fetch(`/api/user/${email}`);
                     const data = await response.json();
-                    console.log("Data:", data);
+                    //console.log("Data:", data);
                     setUser(data);
                     setName(data.name);
                     setAddress(data.address);

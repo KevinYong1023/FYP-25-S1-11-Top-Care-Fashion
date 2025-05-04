@@ -11,7 +11,7 @@ const Register = () => {
         phone: '',
         password: '',
         confirmPassword: '',
-        position: '',
+        position: 'user',
         gender: '',
         dob: '', 
         address: '' 
@@ -62,10 +62,11 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (validateForm()) {
-            console.log('Form Data:', formData);
+
             try {
-                const response = await fetch("/api/auth/register", {
+                const response = await fetch("/api/mainregister", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -149,24 +150,7 @@ const Register = () => {
                         />
                         {errors.phone && <Alert variant="danger">{errors.phone}</Alert>}
                     </Form.Group>
-                    {/* Position Field */}
-                    <Form.Group className="mb-3">
-                        <Form.Label style={{fontWeight:'bold'}}>Position</Form.Label>
-                        <Form.Select
-                            name="position"
-                            value={formData.position}
-                            onChange={handleChange}
-                        >
-                            <option value="">Select your position</option>
-                            <option value="admin">Admin</option>
-                            <option value="user">User</option>
-                            <option value="manager">Manager</option>
-                            <option value="customer support">Customer Support</option>
-                        </Form.Select>
-                        {errors.position && <Alert variant="danger">{errors.position}</Alert>}
-                    </Form.Group>
-                   {/* Address Field - Only show if position is 'user' */}
-                {formData.position === "user" && (
+               
                     <Form.Group className="mb-3">
                         <Form.Label style={{fontWeight:'bold'}}>Address</Form.Label>
                         <Form.Control
@@ -177,7 +161,7 @@ const Register = () => {
                             placeholder="Enter your address"
                         />
                         {errors.address && <Alert variant="danger">{errors.address}</Alert>}
-                    </Form.Group>)}
+                    </Form.Group>
                     {/* Gender Field */}
                     <Form.Group className="mb-3">
                         <Form.Label style={{fontWeight:'bold'}}>Gender</Form.Label>

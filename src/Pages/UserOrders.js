@@ -42,7 +42,7 @@ export default function UserOrders({ email }) {
             );
             setSellList(sellOrders);
             const buyOrders = availableOrder.filter(order => order.buyerName === name);
-            console.log("buyOrders",buyOrders)
+            //console.log("buyOrders",buyOrders)
 
             setBuyList(buyOrders);
         } catch (error) {
@@ -97,7 +97,7 @@ export default function UserOrders({ email }) {
                     });
     
                     const updateData = await res.json();
-                    console.log(updateData)
+                    //console.log(updateData)
                     if (!res.ok) {
                         console.error("Failed to update product:", updateData.message);
                         alert(`Product status update failed: ${updateData.message}`);
@@ -131,6 +131,7 @@ export default function UserOrders({ email }) {
                         <p>Loading...</p>
                     </div>
                 ):(<>
+                {/*Buy Section*/}
                 <h3>Buy:</h3>
                 <table className="table table-bordered">
                     <thead>
@@ -139,8 +140,7 @@ export default function UserOrders({ email }) {
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Seller</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product Price</th>
-                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date</th>
-                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order Total</th>
+                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date</th>                
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Action</th>
                         </tr>
@@ -154,7 +154,6 @@ export default function UserOrders({ email }) {
                                     <td>{item.productName}</td>
                                     <td>{item.price}</td>
                                     <td>{new Date(row.created).toLocaleString()}</td>
-                                    <td>{row.total}</td>
                                     <td>{item.status}</td>
                                     <td>
                                         <Button
@@ -184,6 +183,7 @@ export default function UserOrders({ email }) {
                     </tbody>
                 </table>
                 <hr />
+                {/*Sold Section*/}
                 <h3>Sold:</h3>
                 <table className="table table-bordered">
                     <thead>
@@ -193,7 +193,6 @@ export default function UserOrders({ email }) {
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Product Price</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Date</th>
-                            <th style={{ backgroundColor: "#6b705c", color: "white" }}>Order Total</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Status</th>
                             <th style={{ backgroundColor: "#6b705c", color: "white" }}>Action</th>
                         </tr>
@@ -207,8 +206,7 @@ export default function UserOrders({ email }) {
                                         <td>{row.buyerName}</td>
                                         <td>{item.productName}</td>
                                         <td>{item.price}</td>
-                                        <td>{new Date(row.created).toLocaleString()}</td>
-                                        <td>{row.total}</td>
+                                        <td>{new Date(row.created).toLocaleString()}</td>  
                                         <td>
                                             <Form.Select
                                                 disabled={item.status === "Delivered"}

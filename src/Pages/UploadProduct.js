@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
+import { Form, Button, Container, Alert, Spinner, Card, Row, Col } from "react-bootstrap";
 import { loadMobileNetModel } from "../Components/loadMobileNet";
 import { occasionDataset } from "./OccassionDataset";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -37,6 +37,7 @@ const UploadProduct = ({ email }) => {
   });
 
   const [previewUrl, setPreviewUrl] = useState("");
+  const [loading, setLoading] = useState(false);
   const [imageInfo, setImageInfo] = useState({ width: 0, height: 0, sizeKB: 0 });
   const [name, setName] = useState("");
   const [userId, setUserId] = useState(null);
@@ -62,12 +63,15 @@ const UploadProduct = ({ email }) => {
 
   useEffect(() => {
     const loadModel = async () => {
+      setLoading(true);
       try {
         const loadedModel = await loadMobileNetModel();
         setModel(loadedModel);
       } catch (error) {
-        alert("Failed to load model, please try again.");
-      }
+        alert("Failed to load model, please refresh the page.");
+      } finally {
+        setLoading(false);
+      }      
     };
     loadModel();
   }, []);
@@ -186,8 +190,6 @@ const UploadProduct = ({ email }) => {
         imageUrl: resizedBase64,
       }));
   
-      console.log("Category:", category);
-      console.log("Occasion:", occasion);
     } catch (err) {
       console.error("Image processing failed:", err);
       alert("There was a problem processing the image.");
@@ -203,7 +205,6 @@ const UploadProduct = ({ email }) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
-    console.log(form);
     if (!form.title || !form.price || !form.imageUrl || !form.category || !form.occasion) {
       setError("Please complete all fields including image upload.");
       return;
@@ -229,16 +230,17 @@ const UploadProduct = ({ email }) => {
       });
 
       const data = await res.json();
-      console.log("DATA STARTS HERE")
-      console.log(data.category);
-      console.log(res)
-      if (res.ok && form.category !== "Uncategorized") {
+      if (res.ok && (form.category !== "Uncategorized")) {
         setSuccess(true);
         setForm({ title: "", description: "", price: "", image: null, imageUrl: "", category: "" });
         setPreviewUrl("");
         setImageInfo({ width: 0, height: 0, sizeKB: 0 });
         navigate('/shoppage');
-      } else {
+      } 
+      else if (form.category === "Uncategorized") {
+        setError("Image provided is uncategorized, please upload another image");
+      }
+      else {
         setError("Upload failed, please try again.");
       }
     } catch (err) {
@@ -250,114 +252,119 @@ const UploadProduct = ({ email }) => {
   return (
     <>
       <UserHeader loginStatus={true} />
-      <Container className="mt-4">
-        <Card>
-          <Card.Body>
-            <Row>
-              <Col md={5} className="border-end text-center d-flex flex-column align-items-center justify-content-center">
-                <h4 style={{ fontWeight: 'bold'}}>Image Preview</h4>
-                {previewUrl ? (
-                  <>
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="img-thumbnail mt-2"
-                      style={{ width: "100%", objectFit: "cover", maxHeight: "300px" }}
-                    />
-                    <div className="text-muted mt-2" style={{ fontSize: "0.9rem" }}>
-                      Dimensions: {imageInfo.width} × {imageInfo.height}px<br />
-                      Estimated Size: {imageInfo.sizeKB} KB
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-muted mt-3">No image selected.</div>
-                )}
-              </Col>
+      
+      { loading ? (
+        <div className="text-center mt-5">
+        <Spinner animation="border" role="status" variant="primary" />
+        <p className="mt-2">Loading...</p>
+        </div>
+      ) : (
+        <Container className="mt-4">
+          <Card>
+            <Card.Body>
+              <Row>
+                <Col md={5} className="border-end text-center d-flex flex-column align-items-center justify-content-center">
+                  <h4 style={{ fontWeight: 'bold'}}>Image Preview</h4>
+                  {previewUrl ? (
+                    <>
+                      <img
+                        src={previewUrl}
+                        alt="Preview"
+                        className="img-thumbnail mt-2"
+                        style={{ width: "100%", height: "100%", objectFit: "cover"}}
+                      />
+                    </>
+                  ) : (
+                    <div className="text-muted mt-3">No image selected.</div>
+                  )}
+                </Col>
 
-              <Col md={7}>
-                <h3 className="mb-3 text-center" style={{ fontWeight: 'bold' , color: '#6f4e37'}}>Upload Product</h3>
-                {success && <Alert variant="success">Product uploaded successfully!</Alert>}
-                {error && <Alert variant="danger">{error}</Alert>}
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control
-                      name="title"
-                      value={form.title}
-                      onChange={handleChange}
-                      placeholder="Enter product title"
-                      required
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      name="description"
-                      value={form.description}
-                      onChange={handleChange}
-                      placeholder="Product description"
-                    />
-                  </Form.Group>
-                  <Row>
-                    <Col md={4}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Price</Form.Label>
-                        <Form.Control
-                          type="number"
-                          name="price"
-                          value={form.price}
-                          onChange={handleChange}
-                          placeholder="Enter price"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={4}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={form.category}
-                          readOnly
-                          placeholder="Detected automatically"
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={4}>
+                <Col md={7}>
+                  <h3 className="mb-3 text-center" style={{ fontWeight: 'bold' , color: '#6f4e37'}}>Upload Product</h3>
+                  {success && <Alert variant="success">Product uploaded successfully!</Alert>}
+                  {error && <Alert variant="danger">{error}</Alert>}
+                  <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Occasion</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={form.occasion}
-                          readOnly
-                          placeholder="Detected automatically"
-                        />
+                      <Form.Label>Title</Form.Label>
+                      <Form.Control
+                        name="title"
+                        value={form.title}
+                        onChange={handleChange}
+                        placeholder="Enter product title"
+                        required
+                      />
                     </Form.Group>
-                    </Col>
-                  </Row>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>Upload Image</Form.Label>
-                    <Form.Control
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
-                  </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Description</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="description"
+                        value={form.description}
+                        onChange={handleChange}
+                        placeholder="Product description"
+                        required
+                      />
+                    </Form.Group>
+                    <Row>
+                      <Col md={4}>
+                        <Form.Group className="mb-3">
+                          <Form.Label>Price</Form.Label>
+                          <Form.Control
+                            type="number"
+                            name="price"
+                            value={form.price}
+                            onChange={handleChange}
+                            placeholder="Enter price"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={4}>
+                        <Form.Group className="mb-3">
+                          <Form.Label>Category</Form.Label>
+                          <Form.Control
+                            type="text"
+                            value={form.category}
+                            readOnly
+                            placeholder="Detected automatically"
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={4}>
+                      <Form.Group className="mb-3">
+                          <Form.Label>Occasion</Form.Label>
+                          <Form.Control
+                            type="text"
+                            value={form.occasion}
+                            readOnly
+                            placeholder="Detected automatically"
+                          />
+                      </Form.Group>
+                      </Col>
+                    </Row>
 
-                  <Button type="submit" variant="primary">
-                    Upload
-                  </Button>
-                </Form>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
-      </Container>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Upload Image</Form.Label>
+                      <Form.Control
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                    </Form.Group>
+
+                    <Button type="submit" variant="primary">
+                      Upload
+                    </Button>
+                  </Form>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Container>
+      )}
     </>
   );
 };

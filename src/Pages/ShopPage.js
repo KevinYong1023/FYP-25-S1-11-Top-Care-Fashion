@@ -34,7 +34,7 @@ const ShopPage = () => {
     try {
       const res = await fetch(`/api/products/search?${queryParams.toString()}`);
       const data = await res.json();
-      console.log(data)
+      //console.log(data)
       const filtered = data.products.filter(p => !p.isOrdered);
       setProducts(filtered);
       setTotalPages(data.totalPages);
@@ -59,7 +59,7 @@ const ShopPage = () => {
     fetchProducts();
   };
 
-  // ✅ UPDATED: Navigate to /productpage/:id
+  // Navigate to /productpage/:id
   const goToProduct = (id) => {
     navigate(`/productpage/${id}`);
   };

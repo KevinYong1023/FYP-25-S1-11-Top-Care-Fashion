@@ -9,7 +9,7 @@ export default function ManagerDashboard() {
         totalUsers: 0,
         active: 0,
         suspense: 0,
-        popularCategories: "", // Keep static or fetch if needed
+        popularCategories: "", 
         totalProducts: 0,
         categoryCounts: {
             Footwear: 0,
@@ -87,7 +87,7 @@ export default function ManagerDashboard() {
         };
         fetchUsers();
         fetchProductInsights();
-    }, []); // Empty dependency array means it runs once on component mount
+    }, []); 
 
     return (
       <>

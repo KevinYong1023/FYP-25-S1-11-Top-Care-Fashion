@@ -36,7 +36,7 @@ export default function ManagerUsersDashboard() {
 
     useEffect(() => {
         fetchUsers(); // Fetch users on component mount
-    }, []); // Empty dependency array, run once on mount
+    }, []); 
 
     // Filter users based on search query (filter by username or name) and status
     const handleSearch = () => {

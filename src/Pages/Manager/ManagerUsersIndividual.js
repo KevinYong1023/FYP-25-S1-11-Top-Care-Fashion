@@ -68,7 +68,7 @@ export default function ManagerUsersIndividual() {
       }
     };
 
-    fetchUserData(); // Call the function to fetch user data when the component is mounted
+    fetchUserData(); 
   }, [userEmail]);
 
   const deleteComment = async (commentNo) => {
