@@ -16,7 +16,6 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        console.log("LOGIN IS USING AUTH.JS");
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: 'Invalid credentials' });
