@@ -13,7 +13,7 @@ const ManageList = ({ email }) => {
   const getUserProduct = async () => {
     if (email) {
       try {
-        setIsLoading(true); // Set loading to true when fetch starts
+        setIsLoading(true); 
         const response = await fetch(`/api/products/user/${email}`);
         const data = await response.json();
         setProducts(data);
@@ -22,7 +22,7 @@ const ManageList = ({ email }) => {
         console.error("Failed to fetch listings:", error);
       } finally {
         setMessage("")
-        setIsLoading(false); // Always set loading to false at the end
+        setIsLoading(false); 
       }
     }
   };
@@ -67,7 +67,7 @@ const ManageList = ({ email }) => {
         getUserProduct();
       } else {
         const errorData = await res.json();
-        setError(errorData.message || "Error updating product."); // Duplicate title error msg
+        setError(errorData.message || "Error updating product."); 
       }
     } catch (err) {
       console.error(err);
@@ -161,7 +161,7 @@ const ManageList = ({ email }) => {
                     style={{
                       width: "200px",
                       height: "200px",
-                      objectFit: "cover", // Ensures images fill container without distortion
+                      objectFit: "cover", 
                     }}
                     onError={(e) => (e.target.src = "https://via.placeholder.com/100")}
                   />

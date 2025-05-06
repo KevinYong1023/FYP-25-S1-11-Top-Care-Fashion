@@ -18,12 +18,12 @@ export default function OrderHistory() {
             try {
                 const response = await fetch(`/api/order-history`);
                 const data = await response.json();
-                console.log(data)
-                console.log(name)
+                //console.log(data)
+                //console.log(name)
                 const filtered = data.filter(order =>
                     order.buyerName === name || order.seller.some(s => s.sellerName === name)
                 );
-                console.log(filtered)
+                //console.log(filtered)
                 setFilteredData(filtered);
             } catch (error) {
                 setError("Server Error:Please Refresh the Page")

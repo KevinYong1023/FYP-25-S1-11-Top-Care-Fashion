@@ -67,7 +67,7 @@ const AdminCreateAccount = () => {
         if (validateForm()) {
             try {
                 setIsLoading(true)
-                const response = await fetch("/api/register", {
+                const response = await fetch("/api/mainregister", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

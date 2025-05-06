@@ -263,7 +263,7 @@ export default function ViewAccounts() {
       </td>
     </tr>
   ) : (
-    currentUsers.map((user) => ( // Removed the extra curly braces here
+    currentUsers.map((user) => ( 
       <tr key={user.userId}>
         <td>{user.name}</td>
         <td>{user.username}</td>

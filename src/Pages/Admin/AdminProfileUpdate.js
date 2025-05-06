@@ -23,7 +23,7 @@ export default function AdminProfileUpdate() {
         const fetchUserDetails = async () => {
             if (email) {
                 try {
-                    setIsLoading(true); // 🟦 start loading
+                    setIsLoading(true); 
                     const response = await fetch(`/api/user/${email}`);
                     if (response.ok) {
                         const userData = await response.json();
@@ -42,7 +42,7 @@ export default function AdminProfileUpdate() {
                     errorMessage("Server Error: Please Refresh the Page")
                     console.error('Error fetching user details:', error);
                 } finally {
-                    setIsLoading(false); // 🟦 stop loading
+                    setIsLoading(false); 
                 }
             }
         };
@@ -75,7 +75,7 @@ export default function AdminProfileUpdate() {
         setErrorMessage("No Empty Input Field: Please Fill Up the Form")
     }else{
         try {
-            setIsLoading(true); // 🟦 start loading
+            setIsLoading(true); 
             const response = await fetch(`/api/user/${email}`, {
                 method: 'PUT',
                 headers: {
@@ -95,7 +95,7 @@ export default function AdminProfileUpdate() {
             setErrorMessage("Server Error: Please Try Again")
             console.error('Error updating profile:', error);
         } finally {
-            setIsLoading(false); // 🟦 stop loading
+            setIsLoading(false); 
         }
     }
     };

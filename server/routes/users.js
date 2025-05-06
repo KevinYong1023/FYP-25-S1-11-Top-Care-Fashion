@@ -83,7 +83,7 @@ router.put('/reset-password', async (req, res) => {
 });
 
 // Register
-router.post('/register', async (req, res) => {
+router.post('/mainregister', async (req, res) => {
     const { username, name, email, phone, password, dob, gender, position, address } = req.body;
     try {
         // Check if the user already exists
@@ -96,6 +96,12 @@ router.post('/register', async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        let formattedDob = dob;
+        if (dob && dob.includes('-')) {
+            const [year, month, day] = dob.split('-');
+            formattedDob = `${year}-${month}-${day}`;  // --> Convert to DD/MM/YYYY
+        }
+
         // Create a new user instance
         const newUser = new User({
             username,
@@ -103,7 +109,7 @@ router.post('/register', async (req, res) => {
             email,
             phone,
             password: hashedPassword, // Store the hashed password
-            dob, // Optional field
+            dob: formattedDob, // Optional field
             gender, // Required field
             position, // Required field
             joined: new Date().toISOString().split('T')[0],

@@ -4,7 +4,7 @@ import UserHeader from '../Components/Headers/userHeader';
 import '../css/ShippingDetail.css'; // Ensure to create this CSS file for styling  
 
 const ShippingDetail = ({ loginStatus }) => {  
-    console.log(loginStatus); // Simulate login status  
+    //console.log(loginStatus); // Simulate login status  
 
     return (  
         <div>  

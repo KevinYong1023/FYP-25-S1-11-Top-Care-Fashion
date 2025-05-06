@@ -30,9 +30,9 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
       
-      console.log("Full login response:", response);
+      //console.log("Full login response:", response);
       const data = await response.json();
-      console.log("Received token from server:", data.token);
+      //console.log("Received token from server:", data.token);
 
       if (response.ok) {
         storeAuthToken(data.token); 

@@ -30,7 +30,7 @@ export default function TicketInfo({ email }) {
                     setIsLoading(false); // Set loading to false when fetch completes
                 }
             } else {
-                console.log("EMAIL HAVEN'T PASS IN YET");
+                //console.log("EMAIL HAVEN'T PASS IN YET");
             }
         };
         fetchUserDetails();
@@ -44,7 +44,7 @@ export default function TicketInfo({ email }) {
                 const response = await fetch(`/api/tickets/${ticketId}`); // Fetch ticket using ticketId
                 if (response.ok) {
                     const data = await response.json(); // Parse the response as JSON
-                    console.log(data);
+                    //console.log(data);
                     setTicket(data); // Set the ticket data
                     setTicketStatus(data.status); // Set the ticket's current status
                 } else {
@@ -87,7 +87,7 @@ export default function TicketInfo({ email }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ assignee: userName, status: "In Progress" }), // Send both assignee and status
+                body: JSON.stringify({ assignee: userName, status: "In Progress" }), 
             });
 
             if (response.ok) {
